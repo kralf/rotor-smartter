@@ -1,4 +1,4 @@
-project( elrob-monitor )
+project( smart-monitor )
 
 cmake_minimum_required( VERSION 2.6 )
 
