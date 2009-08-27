@@ -2,4 +2,4 @@
 # Main lib
 #-------------------------------------------------------------------------------
 
-sm_header_install( smart-rotor-interfaces )
+sm_cpp_install_headers( smart-rotor-interfaces )

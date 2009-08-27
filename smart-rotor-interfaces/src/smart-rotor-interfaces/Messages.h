@@ -26,5 +26,92 @@ ROTOR_DEFINE_TYPE( axt_message,
   };
 )
 
+ROTOR_DEFINE_TYPE( carmen_point_t,
+  struct carmen_point_t {
+    double x;
+    double y;
+    double theta;
+  };
+)
+
+ROTOR_DEFINE_TYPE( carmen_base_odometry_message,
+  struct carmen_base_odometry_message {
+    double x;
+    double y;
+    double theta;
+    double tv;
+    double rv;
+    double acceleration;
+    double timestamp;
+    char *host;
+  };
+)
+
+ROTOR_DEFINE_TYPE( carmen_base_velocity_message,
+  struct carmen_base_velocity_message {
+    double tv;
+    double rv;
+    double timestamp;
+    char *host;
+  };
+)
+
+ROTOR_DEFINE_TYPE( carmen_laser_laser_config_t,
+  struct carmen_laser_laser_config_t {
+    int32_t  laser_type;
+    double start_angle;                   
+    double fov;
+    double angular_resolution;
+    double maximum_range;
+    double accuracy;
+    int32_t remission_mode;
+  };
+)
+
+ROTOR_DEFINE_TYPE( carmen_laser_laser_message,
+  struct carmen_laser_laser_message {
+    int32_t id;
+    carmen_laser_laser_config_t config;
+    int32_t num_readings;
+    float *range;
+    int32_t num_remissions;
+    float *remission;
+    double timestamp;
+    char *host;
+  };
+)
+
+ROTOR_DEFINE_TYPE( carmen_robot_laser_message,
+  struct carmen_robot_laser_message {
+    int32_t id;
+    carmen_laser_laser_config_t config;
+    int32_t num_readings;                  
+    float * range;                      
+    int8_t * tooclose;                    
+    int32_t num_remissions;                
+    float * remission;                  
+    carmen_point_t laser_pose;         
+    carmen_point_t robot_pose;         
+    double tv;
+    double rv;                     
+    double forward_safety_dist;
+    double side_safety_dist;
+    double turn_axis;
+    double timestamp;                    
+    char *host;                          
+  };
+)
+
+ROTOR_DEFINE_TYPE( carmen_localize_globalpos_message,
+  struct carmen_localize_globalpos_message {
+    carmen_point_t globalpos;
+    carmen_point_t globalpos_std;
+    carmen_point_t odometrypos;
+    double globalpos_xy_cov;
+    int32_t converged;
+    double timestamp;
+    char *host;
+  };
+)
 
 #endif SMART_ROTOR_INTERFACES_H
