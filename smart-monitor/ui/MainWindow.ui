@@ -128,20 +128,16 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NavigationPlot</class>
+   <class>LocalizationPlot</class>
    <extends>QWidget</extends>
-   <header>elrob_monitor_widgets</header>
+   <header>smart-monitor/LocalizationPlot.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>LocalizationPlot</class>
+   <class>NavigationPlot</class>
    <extends>QWidget</extends>
-   <header location="global" >elrob_monitor_widgets</header>
+   <header>smart-monitor/NavigationPlot.h</header>
    <container>1</container>
-   <slots>
-    <slot>reset()</slot>
-    <slot>save()</slot>
-   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
