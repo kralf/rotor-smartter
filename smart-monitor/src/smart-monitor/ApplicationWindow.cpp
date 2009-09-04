@@ -8,3 +8,11 @@ ApplicationWindow::ApplicationWindow()
   setWindowTitle( "application main window" );
   _mainWidget.setupUi( this );
 }
+
+//------------------------------------------------------------------------------
+
+Ui_MainWindow &
+ApplicationWindow::mainWidget()
+{
+  return _mainWidget;
+}

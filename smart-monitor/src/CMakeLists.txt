@@ -3,6 +3,7 @@
 #-------------------------------------------------------------------------------
 
 find_library( ROTOR_LIB rotor )
+find_library( QWT_LIB qwt-qt4 )
 
 find_package( Qt4 REQUIRED )
 include( ${QT_USE_FILE} )
@@ -37,4 +38,5 @@ target_link_libraries(
   smartMonitor
   ${ROTOR_LIB}
   ${QT_LIBRARIES}
+  ${QWT_LIB}
 )

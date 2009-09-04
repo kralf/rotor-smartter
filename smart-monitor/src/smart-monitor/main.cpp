@@ -1,4 +1,5 @@
 #include "Configuration.h"
+#include "DispatchThread.h"
 #include "ApplicationWindow.h"
 
 #include <smart-rotor-interfaces/Messages.h>
@@ -61,6 +62,9 @@ main( int argc, char * argv[] )
   
   QApplication application( argc, argv );
   ApplicationWindow * window = new ApplicationWindow();
+  DispatchThread dispatch( registry, *window );
+  
+  dispatch.start();
   window->show();
   exit( application.exec() );
 }

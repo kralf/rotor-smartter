@@ -10,6 +10,7 @@ class ApplicationWindow : public QMainWindow
 {
 public:
     ApplicationWindow();
+    Ui_MainWindow & mainWidget();
 private:
   Ui_MainWindow _mainWidget;
 };
