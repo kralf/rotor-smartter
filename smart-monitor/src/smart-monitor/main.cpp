@@ -67,7 +67,7 @@ main( int argc, char * argv[] )
   setupMessages( registry );
   
   QApplication application( argc, argv );
-  ApplicationWindow * window = new ApplicationWindow();
+  ApplicationWindow * window = new ApplicationWindow( configuration );
   DispatchThread dispatch( registry, *window );
   
   dispatch.start();

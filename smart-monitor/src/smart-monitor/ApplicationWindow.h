@@ -3,15 +3,17 @@
 
 
 #include "ui_MainWindow.h"
+#include "Configuration.h"
 #include <QMainWindow>
 
 
 class ApplicationWindow : public QMainWindow
 {
 public:
-    ApplicationWindow();
+    ApplicationWindow( const Configuration & configuration );
     Ui_MainWindow & mainWidget();
 private:
+  Configuration _configuration;
   Ui_MainWindow _mainWidget;
 };
 

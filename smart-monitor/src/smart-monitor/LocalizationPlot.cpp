@@ -62,7 +62,6 @@ LocalizationPlot::reset()
 void
 LocalizationPlot::updateFigure()
 {
-  Rotor::Logger::info( "Updating figure" );
   _lock.lockForRead();
   
   double maxX = DBL_MIN;

@@ -23,7 +23,7 @@ Configuration::Configuration(
 //------------------------------------------------------------------------------
 
 double
-Configuration::scale()
+Configuration::scale() const
 {
   return _scale;
 }
@@ -31,7 +31,7 @@ Configuration::scale()
 //------------------------------------------------------------------------------
 
 double
-Configuration::wheelDistance()
+Configuration::wheelDistance() const
 {
   return _wheelDistance;
 }
@@ -39,7 +39,7 @@ Configuration::wheelDistance()
 //------------------------------------------------------------------------------
 
 double
-Configuration::axesDistance()
+Configuration::axesDistance() const
 {
   return _axesDistance;
 }
@@ -47,7 +47,7 @@ Configuration::axesDistance()
 //------------------------------------------------------------------------------
 
 double
-Configuration::laserDistance()
+Configuration::laserDistance() const
 {
   return _laserDistance;
 }
@@ -55,7 +55,7 @@ Configuration::laserDistance()
 //------------------------------------------------------------------------------
 
 double
-Configuration::securityDistance()
+Configuration::securityDistance() const
 {
   return _securityDistance;
 }

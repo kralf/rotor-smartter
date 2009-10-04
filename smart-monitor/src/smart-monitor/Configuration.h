@@ -12,11 +12,11 @@ public:
   Configuration( 
     const std::string & moduleName,
     const Rotor::Options & options );
-  double scale();
-  double wheelDistance();
-  double axesDistance();
-  double laserDistance();
-  double securityDistance();
+  double scale() const;
+  double wheelDistance() const;
+  double axesDistance() const;
+  double laserDistance() const;
+  double securityDistance() const;
   
 private:
   std::string _platform;
