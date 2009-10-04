@@ -1,53 +1,44 @@
 #include "LocalizationPlot.h"
 #include <rotor/Logger.h>
 #include <qwt-qt4/qwt_plot_layout.h>
+#include <qwt-qt4/qwt_symbol.h>
 #include <QPen>
 #include <algorithm>
+#include <cfloat>
+
+using namespace std;
 
 //------------------------------------------------------------------------------
 
 LocalizationPlot::LocalizationPlot( QWidget * parent )
-  : QWidget( parent ),
-    _globalCurve( "Global" )
+  : QWidget( parent )
 {
-/*  _x = []
-  _y = []
-  _rx = []
-  _ry = []
-  _path = []
-  _nextX = 0.0
-  _nextY = 0.0*/
   setLayout( &_layout );
   _plot.setCanvasBackground( Qt::white );
   _plot.plotLayout()->setCanvasMargin( 0 );
   _plot.plotLayout()->setAlignCanvasToScales( true );
   
-  _globalCurve.attach( &_plot );
-  _globalCurve.setPen( QPen( Qt::blue ) );
-// 
-//   _point = Qwt.QwtPlotMarker()
-//   _point.attach( _plot )
-//   symbol = Qwt.QwtSymbol()
-//   symbol.setStyle( Qwt.QwtSymbol.Cross )
-//   symbol.setPen(  Qt.QPen( Qt.Qt.blue ) )
-//   symbol.setSize( 10 )
-//   _point.setSymbol( symbol )
-// 
-//   _next = Qwt.QwtPlotMarker()
-//   _next.attach( _plot )
-//   symbol = Qwt.QwtSymbol()
-//   symbol.setStyle( Qwt.QwtSymbol.Star2 )
-//   symbol.setPen(  Qt.QPen( Qt.Qt.green ) )
-//   symbol.setSize( 10 )
-//   _next.setSymbol( symbol )
-// 
-//   
   _layout.addWidget( &_plot, 1, 1 );
-// 
   _plot.replot();
-//   
+  
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( updateFigure() ) );
   _timer.start( 500 );
+}
+
+//------------------------------------------------------------------------------
+
+LocalizationPlot::~LocalizationPlot()
+{
+  PlotCurves::iterator curveIt;
+  PlotCurves::iterator curveEnd = _curves.end();
+  for ( curveIt = _curves.begin(); curveIt != curveEnd; ++curveIt ) {
+    delete curveIt->second;
+  }
+  PointMarkers::iterator pointIt;
+  PointMarkers::iterator pointEnd = _points.end();
+  for ( pointIt = _points.begin(); pointIt != pointEnd; ++pointIt ) {
+    delete pointIt->second;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -71,15 +62,32 @@ LocalizationPlot::reset()
 void
 LocalizationPlot::updateFigure()
 {
+  Rotor::Logger::info( "Updating figure" );
   _lock.lockForRead();
-  _globalCurve.setData( &(_x[0]), &(_y[0]), _x.size() );
-//   if len( _x ) > 0:
-//     _point.setValue( _x[-1], _y[-1] )
-//   _next.setValue( _nextX, _nextY )
-  double maxX = _globalCurve.maxXValue();
-  double minX = _globalCurve.minXValue();
-  double maxY = _globalCurve.maxYValue();
-  double minY = _globalCurve.minYValue();
+  
+  double maxX = DBL_MIN;
+  double minX = DBL_MAX;
+  double maxY = DBL_MIN;
+  double minY = DBL_MAX;
+
+  PlotCurves::iterator it;
+  PlotCurves::iterator end = _curves.end();
+  for ( it = _curves.begin(); it != end; ++it ) {
+    const string & name      = it->first;
+    QwtPlotCurve & curve     = *(_curves[name]);
+    QwtPlotMarker & point    = *(_points[name]);
+    std::vector<double> & tx = _x[name];
+    std::vector<double> & ty = _y[name];
+    
+    curve.setData( &(tx[0]), &(ty[0]), tx.size() );
+    if ( tx.size() > 0 ) {
+      point.setValue( tx.back(), ty.back() );
+    }
+    maxX = max( maxX, curve.maxXValue() );
+    minX = min( minX, curve.minXValue() );
+    maxY = max( maxY, curve.maxYValue() );
+    minY = min( minY, curve.minYValue() );
+  }
 /*  if len( _path ) > 0:
     _pcurve.setData( [p[0] for p in _path], [p[1] for p in _path] )
     maxX = max( maxX, _pcurve.maxXValue() )
@@ -123,14 +131,41 @@ LocalizationPlot::updateFigure()
 //------------------------------------------------------------------------------
 
 void
-LocalizationPlot::updateGlobal( double x, double y )
+LocalizationPlot::updatePath( const std::string & name, double x, double y )
 {
   _lock.lockForWrite();
-  _x.push_back( x );
-  _y.push_back( y );
-  if ( _x.size() > 2000 ) {
-    _x.erase( _x.begin() );
-    _y.erase( _y.begin() );
+  initializeCurve( name );
+  std::vector<double> & tx = _x[name];
+  std::vector<double> & ty = _y[name];
+  tx.push_back( x );
+  ty.push_back( y );
+  if ( tx.size() > 2000 ) {
+    tx.erase( tx.begin() );
+    ty.erase( ty.begin() );
   }
   _lock.unlock();
 }
+
+//------------------------------------------------------------------------------
+
+void
+LocalizationPlot::initializeCurve( const std::string & name )
+{
+  if ( _curves.find( name ) == _curves.end() ) {
+    _curves[name]         = new QwtPlotCurve();
+    _points[name]         = new QwtPlotMarker();
+    QwtPlotCurve & curve  = *(_curves[name]);
+    QwtPlotMarker & point = *(_points[name]);
+    
+    curve.attach( &_plot );
+    curve.setPen( QPen( Qt::blue ) );
+
+    point.attach( &_plot );
+    QwtSymbol symbol;
+    symbol.setStyle( QwtSymbol::Cross );
+    symbol.setPen(  QPen( _curves.size() ) );
+    symbol.setSize( 10 );
+    point.setSymbol( symbol );
+  }
+}
+

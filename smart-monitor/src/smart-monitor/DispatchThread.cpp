@@ -30,7 +30,24 @@ DispatchThread::run()
       double x       = data["globalpos"]["x"];
       double y       = data["globalpos"]["y"];
 //       double theta   = data["globalpos"]["theta"];
-      _window.mainWidget().localizationPlot->updateGlobal( x, y );
+      _window.mainWidget().localizationPlot->updatePath( "Global", x, y );
+    } else if ( message.name() == "carmen_base_odometry" ) {
+      Logger::info( data.toString() );
+      double x       = data["x"];
+      double y       = data["y"];
+//       double theta   = data["theta"];
+      _window.mainWidget().localizationPlot->updatePath( "Odometry", x, y );
+    } else if ( message.name() == "axt_message" ) {
+        double dx      = data["x"];
+        double dy      = data["y"];
+        int channel    = data["channel"];
+        size_t count   = data["num_points"];
+        _window.minWidget().navigationPlot->resetLaserData();
+        for ( size_t i = 0; i < count; ++i ) {
+          if ( channel == 2 ) {
+            _window.minWidget().navigationPlot->addLaserPoint( ( -dy[i], dx[i] ) );
+          }
+        }
     }
   }
 

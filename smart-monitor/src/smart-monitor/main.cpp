@@ -39,6 +39,12 @@ setupMessages( Registry & registry )
     ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message ) 
   );
   registry.subscribeToMessage( "carmen_localize_globalpos", false, 4 );
+
+  registry.registerMessageType( 
+    "carmen_base_odometry", 
+    ROTOR_DEFINITION_STRING( carmen_base_odometry_message ) 
+  );
+  registry.subscribeToMessage( "carmen_base_odometry", false, 4 );
 }
 
 

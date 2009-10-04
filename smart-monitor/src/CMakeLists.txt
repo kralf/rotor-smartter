@@ -40,3 +40,5 @@ target_link_libraries(
   ${QT_LIBRARIES}
   ${QWT_LIB}
 )
+
+sm_cpp_install( smartMonitor )
