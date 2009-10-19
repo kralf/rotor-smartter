@@ -114,4 +114,16 @@ ROTOR_DEFINE_TYPE( carmen_localize_globalpos_message,
   };
 )
 
+ROTOR_DEFINE_TYPE( path_message,
+  struct path_message {
+    uint32_t point_count;
+    double * x;
+    double * y;
+    double * theta;
+    double velocity;
+    double timestamp;
+    char *host;
+  };
+)
+
 #endif SMART_ROTOR_INTERFACES_H
