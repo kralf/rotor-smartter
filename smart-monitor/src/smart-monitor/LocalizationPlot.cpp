@@ -65,7 +65,15 @@ LocalizationPlot::save()
 void
 LocalizationPlot::reset()
 {
-  Rotor::Logger::error( "Not implemented" );
+  _lock.lockForRead();
+  PlotCurves::iterator it;
+  PlotCurves::iterator end = _curves.end();
+  for ( it = _curves.begin(); it != end; ++it ) {
+    const string & name      = it->first;
+    _x[name].clear();
+    _y[name].clear();
+  }
+  _lock.unlock();
 }
 
 //------------------------------------------------------------------------------

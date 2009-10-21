@@ -18,3 +18,11 @@ ApplicationWindow::mainWidget()
 {
   return _mainWidget;
 }
+
+//------------------------------------------------------------------------------
+
+const Configuration &
+ApplicationWindow::configuration() const
+{
+  return _configuration;
+}

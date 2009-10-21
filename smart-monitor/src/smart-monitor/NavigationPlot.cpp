@@ -116,7 +116,7 @@ NavigationPlot::drawCar( QPainter & painter )
   painter.setPen( Qt::blue );
   double x = 0 - _configuration->wheelDistance() / 2.0;
   double y = 0;
-  painter.drawRect( QRectF( x, y, _configuration->wheelDistance(), _configuration->axesDistance() ) );
+  painter.drawRect( QRectF( x, y, _configuration->wheelDistance(), _configuration->laserDistance() ) );
 }
 
 //------------------------------------------------------------------------------
@@ -162,11 +162,11 @@ NavigationPlot::drawSteeringArc( QPainter & painter, double steeringAngle )
 {
   double sign   = 0;
   double radius = 0;
-  if ( steeringAngle != 0 ) {
+  if ( fabs( steeringAngle ) > 1E-6 ) {
     sign   = -steeringAngle / fabs( steeringAngle );
     radius = sign * sqrt( pow( _configuration->axesDistance() / sin( steeringAngle ), 2 ) - pow( _configuration->axesDistance(), 2 ) );
   } else {
-    radius = 400.0;
+    radius = 4000.0;
   }
     
   double a1 = 0;
@@ -192,11 +192,11 @@ NavigationPlot::drawClearArc(
 {
   double sign   = 0;
   double radius = 0;
-  if ( steeringAngle != 0 ) {
-    sign   = -steeringAngle / abs( steeringAngle  );
+  if ( fabs( steeringAngle ) > 1E-6 ) {
+    sign   = -steeringAngle / fabs( steeringAngle  );
     radius = sign * sqrt( pow( _configuration->axesDistance() / sin( steeringAngle ), 2 ) - pow( _configuration->axesDistance(), 2 ) );
   } else {
-    radius = 400.0;
+    radius = 4000.0;
   }
 
   double a1      = 0;
@@ -222,7 +222,7 @@ NavigationPlot::drawSteering( QPainter & painter )
   painter.setPen( QColor( 0, 0, 255 ) );
   drawSteeringArc( painter, _steeringAngle );
   painter.setPen( QColor( 255, 0, 0 ) );
-  drawSteeringArc( painter, _commandSteeringAngle );
+//   drawSteeringArc( painter, _commandSteeringAngle );
   painter.setPen( QColor( 128, 128, 128 ) );
   QPointF p1 = drawClearArc( painter, _steeringAngle, _configuration->wheelDistance() / 2.0 );
   painter.setPen( QColor( 128, 128, 128 ) );

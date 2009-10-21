@@ -12,6 +12,7 @@ class ApplicationWindow : public QMainWindow
 public:
     ApplicationWindow( const Configuration & configuration );
     Ui_MainWindow & mainWidget();
+    const Configuration & configuration() const;
 private:
   Configuration _configuration;
   Ui_MainWindow _mainWidget;

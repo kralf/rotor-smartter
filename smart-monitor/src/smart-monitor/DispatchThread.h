@@ -7,6 +7,7 @@
 
 
 class ApplicationWindow;
+class Configuration;
 
 
 class DispatchThread : public QThread
@@ -16,8 +17,9 @@ public:
   void run();
 
 private:
-  Rotor::Registry &   _registry;
-  ApplicationWindow & _window;
+  Rotor::Registry &     _registry;
+  ApplicationWindow &   _window;
+  const Configuration & _configuration;
 };
 
 
