@@ -57,13 +57,6 @@ LocalizationPlot::save()
       f << x[i] << " " << y[i] << endl;
     }
   }
-/*  if len( self.rx ) > 0:
-    for i in xrange( len( self.rx ) ):
-      f.write( "%f %f\n" % ( self.rx[i], self.ry[i] )  )
-  else:
-    for i in xrange( len( self.x ) ):
-      f.write( "%f %f\n" % ( self.x[i], self.y[i] )  )
-  f.close()*/
   _lock.unlock();
 }
 
@@ -105,12 +98,6 @@ LocalizationPlot::updateFigure()
     maxY = max( maxY, curve.maxYValue() );
     minY = min( minY, curve.minYValue() );
   }
-/*  if len( _path ) > 0:
-    _pcurve.setData( [p[0] for p in _path], [p[1] for p in _path] )
-    maxX = max( maxX, _pcurve.maxXValue() )
-    minX = max( minX, _pcurve.minXValue() )
-    maxY = max( maxY, _pcurve.maxYValue() )
-    minY = max( minY, _pcurve.minYValue() )*/
   double dX = maxX - minX + 1.0;
   double dY = maxY - minY + 1.0;
   double delta = std::max( dX, dY ) / 2.0;

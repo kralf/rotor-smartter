@@ -9,7 +9,7 @@ set( PACKAGE_MAINTAINER_NAME "Dizan Vasquez" )
 set( PACKAGE_MAINTAINER_EMAIL "vasquez@mavt.ethz.ch" )
 set( PACKAGE_DESCRIPTION_SUMMARY "Monitoring tool for elrob" )
 set( PACKAGE_DESCRIPTION "Visualization tool for the smartter platorm" )
-set( PACKAGE_DEPENDS rotor,python-qt4,python-qwt5-qt4,python-tk )
+set( PACKAGE_DEPENDS rotor,libqtgui4,libqwt5-qt4 )
 
 include( SimpleCMake )
 sm_configure_project()
