@@ -129,6 +129,15 @@ ArcController::radiusToSteeringAngle( double radius )
 
 //------------------------------------------------------------------------------
 
+double 
+ArcController::steeringAngleToRadius( double angle )
+{
+  int sign = -angle / fabs( angle );
+  return sign * sqrt( pow( _axesDistance / sin( angle ), 2 ) - pow( _axesDistance, 2 ) );
+}
+
+//------------------------------------------------------------------------------
+
 const Vector & 
 ArcController::waypoint( size_t i )
 {
@@ -142,7 +151,7 @@ ArcController::next()
 {
   const Vector & current = waypoint( _current );
   double angle           = current.angle();
-  Vector next            = _path[-1];
+  Vector next            = _path.back();
   for ( size_t i = _lookAhead; i <= _maxLookAhead; ++i )
   {
     if ( ! _cycle && _current + i >= _path.size() )
