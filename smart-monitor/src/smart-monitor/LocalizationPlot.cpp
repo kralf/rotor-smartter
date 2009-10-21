@@ -3,6 +3,7 @@
 #include <qwt-qt4/qwt_plot_layout.h>
 #include <qwt-qt4/qwt_symbol.h>
 #include <QPen>
+#include <fstream>
 #include <algorithm>
 #include <cfloat>
 
@@ -46,7 +47,24 @@ LocalizationPlot::~LocalizationPlot()
 void
 LocalizationPlot::save()
 {
-  Rotor::Logger::error( "Not implemented" );
+  _lock.lockForRead();
+  ofstream f( "path.txt" );
+  std::vector<double> & x = _x["Global"];
+  std::vector<double> & y = _y["Global"];
+  if ( x.size() > 0 ) 
+  {
+    for ( size_t i = 0; i < x.size(); ++i ) {
+      f << x[i] << " " << y[i] << endl;
+    }
+  }
+/*  if len( self.rx ) > 0:
+    for i in xrange( len( self.rx ) ):
+      f.write( "%f %f\n" % ( self.rx[i], self.ry[i] )  )
+  else:
+    for i in xrange( len( self.x ) ):
+      f.write( "%f %f\n" % ( self.x[i], self.y[i] )  )
+  f.close()*/
+  _lock.unlock();
 }
 
 //------------------------------------------------------------------------------
