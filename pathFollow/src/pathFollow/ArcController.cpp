@@ -1,8 +1,11 @@
 #include "ArcController.h"
 #include "Vector.h"
+#include <rotor/Logger.h>
+#include <rotor/Conversion.h>
 #include <cfloat> 
 
 using namespace std;
+using namespace Rotor;
 
 //------------------------------------------------------------------------------
 
@@ -47,6 +50,10 @@ double
 ArcController::step( const Vector & pose )
 {
   _current = closest( pose );
+  if ( pose.distance( _path.back().origin() ) < 0.1 && ! _cycle )
+  {
+    _current = _path.size() - 1;
+  }
   return steeringAngle( pose, next() );
 }
 

@@ -126,4 +126,28 @@ ROTOR_DEFINE_TYPE( path_message,
   };
 )
 
+ROTOR_DEFINE_TYPE( smart_velocity_message,
+  struct smart_velocity_message {
+    double tv;
+    double steering_angle; 
+    double timestamp;
+    char* host;
+  };
+)
+
+ROTOR_DEFINE_TYPE( smart_status_message,
+  struct smart_status_message {
+    double gas_pos;
+    uint32_t gear;      
+    double steering_angle;
+    double tv;
+    double rv_front_right;
+    double rv_front_left; 
+    double rv_rear_right; 
+    double rv_rear_left;  
+    double timestamp;
+    char* host;
+  };
+)
+
 #endif SMART_ROTOR_INTERFACES_H

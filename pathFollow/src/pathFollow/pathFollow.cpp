@@ -64,8 +64,9 @@ readPath(
 void
 mainLoop( Registry & registry, ArcController & controller, double velocity )
 {
-  Structure command( "carmen_base_velocity_message", 0, registry );
-  command["host"]   = const_cast<char*>( hostName().c_str() );
+  Structure commandStructure( "smart_velocity_message", 0, registry );
+  commandStructure["host"]   = const_cast<char*>( hostName().c_str() );
+  smart_velocity_message & command = ROTOR_VARIABLE( smart_velocity_message, commandStructure );
 
 // 
 // points          = []
@@ -90,7 +91,7 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
 //         next.x = nextPoint.origin[0]
 //         next.y = nextPoint.origin[1]
 //         next.timestamp = rotorc.seconds()*/
-        Logger::error( "Received pose " + toString( pose.origin()[0] )
+        Logger::spam( "Received pose " + toString( pose.origin()[0] )
                                  + " " + toString( pose.origin()[1] ), "pathFollow" );
       } else if ( msg.name() == "smart_status_message" ) {
         actualSteering = data["steering_angle"];
@@ -110,18 +111,18 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
       
   //     appliedVelocity = safety.step( velocity, actualSteering, points )
       
-      command["timestamp"] = seconds();
+      command.timestamp = seconds();
       if ( controller.finished() )
       {
-        command["tv"] = 0.0;
-        command["rv"] = 0;
+        command.tv = 0.0;
+        command.steering_angle = 0;
       } else {
-        command["tv"] = appliedVelocity;
-        command["rv"] = appliedVelocity / controller.steeringAngleToRadius( steeringAngle );
+        command.tv = appliedVelocity;
+        command.steering_angle = steeringAngle;
       }
       
-      cout << command.toString();
-      registry.sendStructure( "carmen_base_velocity", command );
+      cout << commandStructure.toString();
+      registry.sendStructure( "smart_velocity_message", commandStructure );
 //       registry.sendStructure( "next_waypoint_message", next );
       
       if ( controller.finished() )
@@ -131,9 +132,9 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
       }
     } catch( MessagingTimeout ) {
       Logger::spam( "Timeout waiting for message", "pathFollow" );
-      command["tv"] = 0;
-      command["rv"] = 0;
-      registry.sendStructure( "carmen_base_velocity", command );
+      command.tv = 0;
+      command.steering_angle = 0;
+      registry.sendStructure( "smart_velocity_message", commandStructure   );
     }
   }
 }
@@ -163,8 +164,8 @@ registerMessages( Registry & registry )
   );
   
   registry.registerMessageType( 
-    "carmen_base_velocity", 
-    ROTOR_DEFINITION_STRING( carmen_base_velocity_message )
+    "smart_velocity_message", 
+    ROTOR_DEFINITION_STRING( smart_velocity_message ) 
   );
 }
 
@@ -191,6 +192,7 @@ sendPathMessage( Registry & registry, const Path & path )
 
 int main( int argc, char * argv[] )
 {
+  Logger::setLevel( Logger::SPAM, "ArcController" );
   if ( argc != 2 )
   {
     cout << "Usage: " << argv[0] << " <config.ini>\n";

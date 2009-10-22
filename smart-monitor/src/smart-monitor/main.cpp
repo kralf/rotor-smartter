@@ -45,6 +45,18 @@ setupMessages( Registry & registry )
     ROTOR_DEFINITION_STRING( carmen_base_odometry_message ) 
   );
   registry.subscribeToMessage( "carmen_base_odometry", false, 4 );
+
+  registry.registerMessageType( 
+    "smart_velocity_message", 
+    ROTOR_DEFINITION_STRING( smart_velocity_message ) 
+  );
+  registry.subscribeToMessage( "smart_velocity_message", false, 4 );
+
+  registry.registerMessageType( 
+    "smart_status_message", 
+    ROTOR_DEFINITION_STRING( smart_status_message ) 
+  );
+  registry.subscribeToMessage( "smart_status_message", false, 4 );
 }
 
 

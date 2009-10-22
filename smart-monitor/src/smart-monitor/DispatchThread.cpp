@@ -64,6 +64,9 @@ DispatchThread::run()
             _window.mainWidget().navigationPlot->addLaserPoint( -alasca.y[i], alasca.x[i] );
           }
         }
+    } else if ( message.name() == "smart_velocity_message" ) {
+      smart_velocity_message & velocity = ROTOR_VARIABLE( smart_velocity_message, data );
+      _window.mainWidget().navigationPlot->commandSteeringAngle( velocity.steering_angle );    
     }
   }
 

@@ -222,7 +222,7 @@ NavigationPlot::drawSteering( QPainter & painter )
   painter.setPen( QColor( 0, 0, 255 ) );
   drawSteeringArc( painter, _steeringAngle );
   painter.setPen( QColor( 255, 0, 0 ) );
-//   drawSteeringArc( painter, _commandSteeringAngle );
+  drawSteeringArc( painter, _commandSteeringAngle );
   painter.setPen( QColor( 128, 128, 128 ) );
   QPointF p1 = drawClearArc( painter, _steeringAngle, _configuration->wheelDistance() / 2.0 );
   painter.setPen( QColor( 128, 128, 128 ) );

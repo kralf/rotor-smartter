@@ -106,7 +106,7 @@ Vector::projection( const Point & point ) const
 double
 Vector::angle() const
 {
-  return atan2( _direction[1], _direction[2] );
+  return atan2( _direction[0], _direction[1] );
 }
 
 //------------------------------------------------------------------------------
