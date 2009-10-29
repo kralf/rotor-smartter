@@ -67,6 +67,15 @@ DispatchThread::run()
     } else if ( message.name() == "smart_velocity_message" ) {
       smart_velocity_message & velocity = ROTOR_VARIABLE( smart_velocity_message, data );
       _window.mainWidget().navigationPlot->commandSteeringAngle( velocity.steering_angle );    
+    } else if ( message.name() == "smart_status_message" ) {
+      smart_status_message & status = ROTOR_VARIABLE( smart_status_message, data );
+      _window.mainWidget().statusPlot->updateStatus(status.gas_pos, status.gear, 
+                                                    status.steering_angle, 
+                                                    status.tv, 
+                                                    status.rv_front_right, 
+                                                    status.rv_front_left, 
+                                                    status.rv_rear_right, 
+                                                    status.rv_rear_left);
     }
   }
 
