@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,22 +10,22 @@
     <height>480</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>SmartMonitor</string>
   </property>
-  <property name="dockNestingEnabled" >
+  <property name="dockNestingEnabled">
    <bool>true</bool>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <layout class="QHBoxLayout" name="horizontalLayout_3" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" >
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="LocalizationPlot" native="1" name="localizationPlot" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+         <widget class="LocalizationPlot" name="localizationPlot" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -32,9 +33,9 @@
          </widget>
         </item>
         <item>
-         <widget class="NavigationPlot" native="1" name="navigationPlot" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+         <widget class="NavigationPlot" name="navigationPlot" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -42,44 +43,66 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4" >
+         <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <widget class="QDial" name="yawDial" >
-            <property name="enabled" >
+           <widget class="QDial" name="yawDial">
+            <property name="enabled">
              <bool>true</bool>
             </property>
-            <property name="maximum" >
+            <property name="maximum">
              <number>360</number>
             </property>
-            <property name="value" >
+            <property name="value">
              <number>0</number>
             </property>
-            <property name="sliderPosition" >
+            <property name="sliderPosition">
              <number>0</number>
             </property>
-            <property name="tracking" >
+            <property name="tracking">
              <bool>false</bool>
             </property>
-            <property name="orientation" >
+            <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="wrapping" >
+            <property name="wrapping">
              <bool>true</bool>
             </property>
-            <property name="notchTarget" >
+            <property name="notchTarget">
              <double>10.000000000000000</double>
             </property>
-            <property name="notchesVisible" >
+            <property name="notchesVisible">
              <bool>false</bool>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer" >
-            <property name="orientation" >
+           <widget class="CStatusPlot" name="statusPlot" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>253</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>253</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeHint" stdset="0" >
+            <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
               <height>40</height>
@@ -92,40 +115,40 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" >
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="label" >
-          <property name="text" >
+         <widget class="QLabel" name="label">
+          <property name="text">
            <string>Path:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="resetButton" >
-          <property name="text" >
+         <widget class="QPushButton" name="resetButton">
+          <property name="text">
            <string>Reset</string>
           </property>
-          <property name="default" >
+          <property name="default">
            <bool>false</bool>
           </property>
-          <property name="flat" >
+          <property name="flat">
            <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="saveButton" >
-          <property name="text" >
+         <widget class="QPushButton" name="saveButton">
+          <property name="text">
            <string>Save</string>
           </property>
          </widget>
         </item>
         <item>
-         <spacer name="horizontalSpacer" >
-          <property name="orientation" >
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
             <height>20</height>
@@ -139,7 +162,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
   <customwidget>
@@ -154,6 +177,12 @@
    <header>smart-monitor/NavigationPlot.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>CStatusPlot</class>
+   <extends>QWidget</extends>
+   <header>smart-monitor/StatusPlot.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -163,11 +192,11 @@
    <receiver>localizationPlot</receiver>
    <slot>reset()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>274</x>
      <y>723</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>195</x>
      <y>526</y>
     </hint>
@@ -179,11 +208,11 @@
    <receiver>localizationPlot</receiver>
    <slot>save()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>345</x>
      <y>723</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>195</x>
      <y>526</y>
     </hint>
