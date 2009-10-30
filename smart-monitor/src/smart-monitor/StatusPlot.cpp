@@ -121,6 +121,14 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpRotationalVelocityRearLeftValue = new QLabel(this);
   mpRotationalVelocityRearLeftValue->setNum(0.0);
   mpGridLayout->addWidget(mpRotationalVelocityRearLeftValue, 7, 1);
+ 
+  mpGyroAngleLabel = new QLabel(this);
+  mpGyroAngleLabel->setText("Gyro angle");
+  mpGridLayout->addWidget(mpGyroAngleLabel, 8, 0);
+
+  mpGyroAngleValue = new QLabel(this);
+  mpGyroAngleValue->setNum(0.0);
+  mpGridLayout->addWidget(mpGyroAngleValue, 8, 1); 
 
   this->setLayout(mpGridLayout);
 };
@@ -191,6 +199,21 @@ void CStatusPlot::updateStatus(double dGasPedalValue,
   mpRotationalVelocityFrontLeftValue->setNum(dRotationalVelocityFrontLeft);
   mpRotationalVelocityRearRightValue->setNum(dRotationalVelocityRearRight);
   mpRotationalVelocityRearLeftValue->setNum(dRotationalVelocityRearLeft);
+};
+
+///
+/// \fn void updateGyro(double dTheta)
+///
+/// \brief This function updates the gyro angle.
+///
+/// \param[in] dTheta integrated gyro angle
+///
+/// \return void
+///
+void CStatusPlot::updateGyro(double dTheta)
+{
+  // display the gyro angle
+  mpGyroAngleValue->setNum(dTheta);
 };
 
 

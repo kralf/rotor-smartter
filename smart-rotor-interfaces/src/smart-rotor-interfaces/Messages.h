@@ -150,4 +150,12 @@ ROTOR_DEFINE_TYPE( smart_status_message,
   };
 )
 
+ROTOR_DEFINE_TYPE( gyro_integrated_message,
+  struct gyro_integrated_message {
+    double theta;
+    double timestamp;
+    char* host;
+  };
+)
+
 #endif SMART_ROTOR_INTERFACES_H

@@ -169,6 +169,18 @@ class CStatusPlot : public QWidget {
   ///
   QLabel *mpRotationalVelocityRearLeftValue;
 
+  /// \var QLabel *mpGyroAngleLabel
+  ///
+  /// \brief Handle on the gyro angle value label.
+  ///
+  QLabel *mpGyroAngleLabel;
+
+  /// \var QLabel *mpGyroAngleValue
+  ///
+  /// \brief Handle on the gyro angle value.
+  ///
+  QLabel *mpGyroAngleValue;
+
   /// \var QGridLayout *mpGridLayout
   ///
   /// \brief Handle on the grid layout of our status plot.
@@ -223,6 +235,17 @@ public:
                     double dRotationalVelocityFrontLeft,
                     double dRotationalVelocityRearRight,
                     double dRotationalVelocityRearLeft);
+
+  ///
+  /// \fn void updateGyro(double dTheta)
+  ///
+  /// \brief This function updates the gyro angle.
+  ///
+  /// \param[in] dTheta integrated gyro angle
+  ///
+  /// \return void
+  ///
+  void updateGyro(double dTheta);
 
 
 protected:
