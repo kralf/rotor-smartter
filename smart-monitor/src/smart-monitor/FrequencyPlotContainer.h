@@ -54,6 +54,8 @@
 /// \brief Class for interfacing the status plot.
 ///
 class CFrequencyPlotContainer : public QWidget {
+  Q_OBJECT
+
   ///
   /// \fn CFrequencyPlotContainer()
   ///
@@ -72,7 +74,7 @@ class CFrequencyPlotContainer : public QWidget {
   /// \brief Assignement operator.
   ///
   CFrequencyPlotContainer& operator = (const CFrequencyPlotContainer &other);
-  
+
   /// \var QGridLayout *mpGridLayout
   ///
   /// \brief Handle on the grid layout of our status plot.
@@ -144,7 +146,7 @@ class CFrequencyPlotContainer : public QWidget {
   /// \brief Handle on the laser config frequency plot.
   ///
   CFrequencyPlot *mpLaserConfigFreqPlot;
-  
+
   /// \var CFrequencyPlot *mpLaserLaserFreqPlot
   ///
   /// \brief Handle on the laser laser frequency plot.

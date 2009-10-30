@@ -56,6 +56,8 @@
 /// \brief Class for interfacing the status plot.
 ///
 class CFrequencyPlot : public QWidget {
+  Q_OBJECT
+
   ///
   /// \fn CFrequencyPlot()
   ///
