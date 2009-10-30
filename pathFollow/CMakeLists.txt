@@ -11,5 +11,11 @@ set( PACKAGE_DESCRIPTION_SUMMARY "Simple path follow module for the Smartter" )
 set( PACKAGE_DESCRIPTION "Arc controller based path follow module used on the Smartter autonomous vehicle" )
 set( PACKAGE_DEPENDS )
 
+execute_process(
+  COMMAND dpkg --print-architecture
+  OUTPUT_VARIABLE DEBIAN_ARCHITECTURE
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 include( SimpleCMake )
 sm_configure_project()

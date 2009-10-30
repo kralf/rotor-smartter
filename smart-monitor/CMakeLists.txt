@@ -11,5 +11,11 @@ set( PACKAGE_DESCRIPTION_SUMMARY "Monitoring tool for elrob" )
 set( PACKAGE_DESCRIPTION "Visualization tool for the smartter platorm" )
 set( PACKAGE_DEPENDS rotor,libqtgui4,libqwt5-qt4 )
 
+execute_process(
+  COMMAND dpkg --print-architecture
+  OUTPUT_VARIABLE DEBIAN_ARCHITECTURE
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 include( SimpleCMake )
 sm_configure_project()

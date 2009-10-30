@@ -11,5 +11,11 @@ set( PACKAGE_DESCRIPTION_SUMMARY "Rotor definitions and utilities for the Smart 
 set( PACKAGE_DESCRIPTION "Rotor definitions and utilities for the Smart platform" )
 set( PACKAGE_DEPENDS rotor )
 
+execute_process(
+  COMMAND dpkg --print-architecture
+  OUTPUT_VARIABLE DEBIAN_ARCHITECTURE
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 include( SimpleCMake )
 sm_configure_project()

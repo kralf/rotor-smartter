@@ -21,20 +21,24 @@ qt4_wrap_ui( MAIN_WINDOW_UI_H ../ui/MainWindow.ui )
 
 file( GLOB SMART_MONITOR_SRC smart-monitor/*.cpp )
 
-set( SMART_MONITOR_MOC_HEADERS smart-monitor/LocalizationPlot.h )
+set(
+  SMART_MONITOR_MOC_HEADERS
+  smart-monitor/LocalizationPlot.h
+  smart-monitor/FrequencyPlot.h
+)
 
 qt4_automoc( ${SMART_MONITOR_SRC} )
 QT4_WRAP_CPP( SMART_MONITOR_MOC_SRC ${SMART_MONITOR_MOC_HEADERS} )
 
 
-add_executable( 
-  smartMonitor 
-  ${SMART_MONITOR_SRC} 
-  ${MAIN_WINDOW_UI_H} 
-  ${SMART_MONITOR_MOC_SRC} 
+add_executable(
+  smartMonitor
+  ${SMART_MONITOR_SRC}
+  ${MAIN_WINDOW_UI_H}
+  ${SMART_MONITOR_MOC_SRC}
 )
 
-target_link_libraries( 
+target_link_libraries(
   smartMonitor
   ${ROTOR_LIB}
   ${QT_LIBRARIES}

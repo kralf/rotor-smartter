@@ -38,7 +38,7 @@
 //------------------------------------------------------------------------------
 // Constants
 //------------------------------------------------------------------------------
-const unsigned int LIST_DEFAULT_CAPACITY = 20;
+const size_t LIST_DEFAULT_CAPACITY = 20;
 
 
 //------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ CFrequencyPlot::CFrequencyPlot() {
 /// \param[in] rTitle title of the plot
 /// \param[in] pParent pointer to the parent's widget
 ///
-CFrequencyPlot::CFrequencyPlot(const QwtText &rTitle, 
+CFrequencyPlot::CFrequencyPlot(const QwtText &rTitle,
                                QWidget *pParent) : QWidget(pParent),
                                                    muFrequencyListCapacity(LIST_DEFAULT_CAPACITY) {
   // create the layout
@@ -117,7 +117,7 @@ CFrequencyPlot& CFrequencyPlot::operator = (const CFrequencyPlot &other) {
 /// \return void
 ///
 void CFrequencyPlot::updateFigure() {
-  
+
 };
 
 ///
@@ -130,7 +130,7 @@ void CFrequencyPlot::updateFigure() {
 void CFrequencyPlot::updateFrequency(double dFrequency) {
   // add the new frequency at the back
   mFrequencyList.push_back(dFrequency);
-  
+
   // if list capacity is exhausted, delete first element
   if (mFrequencyList.size() > muFrequencyListCapacity) {
     mFrequencyList.pop_front();
@@ -138,7 +138,7 @@ void CFrequencyPlot::updateFrequency(double dFrequency) {
 };
 
 ///
-/// \fn void setFrequencyListCapacity(unsigned int uCapacity)
+/// \fn void setFrequencyListCapacity(size_t uCapacity)
 ///
 /// \brief This function sets the capacity of the frequency list.
 ///
@@ -146,18 +146,18 @@ void CFrequencyPlot::updateFrequency(double dFrequency) {
 ///
 /// \return void
 ///
-void setFrequencyListCapacity(unsigned int uCapacity) {
+void CFrequencyPlot::setFrequencyListCapacity(size_t uCapacity) {
   muFrequencyListCapacity = uCapacity;
 };
 
 ///
-/// \fn unsigned int getFrequencyListCapacity const ()
+/// \fn size_t getFrequencyListCapacity const ()
 ///
 /// \brief This function sets the capacity of the frequency list.
 ///
 /// \return capacity of the list
 ///
-unsigned int getFrequencyListCapacity const () {
+size_t CFrequencyPlot::getFrequencyListCapacity () const {
   return muFrequencyListCapacity;
 };
 

@@ -74,13 +74,13 @@ class CFrequencyPlot : public QWidget {
   /// \brief Assignement operator.
   ///
   CFrequencyPlot& operator = (const CFrequencyPlot &other);
-  
+
   /// \var QwtPlot *mpPlot
   ///
   /// \brief Handle on the frequency plot.
   ///
   QwtPlot *mpPlot;
-  
+
   /// \var QGridLayout *mpGridLayout
   ///
   /// \brief Handle on the grid layout of our status plot.
@@ -93,11 +93,11 @@ class CFrequencyPlot : public QWidget {
   ///
   std::list<double> mFrequencyList;
 
-  /// \var unsigned int muFrequencyListCapacity
+  /// \var size_t muFrequencyListCapacity
   ///
   /// \brief Capacity of the frequency list.
   ///
-  unsigned int muFrequencyListCapacity;
+  size_t muFrequencyListCapacity;
 
 
 public:
@@ -137,7 +137,7 @@ public:
   void updateFrequency(double dFrequency);
 
   ///
-  /// \fn void setFrequencyListCapacity(unsigned int uCapacity)
+  /// \fn void setFrequencyListCapacity(size_t uCapacity)
   ///
   /// \brief This function sets the capacity of the frequency list.
   ///
@@ -145,16 +145,16 @@ public:
   ///
   /// \return void
   ///
-  void setFrequencyListCapacity(unsigned int uCapacity);
+  void setFrequencyListCapacity(size_t uCapacity);
 
   ///
-  /// \fn unsigned int getFrequencyListCapacity const ()
+  /// \fn size_t getFrequencyListCapacity const ()
   ///
   /// \brief This function sets the capacity of the frequency list.
   ///
   /// \return capacity of the list
   ///
-  unsigned int getFrequencyListCapacity const ();
+  size_t getFrequencyListCapacity() const;
 
 
 protected:
