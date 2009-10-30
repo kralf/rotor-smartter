@@ -137,6 +137,30 @@ void CFrequencyPlot::updateFrequency(double dFrequency) {
   }
 };
 
+///
+/// \fn void setFrequencyListCapacity(unsigned int uCapacity)
+///
+/// \brief This function sets the capacity of the frequency list.
+///
+/// \param[in] uCapacity capacity of the list
+///
+/// \return void
+///
+void setFrequencyListCapacity(unsigned int uCapacity) {
+  muFrequencyListCapacity = uCapacity;
+};
+
+///
+/// \fn unsigned int getFrequencyListCapacity const ()
+///
+/// \brief This function sets the capacity of the frequency list.
+///
+/// \return capacity of the list
+///
+unsigned int getFrequencyListCapacity const () {
+  return muFrequencyListCapacity;
+};
+
 
 //------------------------------------------------------------------------------
 // End of FrequencyPlot.cpp
