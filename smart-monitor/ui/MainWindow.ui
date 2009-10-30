@@ -46,17 +46,8 @@
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="QDial" name="yawDial">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
             <property name="maximum">
              <number>360</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="sliderPosition">
-             <number>0</number>
             </property>
             <property name="tracking">
              <bool>false</bool>
@@ -70,9 +61,6 @@
             <property name="notchTarget">
              <double>10.000000000000000</double>
             </property>
-            <property name="notchesVisible">
-             <bool>false</bool>
-            </property>
            </widget>
           </item>
           <item>
@@ -83,17 +71,15 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="minimumSize">
-             <size>
-              <width>253</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>253</width>
-              <height>16777215</height>
-             </size>
+           </widget>
+          </item>
+          <item>
+           <widget class="CFrequencyPlotContainer" name="frequencyPlot" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
            </widget>
           </item>
@@ -181,6 +167,12 @@
    <class>CStatusPlot</class>
    <extends>QWidget</extends>
    <header>smart-monitor/StatusPlot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CFrequencyPlotContainer</class>
+   <extends>QWidget</extends>
+   <header location="global">smart-monitor/FrequencyPlotContainer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

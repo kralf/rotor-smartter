@@ -47,7 +47,7 @@ CStatusPlot::CStatusPlot() {
 };
 
 ///
-/// \fn CStatusPlot(QWidget * parent)
+/// \fn CStatusPlot(QWidget *pParent)
 ///
 /// \brief Constructor called automatically by QT.
 ///
