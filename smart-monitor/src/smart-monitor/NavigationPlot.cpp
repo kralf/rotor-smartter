@@ -70,7 +70,7 @@ NavigationPlot::paintEvent( QPaintEvent * event )
   painter.begin( this );
   painter.setRenderHint( QPainter::Antialiasing );
 /*  if self.status == 0:*/
-    painter.fillRect( event->rect(), QBrush( Qt::white ) );
+  painter.fillRect( event->rect(), palette().brush( QPalette::Base ) );
 /*    self.drawStatusMessage( painter, self.statusMessage )
   elif self.status == 1:
     painter.fillRect( event.rect(), QtGui.QBrush( QtCore.Qt.yellow ) )

@@ -33,10 +33,6 @@
 // local includes
 #include "FrequencyPlotContainer.h"
 
-// system includes
-#include <qwt-qt4/qwt_text.h>
-
-
 //------------------------------------------------------------------------------
 // Functions Implementations
 //------------------------------------------------------------------------------
@@ -55,35 +51,16 @@ CFrequencyPlotContainer::CFrequencyPlotContainer() {
 ///
 /// \param[in] pParent pointer to the parent's widget
 ///
-CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) : QWidget(pParent) {
-  // create the layout
-//   mpGridLayout = new QGridLayout(this);
-
-  // set layout
-//   this->setLayout(mpGridLayout);
-
-  // create alasca frequency plot and add it to the layout
-//   mpAxtFreqPlot = new CFrequencyPlot(QwtText("Alasca"), this);
-//   mpGridLayout->addWidget(mpAxtFreqPlot, 0, 0);
-
-  // create gyro frequency plot and add it to the layout
-//   mpGyroFreqPlot = new CFrequencyPlot(QwtText("Gyro"), this);
-//   mpGridLayout->addWidget(mpGyroFreqPlot, 1, 0);
-
-  // create odometry frequency plot and add it to the layout
-  //mpOdometryFreqPlot = new CFrequencyPlot(this);
-  //mpGridLayout->addWidget(mpOdometryFreqPlot, 2, 0);
-
-  // create localize frequency plot and add it to the layout
-  //mpLocalizeFreqPlot = new CFrequencyPlot(this);
-  //mpGridLayout->addWidget(mpLocalizeFreqPlot, 3, 0);
-
-  // create update timer
-  mpTimer = new QTimer(this);
+CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) :
+  QWidget(pParent),
+  mpRegistry(0),
+  mpVBoxLayout(new QVBoxLayout(this)),
+  mpTimer(new QTimer(this)) {
+  setLayout(mpVBoxLayout);
+  mpVBoxLayout->addStretch(1);
 
   /// update function of the plot is called periodically
   connect(mpTimer, SIGNAL(timeout()), this, SLOT(updatePlots()));
-
   // start update timer
   mpTimer->start(500);
 };
@@ -116,6 +93,34 @@ CFrequencyPlotContainer& CFrequencyPlotContainer::operator = (const CFrequencyPl
 };
 
 ///
+/// \fn setRegistry(Rotor::Registry& rRegistry)
+///
+/// \brief Set the frequency plot's Rotor registry.
+///
+void CFrequencyPlotContainer::setRegistry(Rotor::Registry& rRegistry) {
+  mpRegistry = &rRegistry;
+};
+
+///
+/// \fn addPlot(const QString& messageName, double dMaxFrequency)
+///
+/// \brief Add a frequency plot for the message with the given name.
+///
+void CFrequencyPlotContainer::addPlot(const QString& messageName,
+  double dMaxFrequency) {
+  std::map<QString, CFrequencyPlot*>::const_iterator it =
+    mpPlots.find(messageName);
+
+  if (it == mpPlots.end()) {
+    CFrequencyPlot* mpPlot = new CFrequencyPlot(messageName,
+      dMaxFrequency, this);
+    mpVBoxLayout->insertWidget(mpVBoxLayout->count()-1, mpPlot);
+
+    mpPlots[messageName] = mpPlot;
+  }
+};
+
+///
 /// \fn void updatePlots()
 ///
 /// \brief This function updates the plots.
@@ -123,9 +128,11 @@ CFrequencyPlotContainer& CFrequencyPlotContainer::operator = (const CFrequencyPl
 /// \return void
 ///
 void CFrequencyPlotContainer::updatePlots() {
-  // trigger the update figure of the frequency plots
-//   mpAxtFreqPlot->updateFigure();
-//   mpGyroFreqPlot->updateFigure();
+  if (mpRegistry) {
+    for (std::map<QString, CFrequencyPlot*>::const_iterator it = mpPlots.begin();
+      it != mpPlots.end(); ++it)
+      mpRegistry->messageFrequency(it->first.toLatin1().constData());
+  }
 };
 
 

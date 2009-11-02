@@ -32,13 +32,8 @@
 #include "FrequencyPlot.h"
 
 // system includes
-#include <qwt-qt4/qwt_plot_layout.h>
-
-
-//------------------------------------------------------------------------------
-// Constants
-//------------------------------------------------------------------------------
-const size_t LIST_DEFAULT_CAPACITY = 20;
+#include <QPaintEvent>
+#include <QPainter>
 
 
 //------------------------------------------------------------------------------
@@ -60,26 +55,13 @@ CFrequencyPlot::CFrequencyPlot() {
 /// \param[in] rTitle title of the plot
 /// \param[in] pParent pointer to the parent's widget
 ///
-CFrequencyPlot::CFrequencyPlot(const QwtText &rTitle, QWidget *pParent) :
+CFrequencyPlot::CFrequencyPlot(const QString &rTitle, double dMaxFrequency,
+  QWidget *pParent, size_t uFrequencyListCapacity) :
   QWidget(pParent),
-  muFrequencyListCapacity(LIST_DEFAULT_CAPACITY) {
-  // create the layout
-  mpGridLayout = new QGridLayout(this);
-
-  // create the QT plot
-  mpPlot = new QwtPlot(rTitle, this);
-
-  // set canvas
-  mpPlot->setCanvasBackground(Qt::white);
-  mpPlot->plotLayout()->setCanvasMargin(0);
-  mpPlot->plotLayout()->setAlignCanvasToScales(true);
-
-  // add plot to layout
-  mpGridLayout->addWidget(mpPlot, 0, 0);
-  mpPlot->replot();
-
-  // set layout
-  this->setLayout(mpGridLayout);
+  mTitle(rTitle),
+  mdMaxFrequency(dMaxFrequency),
+  muFrequencyListCapacity(uFrequencyListCapacity) {
+  setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 };
 
 ///
@@ -110,17 +92,6 @@ CFrequencyPlot& CFrequencyPlot::operator = (const CFrequencyPlot &other) {
 };
 
 ///
-/// \fn void updateFigure()
-///
-/// \brief This function updates the plot.
-///
-/// \return void
-///
-void CFrequencyPlot::updateFigure() {
-
-};
-
-///
 /// \fn void updateFrequency(double dFrequency)
 ///
 /// \brief This function updates the frequency list to paint.
@@ -132,9 +103,10 @@ void CFrequencyPlot::updateFrequency(double dFrequency) {
   mFrequencyList.push_back(dFrequency);
 
   // if list capacity is exhausted, delete first element
-  if (mFrequencyList.size() > muFrequencyListCapacity) {
+  if (mFrequencyList.size() > muFrequencyListCapacity)
     mFrequencyList.pop_front();
-  }
+
+  repaint();
 };
 
 ///
@@ -161,8 +133,40 @@ size_t CFrequencyPlot::getFrequencyListCapacity () const {
   return muFrequencyListCapacity;
 };
 
+QSize CFrequencyPlot::sizeHint() const {
+  return fontMetrics().boundingRect(mTitle+" 000 Hz").size()+QSize(20, 25);
+};
+
+void CFrequencyPlot::paintEvent(QPaintEvent* event) {
+  QPainter painter;
+  painter.begin(this);
+  painter.setRenderHint(QPainter::Antialiasing);
+  painter.fillRect(event->rect(), palette().brush(QPalette::Base));
+
+  painter.translate(0, height());
+  painter.scale((double)width()/(double)muFrequencyListCapacity,
+    -height()/mdMaxFrequency);
+  size_t i = 0;
+  QLinearGradient gradient(0, 0, 0, mdMaxFrequency);
+  gradient.setColorAt(0, Qt::red);
+  gradient.setColorAt(1, Qt::green);
+  for (std::list<double>::const_iterator it = mFrequencyList.begin();
+    it != mFrequencyList.end(); ++it, ++i)
+    painter.fillRect(i, 0, 1, *it, gradient);
+
+  painter.resetTransform();
+  painter.drawText(QRect(4, 4,  width()-8, height()-8),
+    Qt::AlignLeft | Qt::AlignTop, mTitle);
+
+  double frequency = 0.0;
+  QString frequencyString;
+  if (!mFrequencyList.empty())
+    frequency = mFrequencyList.back();
+  painter.drawText(QRect(4, 4, width()-8, height()-8),
+    Qt::AlignRight | Qt::AlignTop,
+    frequencyString.sprintf("%3.0f Hz", frequency));
+};
 
 //------------------------------------------------------------------------------
 // End of FrequencyPlot.cpp
 //------------------------------------------------------------------------------
-

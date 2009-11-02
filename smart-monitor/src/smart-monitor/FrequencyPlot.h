@@ -38,7 +38,6 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QTimer>
-#include <qwt-qt4/qwt_plot.h>
 #include <list>
 
 
@@ -77,17 +76,17 @@ class CFrequencyPlot : public QWidget {
   ///
   CFrequencyPlot& operator = (const CFrequencyPlot &other);
 
-  /// \var QwtPlot *mpPlot
+  /// \var QString muTitle
   ///
-  /// \brief Handle on the frequency plot.
+  /// \brief Title of the frequency plot.
   ///
-  QwtPlot *mpPlot;
+  QString mTitle;
 
-  /// \var QGridLayout *mpGridLayout
+  /// \var double mdMaxFrequency
   ///
-  /// \brief Handle on the grid layout of our status plot.
+  /// \brief Maximum frequency of the frequency plot.
   ///
-  QGridLayout *mpGridLayout;
+  double mdMaxFrequency;
 
   /// \var std::list<double> mFrequencyList
   ///
@@ -103,14 +102,17 @@ class CFrequencyPlot : public QWidget {
 
 public:
   ///
-  /// \fn CFrequencyPlot(const QwtText &rTitle, QWidget *pParent)
+  /// \fn CFrequencyPlot(const QString &rTitle, double mdMaxFrequency, QWidget *pParent)
   ///
   /// \brief Constructor called automatically by QT.
   ///
   /// \param[in] rTitle title of the plot
+  /// \param[in] dMaxFrequency maximum frequency of the plot
   /// \param[in] pParent pointer to the parent's widget
+  /// \param[in] uFrequencyListCapacity frequency queue capacity
   ///
-  CFrequencyPlot(const QwtText &rTitle, QWidget *pParent);
+  CFrequencyPlot(const QString &rTitle, double dMaxFrequency,
+    QWidget *pParent, size_t uFrequencyListCapacity = 100);
 
   ///
   /// \fn virtual ~CFrequencyPlot()
@@ -118,15 +120,6 @@ public:
   /// \brief Destructor.
   ///
   ~CFrequencyPlot();
-
-  ///
-  /// \fn void updateFigure()
-  ///
-  /// \brief This function updates the plot.
-  ///
-  /// \return void
-  ///
-  void updateFigure();
 
   ///
   /// \fn void updateFrequency(double dFrequency)
@@ -157,10 +150,11 @@ public:
   ///
   size_t getFrequencyListCapacity() const;
 
-
+  virtual QSize sizeHint() const;
 protected:
 // accessible by inheritance
 
+  void paintEvent(QPaintEvent* event);
 };
 
 #endif // FREQUENCYPLOT_H

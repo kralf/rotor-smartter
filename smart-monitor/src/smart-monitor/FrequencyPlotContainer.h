@@ -35,10 +35,13 @@
 #include "FrequencyPlot.h"
 
 // system includes
+#include <map>
+
 #include <QWidget>
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QTimer>
 
+#include <rotor/Registry.h>
 
 //------------------------------------------------------------------------------
 // Forward Declarations
@@ -75,11 +78,17 @@ class CFrequencyPlotContainer : public QWidget {
   ///
   CFrequencyPlotContainer& operator = (const CFrequencyPlotContainer &other);
 
+  /// \var Rotor::Registry *mpRegistry
+  ///
+  /// \brief Handle on the Rotor registry.
+  ///
+  Rotor::Registry* mpRegistry;
+
   /// \var QGridLayout *mpGridLayout
   ///
   /// \brief Handle on the grid layout of our status plot.
   ///
-  QGridLayout *mpGridLayout;
+  QVBoxLayout *mpVBoxLayout;
 
   /// \var QTimer *mpTimer
   ///
@@ -87,77 +96,11 @@ class CFrequencyPlotContainer : public QWidget {
   ///
   QTimer *mpTimer;
 
-  /// \var CFrequencyPlot *mpAxtFreqPlot
+  /// \var map<QString, CFrequencyPlot*> mpPlots
   ///
-  /// \brief Handle on the alasca frequency plot.
+  /// \brief Handles on the frequecny plots.
   ///
-  CFrequencyPlot *mpAxtFreqPlot;
-
-  /// \var CFrequencyPlot *mpGyroFreqPlot
-  ///
-  /// \brief Handle on the gyro frequency plot.
-  ///
-  CFrequencyPlot *mpGyroFreqPlot;
-
-  /// \var CFrequencyPlot *mpStatusFreqPlot
-  ///
-  /// \brief Handle on the status frequency plot.
-  ///
-  CFrequencyPlot *mpStatusFreqPlot;
-
-  /// \var CFrequencyPlot *mpSmartVelocityFreqPlot
-  ///
-  /// \brief Handle on the smart velocity frequency plot.
-  ///
-  CFrequencyPlot *mpSmartVelocityFreqPlot;
-
-  /// \var CFrequencyPlot *mpCarmenVelocityFreqPlot
-  ///
-  /// \brief Handle on the carmen velocity frequency plot.
-  ///
-  CFrequencyPlot *mpCarmenVelocityFreqPlot;
-
-  /// \var CFrequencyPlot *mpPathFreqPlot
-  ///
-  /// \brief Handle on the path frequency plot.
-  ///
-  CFrequencyPlot *mpPathFreqPlot;
-
-  /// \var CFrequencyPlot *mpLocalizeFreqPlot
-  ///
-  /// \brief Handle on the localize frequency plot.
-  ///
-  CFrequencyPlot *mpLocalizeFreqPlot;
-
-  /// \var CFrequencyPlot *mpOdometryFreqPlot
-  ///
-  /// \brief Handle on the odometry frequency plot.
-  ///
-  CFrequencyPlot *mpOdometryFreqPlot;
-
-  /// \var CFrequencyPlot *mpPointFreqPlot
-  ///
-  /// \brief Handle on the point frequency plot.
-  ///
-  CFrequencyPlot *mpPointFreqPlot;
-
-  /// \var CFrequencyPlot *mpLaserConfigFreqPlot
-  ///
-  /// \brief Handle on the laser config frequency plot.
-  ///
-  CFrequencyPlot *mpLaserConfigFreqPlot;
-
-  /// \var CFrequencyPlot *mpLaserLaserFreqPlot
-  ///
-  /// \brief Handle on the laser laser frequency plot.
-  ///
-  CFrequencyPlot *mpLaserLaserFreqPlot;
-
-  /// \var CFrequencyPlot *mpRobotLaserFreqPlot
-  ///
-  /// \brief Handle on the robot laser frequency plot.
-  ///
-  CFrequencyPlot *mpRobotLaserFreqPlot;
+  std::map<QString, CFrequencyPlot*> mpPlots;
 
 public:
   ///
@@ -176,6 +119,19 @@ public:
   ///
   ~CFrequencyPlotContainer();
 
+  ///
+  /// \fn setRegistry(Rotor::Registry& rRegistry)
+  ///
+  /// \brief Set the frequency plot's Rotor registry.
+  ///
+  void setRegistry(Rotor::Registry& rRegistry);
+
+  ///
+  /// \fn addPlot(const QString& messageName, double dMaxFrequency)
+  ///
+  /// \brief Add a frequency plot for the message with the given name.
+  ///
+  void addPlot(const QString& messageName, double dMaxFrequency);
 
 public slots:
   ///
@@ -186,7 +142,6 @@ public slots:
   /// \return void
   ///
   void updatePlots();
-
 
 protected:
 // accessible by inheritance
