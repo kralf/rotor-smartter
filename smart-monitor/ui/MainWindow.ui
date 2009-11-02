@@ -102,7 +102,7 @@
               <item>
                <widget class="QPushButton" name="resetButton">
                 <property name="text">
-                 <string>Reset</string>
+                 <string>New</string>
                 </property>
                 <property name="default">
                  <bool>false</bool>
@@ -161,6 +161,28 @@
             <number>4</number>
            </property>
            <item>
+            <widget class="QSlider" name="navigationScaleSlider">
+             <property name="minimum">
+              <number>-100</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="pageStep">
+              <number>14</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+             <property name="sliderPosition">
+              <number>0</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="NavigationPlot" name="navigationPlot" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -201,6 +223,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="executeButton">
+                <property name="text">
+                 <string>Execute</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="loadButton">
                 <property name="text">
                  <string>Load</string>
@@ -208,9 +237,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="executeButton">
+               <widget class="QPushButton" name="loadFromButton">
                 <property name="text">
-                 <string>Execute</string>
+                 <string>...</string>
                 </property>
                </widget>
               </item>
@@ -345,6 +374,9 @@
    <extends>QWidget</extends>
    <header>smart-monitor/NavigationPlot.h</header>
    <container>1</container>
+   <slots>
+    <slot>setScale(int)</slot>
+   </slots>
   </customwidget>
   <customwidget>
    <class>CStatusPlot</class>
@@ -412,6 +444,22 @@
     <hint type="destinationlabel">
      <x>140</x>
      <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>navigationScaleSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>navigationPlot</receiver>
+   <slot>setScale(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>243</y>
     </hint>
    </hints>
   </connection>

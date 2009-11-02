@@ -67,7 +67,7 @@ DispatchThread::run()
         _window.mainWidget().navigationPlot->resetLaserData();
         for ( size_t i = 0; i < alasca.num_points; ++i ) {
           if ( alasca.channel[i] == 2 ) {
-            _window.mainWidget().navigationPlot->addLaserPoint( -alasca.y[i], alasca.x[i] );
+            _window.mainWidget().navigationPlot->addLaserPoint( -alasca.y[i], alasca.x[i], alasca.point_status[i] );
           }
         }
     } else if ( message.name() == "smart_velocity_message" ) {

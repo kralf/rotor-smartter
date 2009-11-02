@@ -12,25 +12,33 @@ class Configuration;
 
 class NavigationPlot : public QWidget
 {
+  Q_OBJECT
+
 public:
   NavigationPlot( QWidget * parent );
   void configuration( const Configuration & configuration );
-  void addLaserPoint( double x, double y );
+  void addLaserPoint( double x, double y, unsigned char status );
   void resetLaserData();
   void steeringAngle( double value );
   void commandSteeringAngle( double value );
+
+public slots:
+  void setScale( int value );
 
 protected:
   void paintEvent( QPaintEvent * event );
 
 private:
-  const Configuration * _configuration;
-  QTimer                _timer;
-  QReadWriteLock        _lock;
-  std::vector<double>   _laserX;
-  std::vector<double>   _laserY;
-  double                _steeringAngle;
-  double                _commandSteeringAngle;
+  const Configuration *       _configuration;
+  QTimer                      _timer;
+  QReadWriteLock              _lock;
+  std::vector<double>         _laserX;
+  std::vector<double>         _laserY;
+  std::vector<unsigned char>  _laserStatus;
+  double                      _steeringAngle;
+  double                      _commandSteeringAngle;
+
+  double                      _scale;
 
   void drawLaserPoints( QPainter & painter );
   void drawCar( QPainter & painter );

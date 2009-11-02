@@ -8,7 +8,8 @@
 
 
 NavigationPlot::NavigationPlot( QWidget * parent )
-  : QWidget( parent )
+  : QWidget( parent ),
+    _scale ( 1.0 )
 {
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( repaint() ) );
   _timer.start( 200 );
@@ -25,10 +26,11 @@ NavigationPlot::configuration( const Configuration & value )
 //------------------------------------------------------------------------------
 
 void
-NavigationPlot::addLaserPoint( double x, double y )
+NavigationPlot::addLaserPoint( double x, double y, unsigned char status )
 {
   _laserX.push_back( x );
   _laserY.push_back( y );
+  _laserStatus.push_back( status );
 }
 
 //------------------------------------------------------------------------------
@@ -41,6 +43,8 @@ NavigationPlot::resetLaserData()
   _laserX.reserve( size );
   _laserY.clear();
   _laserY.reserve( size );
+  _laserStatus.clear();
+  _laserStatus.reserve( size );
 }
 
 //------------------------------------------------------------------------------
@@ -62,6 +66,14 @@ NavigationPlot::commandSteeringAngle( double value )
 //------------------------------------------------------------------------------
 
 void
+NavigationPlot::setScale( int value ) {
+  _scale = exp(0.01*value);
+  repaint();
+}
+
+//------------------------------------------------------------------------------
+
+void
 NavigationPlot::paintEvent( QPaintEvent * event )
 {
   double scale = 25;
@@ -69,15 +81,8 @@ NavigationPlot::paintEvent( QPaintEvent * event )
   QPainter painter;
   painter.begin( this );
   painter.setRenderHint( QPainter::Antialiasing );
-/*  if self.status == 0:*/
   painter.fillRect( event->rect(), palette().brush( QPalette::Base ) );
-/*    self.drawStatusMessage( painter, self.statusMessage )
-  elif self.status == 1:
-    painter.fillRect( event.rect(), QtGui.QBrush( QtCore.Qt.yellow ) )
-    self.drawStatusMessage( painter, self.statusMessage )
-  elif self.status == 2:
-    painter.fillRect( event.rect(), QtGui.QBrush( QtCore.Qt.red ) )
-    self.drawStatusMessage( painter, self.statusMessage )*/
+
   painter.translate( width() / 2.0, height() );
   if ( width() > height() ) {
     double ar = 1.5 * height() / width();
@@ -86,9 +91,10 @@ NavigationPlot::paintEvent( QPaintEvent * event )
     double ar = 1.5 * width() / height();
     painter.scale( ar * scale, ar * -scale );
   }
+  painter.scale( _scale, _scale );
+
   drawSteering( painter );
   drawCar( painter );
-//  self.drawNext( painter )
   painter.translate( 0, _configuration->laserDistance() );
   drawLaserPoints( painter );
   painter.end();
@@ -100,10 +106,16 @@ NavigationPlot::paintEvent( QPaintEvent * event )
 void
 NavigationPlot::drawLaserPoints( QPainter & painter )
 {
-  QPen pen( QColor( 0, 128, 0 ) );
+  QPen pen;
   pen.setWidthF( 0.1 );
-  painter.setPen( pen );
+
   for ( size_t i = 0; i < _laserX.size(); ++i ) {
+    if ( _laserStatus[i] )
+      pen.setColor( QColor( 128, 0, 0 ) );
+    else
+      pen.setColor( QColor( 0, 128, 0 ) );
+
+    painter.setPen( pen );
     painter.drawPoint( QPointF( _laserX[i], _laserY[i] ) );
   }
 }
