@@ -35,9 +35,9 @@ DispatchThread::DispatchThread(
   _window.mainWidget().frequencyPlot->setRegistry( registry );
   _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 150 );
   _window.mainWidget().frequencyPlot->addPlot( "carmen_base_odometry", 150 );
-  _window.mainWidget().frequencyPlot->addPlot( "carmen_localize_globalpos", 150 );
-  _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 150 );
-  _window.mainWidget().frequencyPlot->addPlot( "axt_message", 25 );
+  _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 120 );
+  _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 120 );
+  _window.mainWidget().frequencyPlot->addPlot( "axt_message", 30 );
 }
 
 //------------------------------------------------------------------------------
@@ -48,9 +48,9 @@ DispatchThread::run()
   while( true ) {
     Message message   = _registry.receiveMessage();
     Structure data    = message.data();
-    if ( message.name() == "carmen_localize_globalpos" ) {
-      carmen_localize_globalpos_message & global = ROTOR_VARIABLE( carmen_localize_globalpos_message, data );
-      _window.mainWidget().localizationPlot->updatePath( "Global", global.globalpos.x, global.globalpos.y );
+    if ( message.name() == "locfilter_filteredpos_message" ) {
+      locfilter_filteredpos_message & filteredpos = ROTOR_VARIABLE( locfilter_filteredpos_message, data );
+      _window.mainWidget().localizationPlot->updatePath( "Global", filteredpos.filteredpos.x, filteredpos.filteredpos.y );
     } else if ( message.name() == "carmen_base_odometry" ) {
       carmen_base_odometry_message & odometry = ROTOR_VARIABLE( carmen_base_odometry_message, data );
       _window.mainWidget().localizationPlot->updatePath( "Odometry", odometry.x, odometry.y );

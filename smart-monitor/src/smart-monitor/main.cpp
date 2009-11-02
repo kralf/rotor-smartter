@@ -47,6 +47,12 @@ setupMessages( Registry & registry )
   registry.subscribeToMessage( "carmen_base_odometry", false, 4 );
 
   registry.registerMessageType( 
+    "locfilter_filteredpos_message", 
+    ROTOR_DEFINITION_STRING( locfilter_filteredpos_message ) 
+  );
+  registry.subscribeToMessage( "locfilter_filteredpos_message", false, 4 );
+
+  registry.registerMessageType( 
     "smart_velocity_message", 
     ROTOR_DEFINITION_STRING( smart_velocity_message ) 
   );
@@ -57,6 +63,12 @@ setupMessages( Registry & registry )
     ROTOR_DEFINITION_STRING( smart_status_message ) 
   );
   registry.subscribeToMessage( "smart_status_message", false, 4 );
+
+  registry.registerMessageType( 
+    "gyro_integrated_message", 
+    ROTOR_DEFINITION_STRING( gyro_integrated_message ) 
+  );
+  registry.subscribeToMessage( "gyro_integrated_message", false, 4 );
 }
 
 

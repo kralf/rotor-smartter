@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>804</width>
     <height>480</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralwidget">
    <property name="font">
     <font>
-     <pointsize>6</pointsize>
+     <pointsize>9</pointsize>
     </font>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -59,11 +59,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="font">
-              <font>
-               <pointsize>6</pointsize>
-              </font>
-             </property>
             </widget>
            </item>
            <item>
@@ -73,11 +68,6 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>6</pointsize>
-              </font>
              </property>
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
@@ -228,11 +218,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="font">
-              <font>
-               <pointsize>6</pointsize>
-              </font>
-             </property>
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -240,6 +225,9 @@
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout">
+              <property name="margin">
+               <number>4</number>
+              </property>
               <item>
                <widget class="QLabel" name="label_2">
                 <property name="text">
@@ -307,15 +295,10 @@
              <item>
               <widget class="CFrequencyPlotContainer" name="frequencyPlot" native="true">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
-               </property>
-               <property name="font">
-                <font>
-                 <pointsize>6</pointsize>
-                </font>
                </property>
               </widget>
              </item>
@@ -337,15 +320,10 @@
              <item>
               <widget class="CStatusPlot" name="statusPlot" native="true">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
-               </property>
-               <property name="font">
-                <font>
-                 <pointsize>6</pointsize>
-                </font>
                </property>
               </widget>
              </item>
@@ -365,13 +343,7 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
-              <widget class="CGyroPlot" name="gyroPlot" native="true">
-               <property name="font">
-                <font>
-                 <pointsize>6</pointsize>
-                </font>
-               </property>
-              </widget>
+              <widget class="CGyroPlot" name="gyroPlot" native="true"/>
              </item>
             </layout>
            </widget>
@@ -477,7 +449,7 @@
   </connection>
   <connection>
    <sender>navigationScaleSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>navigationPlot</receiver>
    <slot>setScale(int)</slot>
    <hints>

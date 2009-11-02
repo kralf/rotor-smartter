@@ -158,4 +158,13 @@ ROTOR_DEFINE_TYPE( gyro_integrated_message,
   };
 )
 
+ROTOR_DEFINE_TYPE( locfilter_filteredpos_message,
+  struct locfilter_filteredpos_message {
+    carmen_point_t filteredpos;
+    carmen_point_t odometrypos;
+    double timestamp;
+    char *host;
+  };
+)
+
 #endif SMART_ROTOR_INTERFACES_H
