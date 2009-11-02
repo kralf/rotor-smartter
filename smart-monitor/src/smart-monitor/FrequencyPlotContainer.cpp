@@ -130,8 +130,11 @@ void CFrequencyPlotContainer::addPlot(const QString& messageName,
 void CFrequencyPlotContainer::updatePlots() {
   if (mpRegistry) {
     for (std::map<QString, CFrequencyPlot*>::const_iterator it = mpPlots.begin();
-      it != mpPlots.end(); ++it)
-      mpRegistry->messageFrequency(it->first.toLatin1().constData());
+      it != mpPlots.end(); ++it) {
+      double frequency =
+        mpRegistry->messageFrequency(it->first.toLatin1().constData());
+      it->second->updateFrequency(frequency);
+    }
   }
 };
 
