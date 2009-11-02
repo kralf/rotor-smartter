@@ -150,6 +150,26 @@ public:
   ///
   size_t getFrequencyListCapacity() const;
 
+  ///
+  /// \fn setMaxFrequency(double dMaxFrequency)
+  ///
+  /// \brief This function sets the maximum frequency.
+  ///
+  /// \param[in] dMaxFrequency maximum frequency
+  ///
+  /// \return void
+  ///
+  void setMaxFrequency(double dMaxFrequency);
+
+  ///
+  /// \fn double getMaxFrequency const ()
+  ///
+  /// \brief This function gets the maximum frequency.
+  ///
+  /// \return maximum frequency
+  ///
+  double getMaxFrequency() const;
+
   virtual QSize sizeHint() const;
 protected:
 // accessible by inheritance

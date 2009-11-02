@@ -33,11 +33,11 @@ DispatchThread::DispatchThread(
     _configuration( window.configuration() )
 {
   _window.mainWidget().frequencyPlot->setRegistry( registry );
-  _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 150 );
-  _window.mainWidget().frequencyPlot->addPlot( "carmen_base_odometry", 150 );
-  _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 120 );
-  _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 120 );
-  _window.mainWidget().frequencyPlot->addPlot( "axt_message", 30 );
+  _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 125 );
+  _window.mainWidget().frequencyPlot->addPlot( "carmen_base_odometry", 125 );
+  _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 100 );
+  _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 100 );
+  _window.mainWidget().frequencyPlot->addPlot( "axt_message", 25 );
 }
 
 //------------------------------------------------------------------------------

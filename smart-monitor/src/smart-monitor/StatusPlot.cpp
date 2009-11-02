@@ -38,21 +38,10 @@
 //------------------------------------------------------------------------------
 // Functions Implementations
 //------------------------------------------------------------------------------
-///
-/// \fn CStatusPlot()
-///
-/// \brief Default constructor.
-///
+
 CStatusPlot::CStatusPlot() {
 };
 
-///
-/// \fn CStatusPlot(QWidget *pParent)
-///
-/// \brief Constructor called automatically by QT.
-///
-/// \param[in] pParent pointer to the parent's widget
-///
 CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   // create the grid layout to put further objects in it
   mpGridLayout = new QGridLayout(this);
@@ -143,25 +132,12 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   this->setLayout(mpGridLayout);
 };
 
-///
-/// \fn CStatusPlot(const CStatusPlot &other)
-///
-/// \brief Copy constructor.
-///
 CStatusPlot::CStatusPlot(const CStatusPlot &other) {
 };
 
-///
-/// \fn virtual ~CStatusPlot()
-///
-/// \brief Destructor.
-///
 CStatusPlot::~CStatusPlot() {
 };
 
-///
-/// \brief Assignement operator.
-///
 CStatusPlot& CStatusPlot::operator = (const CStatusPlot &other) {
   if (this != &other) { // protect against invalid self-assignment
   }
@@ -170,28 +146,6 @@ CStatusPlot& CStatusPlot::operator = (const CStatusPlot &other) {
   return *this;
 };
 
-///
-/// \fn void updateStatus(double dGasPedalValue,
-///                       int    iGearValue,
-///                       double dSteeringAngleValue,
-///                       double dTranslationalVelocity,
-///                       double dRotationalVelocityFrontRight,
-///                       double dRotationalVelocityFrontLeft,
-///                       double dRotationalVelocityRearRight,
-///                       double dRotationalVelocityRearLeft)
-///
-/// \brief This function updates the status.
-///
-/// \param[in] dGasPedalValue gas pedal position
-/// \param[in] iGearValue gear position
-/// \param[in] dSteeringAngleValue steering angle [rad]
-/// \param[in] dTranslationalVelocity translational velocity [m/s]
-/// \param[in] dRotationalVelocityFrontRight front right wheel rotational velocity [rps]
-/// \param[in] dRotationalVelocityFrontLeft front left wheel rotational velocity [rps]
-/// \param[in] dRotationalVelocityRearRight rear right wheel rotational velocity [rps]
-/// \param[in] dRotationalVelocityRearLeft rear left wheel rotational velocity [rps]
-/// \return void
-///
 void CStatusPlot::updateStatus(double dGasPedalValue,
                                int    iGearValue,
                                double dSteeringAngleValue,
@@ -235,4 +189,3 @@ void CStatusPlot::updateStatus(double dGasPedalValue,
 //------------------------------------------------------------------------------
 // End of StatusPlot.cpp
 //------------------------------------------------------------------------------
-

@@ -36,21 +36,10 @@
 //------------------------------------------------------------------------------
 // Functions Implementations
 //------------------------------------------------------------------------------
-///
-/// \fn CFrequencyPlotContainer()
-///
-/// \brief Default constructor.
-///
+
 CFrequencyPlotContainer::CFrequencyPlotContainer() {
 };
 
-///
-/// \fn CFrequencyPlotContainer(QWidget * parent)
-///
-/// \brief Constructor called automatically by QT.
-///
-/// \param[in] pParent pointer to the parent's widget
-///
 CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) :
   QWidget(pParent),
   mpRegistry(0),
@@ -65,25 +54,12 @@ CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) :
   mpTimer->start(500);
 };
 
-///
-/// \fn CFrequencyPlotContainer(const CFrequencyPlotContainer &other)
-///
-/// \brief Copy constructor.
-///
 CFrequencyPlotContainer::CFrequencyPlotContainer(const CFrequencyPlotContainer &other) {
 };
 
-///
-/// \fn virtual ~CFrequencyPlotContainer()
-///
-/// \brief Destructor.
-///
 CFrequencyPlotContainer::~CFrequencyPlotContainer() {
 };
 
-///
-/// \brief Assignement operator.
-///
 CFrequencyPlotContainer& CFrequencyPlotContainer::operator = (const CFrequencyPlotContainer &other) {
   if (this != &other) { // protect against invalid self-assignment
   }
@@ -92,20 +68,10 @@ CFrequencyPlotContainer& CFrequencyPlotContainer::operator = (const CFrequencyPl
   return *this;
 };
 
-///
-/// \fn setRegistry(Rotor::Registry& rRegistry)
-///
-/// \brief Set the frequency plot's Rotor registry.
-///
 void CFrequencyPlotContainer::setRegistry(Rotor::Registry& rRegistry) {
   mpRegistry = &rRegistry;
 };
 
-///
-/// \fn addPlot(const QString& messageName, double dMaxFrequency)
-///
-/// \brief Add a frequency plot for the message with the given name.
-///
 void CFrequencyPlotContainer::addPlot(const QString& messageName,
   double dMaxFrequency) {
   std::map<QString, CFrequencyPlot*>::const_iterator it =
@@ -120,13 +86,6 @@ void CFrequencyPlotContainer::addPlot(const QString& messageName,
   }
 };
 
-///
-/// \fn void updatePlots()
-///
-/// \brief This function updates the plots.
-///
-/// \return void
-///
 void CFrequencyPlotContainer::updatePlots() {
   if (mpRegistry) {
     for (std::map<QString, CFrequencyPlot*>::const_iterator it = mpPlots.begin();
@@ -138,8 +97,6 @@ void CFrequencyPlotContainer::updatePlots() {
   }
 };
 
-
 //------------------------------------------------------------------------------
 // End of FrequencyPlotContainer.cpp
 //------------------------------------------------------------------------------
-

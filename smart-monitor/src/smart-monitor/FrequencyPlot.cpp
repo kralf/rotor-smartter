@@ -39,50 +39,25 @@
 //------------------------------------------------------------------------------
 // Functions Implementations
 //------------------------------------------------------------------------------
-///
-/// \fn CFrequencyPlot()
-///
-/// \brief Default constructor.
-///
+
 CFrequencyPlot::CFrequencyPlot() {
 };
 
-///
-/// \fn CFrequencyPlot(const QwtText &rTitle, QWidget *pParent)
-///
-/// \brief Constructor called automatically by QT.
-///
-/// \param[in] rTitle title of the plot
-/// \param[in] pParent pointer to the parent's widget
-///
 CFrequencyPlot::CFrequencyPlot(const QString &rTitle, double dMaxFrequency,
   QWidget *pParent, size_t uFrequencyListCapacity) :
   QWidget(pParent),
   mTitle(rTitle),
   mdMaxFrequency(dMaxFrequency),
   muFrequencyListCapacity(uFrequencyListCapacity) {
-  setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+  setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 };
 
-///
-/// \fn CFrequencyPlot(const CFrequencyPlot &other)
-///
-/// \brief Copy constructor.
-///
 CFrequencyPlot::CFrequencyPlot(const CFrequencyPlot &other) {
 };
 
-///
-/// \fn virtual ~CFrequencyPlot()
-///
-/// \brief Destructor.
-///
 CFrequencyPlot::~CFrequencyPlot() {
 };
 
-///
-/// \brief Assignement operator.
-///
 CFrequencyPlot& CFrequencyPlot::operator = (const CFrequencyPlot &other) {
   if (this != &other) { // protect against invalid self-assignment
   }
@@ -91,13 +66,6 @@ CFrequencyPlot& CFrequencyPlot::operator = (const CFrequencyPlot &other) {
   return *this;
 };
 
-///
-/// \fn void updateFrequency(double dFrequency)
-///
-/// \brief This function updates the frequency list to paint.
-///
-/// \return void
-///
 void CFrequencyPlot::updateFrequency(double dFrequency) {
   // add the new frequency at the back
   mFrequencyList.push_back(dFrequency);
@@ -109,29 +77,22 @@ void CFrequencyPlot::updateFrequency(double dFrequency) {
   repaint();
 };
 
-///
-/// \fn void setFrequencyListCapacity(size_t uCapacity)
-///
-/// \brief This function sets the capacity of the frequency list.
-///
-/// \param[in] uCapacity capacity of the list
-///
-/// \return void
-///
 void CFrequencyPlot::setFrequencyListCapacity(size_t uCapacity) {
   muFrequencyListCapacity = uCapacity;
 };
 
-///
-/// \fn size_t getFrequencyListCapacity const ()
-///
-/// \brief This function sets the capacity of the frequency list.
-///
-/// \return capacity of the list
-///
 size_t CFrequencyPlot::getFrequencyListCapacity () const {
   return muFrequencyListCapacity;
 };
+
+void CFrequencyPlot::setMaxFrequency(double dMaxFrequency) {
+  mdMaxFrequency = dMaxFrequency;
+  repaint();
+}
+
+double CFrequencyPlot::getMaxFrequency() const {
+  return mdMaxFrequency;
+}
 
 QSize CFrequencyPlot::sizeHint() const {
   return fontMetrics().boundingRect(mTitle+" 000 Hz").size()+QSize(20, 20);
@@ -145,7 +106,7 @@ void CFrequencyPlot::paintEvent(QPaintEvent* event) {
 
   painter.translate(0, height());
   painter.scale((double)width()/(double)muFrequencyListCapacity,
-    -height()/mdMaxFrequency);
+    -height()/(mdMaxFrequency*1.2));
   size_t i = 0;
   QLinearGradient gradient(0, 0, 0, mdMaxFrequency);
   gradient.setColorAt(0, Qt::red);

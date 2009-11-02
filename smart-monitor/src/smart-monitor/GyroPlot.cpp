@@ -38,21 +38,10 @@
 //------------------------------------------------------------------------------
 // Functions Implementations
 //------------------------------------------------------------------------------
-///
-/// \fn CGyroPlot()
-///
-/// \brief Default constructor.
-///
+
 CGyroPlot::CGyroPlot() {
 };
 
-///
-/// \fn CGyroPlot(QWidget *pParent)
-///
-/// \brief Constructor called automatically by QT.
-///
-/// \param[in] pParent pointer to the parent's widget
-///
 CGyroPlot::CGyroPlot(QWidget *pParent) : QWidget(pParent) {
   // create the grid layout to put further objects in it
   mpGridLayout = new QGridLayout(this);
@@ -73,25 +62,12 @@ CGyroPlot::CGyroPlot(QWidget *pParent) : QWidget(pParent) {
   this->setLayout(mpGridLayout);
 };
 
-///
-/// \fn CGyroPlot(const CGyroPlot &other)
-///
-/// \brief Copy constructor.
-///
 CGyroPlot::CGyroPlot(const CGyroPlot &other) {
 };
 
-///
-/// \fn virtual ~CGyroPlot()
-///
-/// \brief Destructor.
-///
 CGyroPlot::~CGyroPlot() {
 };
 
-///
-/// \brief Assignement operator.
-///
 CGyroPlot& CGyroPlot::operator = (const CGyroPlot &other) {
   if (this != &other) { // protect against invalid self-assignment
   }
@@ -100,21 +76,11 @@ CGyroPlot& CGyroPlot::operator = (const CGyroPlot &other) {
   return *this;
 };
 
-///
-/// \fn void updateGyro(double dIntegratedTheta)
-///
-/// \brief This function updates the gyro angles.
-///
-/// \param[in] dIntegratedTheta integrated gyro angle
-///
-/// \return void
-///
 void CGyroPlot::updateGyro(double dIntegratedTheta) {
   // display the gyro angle
   sprintf(macBuffer, "%.2lf deg", dIntegratedTheta * 180.0 / M_PI);
   mpIntegratedAngleValue->setText(macBuffer);
 };
-
 
 //------------------------------------------------------------------------------
 // End of GyroPlot.cpp
