@@ -60,9 +60,9 @@ CFrequencyPlot::CFrequencyPlot() {
 /// \param[in] rTitle title of the plot
 /// \param[in] pParent pointer to the parent's widget
 ///
-CFrequencyPlot::CFrequencyPlot(const QwtText &rTitle,
-                               QWidget *pParent) : QWidget(pParent),
-                                                   muFrequencyListCapacity(LIST_DEFAULT_CAPACITY) {
+CFrequencyPlot::CFrequencyPlot(const QwtText &rTitle, QWidget *pParent) :
+  QWidget(pParent),
+  muFrequencyListCapacity(LIST_DEFAULT_CAPACITY) {
   // create the layout
   mpGridLayout = new QGridLayout(this);
 

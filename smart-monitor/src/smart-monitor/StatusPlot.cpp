@@ -138,7 +138,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpRotationalVelocityRearLeftValue->setNum(0.0);
   mpRotationalVelocityRearLeftValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityRearLeftValue, 7, 1);
- 
+
   mpGyroAngleLabel = new QLabel(this);
   mpGyroAngleLabel->setText("Gyro angle");
   mpGyroAngleLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -147,7 +147,9 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGyroAngleValue = new QLabel(this);
   mpGyroAngleValue->setNum(0.0);
   mpGyroAngleValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  mpGridLayout->addWidget(mpGyroAngleValue, 8, 1); 
+  mpGridLayout->addWidget(mpGyroAngleValue, 8, 1);
+
+  mpGridLayout->setRowStretch(9, 1);
 
   this->setLayout(mpGridLayout);
 };
@@ -209,28 +211,28 @@ void CStatusPlot::updateStatus(double dGasPedalValue,
                                double dRotationalVelocityFrontLeft,
                                double dRotationalVelocityRearRight,
                                double dRotationalVelocityRearLeft) {
-  
+
   // display all the incoming information
   sprintf(macBuffer, "%.2lf", dGasPedalValue);
   mpGasPedalValue->setText(macBuffer);
-  
+
   mpGearValue->setNum(iGearValue);
-  
+
   sprintf(macBuffer, "%.2lf", dSteeringAngleValue * 180.0 / M_PI);
   mpSteeringAngleValue->setText(macBuffer);
-  
+
   sprintf(macBuffer, "%.2lf", dTranslationalVelocity);
   mpTranslationalVelocityValue->setText(macBuffer);
-  
+
   sprintf(macBuffer, "%.2lf", dRotationalVelocityFrontRight);
   mpRotationalVelocityFrontRightValue->setText(macBuffer);
-  
+
   sprintf(macBuffer, "%.2lf", dRotationalVelocityFrontRight);
   mpRotationalVelocityFrontLeftValue->setText(macBuffer);
-  
+
   sprintf(macBuffer, "%.2lf", dRotationalVelocityRearRight);
   mpRotationalVelocityRearRightValue->setText(macBuffer);
-  
+
   sprintf(macBuffer, "%.2lf", dRotationalVelocityRearLeft);
   mpRotationalVelocityRearLeftValue->setText(macBuffer);
 };

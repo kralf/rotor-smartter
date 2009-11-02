@@ -101,7 +101,6 @@ class CFrequencyPlot : public QWidget {
   ///
   size_t muFrequencyListCapacity;
 
-
 public:
   ///
   /// \fn CFrequencyPlot(const QwtText &rTitle, QWidget *pParent)

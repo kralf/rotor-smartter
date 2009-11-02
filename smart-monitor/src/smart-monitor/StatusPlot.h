@@ -186,7 +186,7 @@ class CStatusPlot : public QWidget {
   /// \brief Handle on the grid layout of our status plot.
   ///
   QGridLayout *mpGridLayout;
-  
+
   /// \var char macBuffer[128]
   ///
   /// \brief Character array for displaying stuff.

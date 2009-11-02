@@ -23,7 +23,6 @@ LocalizationPlot::LocalizationPlot( QWidget * parent )
   _plot.plotLayout()->setAlignCanvasToScales( true );
 
   QFont axisFont = font();
-  axisFont.setPixelSize( 8 );
   _plot.enableAxis( QwtPlot::yLeft, true );
   _plot.setAxisFont( QwtPlot::yLeft, axisFont );
   _plot.enableAxis( QwtPlot::yRight, true );
