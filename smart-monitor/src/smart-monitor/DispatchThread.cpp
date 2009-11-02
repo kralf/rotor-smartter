@@ -34,7 +34,10 @@ DispatchThread::DispatchThread(
 {
   _window.mainWidget().frequencyPlot->setRegistry( registry );
   _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 150 );
+  _window.mainWidget().frequencyPlot->addPlot( "carmen_base_odometry", 150 );
   _window.mainWidget().frequencyPlot->addPlot( "carmen_localize_globalpos", 150 );
+  _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 150 );
+  _window.mainWidget().frequencyPlot->addPlot( "axt_message", 25 );
 }
 
 //------------------------------------------------------------------------------
@@ -81,7 +84,7 @@ DispatchThread::run()
                                                     status.rv_rear_left);
     } else if (message.name() == "gyro_integrated_message") {
       gyro_integrated_message &gyro = ROTOR_VARIABLE(gyro_integrated_message, data);
-      _window.mainWidget().statusPlot->updateGyro(gyro.theta);
+      _window.mainWidget().gyroPlot->updateGyro(gyro.theta);
     }
   }
 

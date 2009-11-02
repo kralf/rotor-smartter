@@ -4,6 +4,7 @@
 #include <qwt-qt4/qwt_plot_canvas.h>
 #include <qwt-qt4/qwt_symbol.h>
 #include <QPen>
+#include <QFileDialog>
 #include <fstream>
 #include <algorithm>
 #include <cfloat>
@@ -60,17 +61,24 @@ LocalizationPlot::~LocalizationPlot()
 void
 LocalizationPlot::save()
 {
-  _lock.lockForRead();
-  ofstream f( "path.txt" );
-  std::vector<double> & x = _x["Global"];
-  std::vector<double> & y = _y["Global"];
-  if ( x.size() > 0 )
-  {
-    for ( size_t i = 0; i < x.size(); ++i ) {
-      f << x[i] << " " << y[i] << endl;
-    }
-  }
-  _lock.unlock();
+  writePath( "path.txt" );
+}
+
+//------------------------------------------------------------------------------
+
+void
+LocalizationPlot::saveAs()
+{
+  QFileDialog dialog(this,"Save Path");
+
+  dialog.setFilter("Path Files (*.txt)");
+  dialog.selectFile("path.txt");
+  dialog.setAcceptMode(QFileDialog::AcceptSave);
+  dialog.setConfirmOverwrite(true);
+  dialog.setDirectory(QDir::current());
+
+  if (dialog.exec())
+    writePath(dialog.selectedFiles().front().toLatin1().constData());
 }
 
 //------------------------------------------------------------------------------
@@ -169,6 +177,24 @@ LocalizationPlot::updatePath( const std::string & name, double x, double y )
   if ( tx.size() > 2000 ) {
     tx.erase( tx.begin() );
     ty.erase( ty.begin() );
+  }
+  _lock.unlock();
+}
+
+//------------------------------------------------------------------------------
+
+void
+LocalizationPlot::writePath( const std::string & filename )
+{
+  _lock.lockForRead();
+  ofstream f( filename.c_str() );
+  std::vector<double> & x = _x["Global"];
+  std::vector<double> & y = _y["Global"];
+  if ( x.size() > 0 )
+  {
+    for ( size_t i = 0; i < x.size(); ++i ) {
+      f << x[i] << " " << y[i] << endl;
+    }
   }
   _lock.unlock();
 }

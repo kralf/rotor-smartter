@@ -22,10 +22,12 @@ public:
   LocalizationPlot( QWidget * parent );
   virtual ~LocalizationPlot();
   void updatePath( const std::string & name, double x, double y );
+  void writePath( const std::string & filename );
 
 public slots:
   void reset();
   void save();
+  void saveAs();
   void updateFigure();
 
 private:

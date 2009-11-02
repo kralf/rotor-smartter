@@ -24,8 +24,10 @@ file( GLOB SMART_MONITOR_SRC smart-monitor/*.cpp )
 set(
   SMART_MONITOR_MOC_HEADERS
   smart-monitor/LocalizationPlot.h
-  smart-monitor/FrequencyPlot.h
   smart-monitor/FrequencyPlotContainer.h
+  smart-monitor/FrequencyPlot.h
+  smart-monitor/StatusPlot.h
+  smart-monitor/GyroPlot.h
 )
 
 qt4_automoc( ${SMART_MONITOR_SRC} )

@@ -58,14 +58,13 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout = new QGridLayout(this);
 
   // create all the labels and corresponding values that we want to display
-
   mpGasPedalLabel = new QLabel(this);
   mpGasPedalLabel->setText("Gas Pedal Position");
   mpGasPedalLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpGasPedalLabel, 0, 0);
 
   mpGasPedalValue = new QLabel(this);
-  mpGasPedalValue->setNum(0.0);
+  mpGasPedalValue->setText("n/a");
   mpGasPedalValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpGasPedalValue, 0, 1);
 
@@ -75,7 +74,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpGearLabel, 1, 0);
 
   mpGearValue = new QLabel(this);
-  mpGearValue->setNum(0);
+  mpGearValue->setText("n/a");
   mpGearValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpGearValue, 1, 1);
 
@@ -85,7 +84,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpSteeringAngleLabel, 2, 0);
 
   mpSteeringAngleValue = new QLabel(this);
-  mpSteeringAngleValue->setNum(0.0);
+  mpSteeringAngleValue->setText("n/a");
   mpSteeringAngleValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpSteeringAngleValue, 2, 1);
 
@@ -95,7 +94,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpTranslationalVelocityLabel, 3, 0);
 
   mpTranslationalVelocityValue = new QLabel(this);
-  mpTranslationalVelocityValue->setNum(0.0);
+  mpTranslationalVelocityValue->setText("n/a");
   mpTranslationalVelocityValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpTranslationalVelocityValue, 3, 1);
 
@@ -105,7 +104,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpRotationalVelocityFrontRightLabel, 4, 0);
 
   mpRotationalVelocityFrontRightValue = new QLabel(this);
-  mpRotationalVelocityFrontRightValue->setNum(0.0);
+  mpRotationalVelocityFrontRightValue->setText("n/a");
   mpRotationalVelocityFrontRightValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityFrontRightValue, 4, 1);
 
@@ -115,7 +114,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpRotationalVelocityFrontLeftLabel, 5, 0);
 
   mpRotationalVelocityFrontLeftValue = new QLabel(this);
-  mpRotationalVelocityFrontLeftValue->setNum(0.0);
+  mpRotationalVelocityFrontLeftValue->setText("n/a");
   mpRotationalVelocityFrontLeftValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityFrontLeftValue, 5, 1);
 
@@ -125,7 +124,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpRotationalVelocityRearRightLabel, 6, 0);
 
   mpRotationalVelocityRearRightValue = new QLabel(this);
-  mpRotationalVelocityRearRightValue->setNum(0.0);
+  mpRotationalVelocityRearRightValue->setText("n/a");
   mpRotationalVelocityRearRightValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityRearRightValue, 6, 1);
 
@@ -135,21 +134,11 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpRotationalVelocityRearLeftLabel, 7, 0);
 
   mpRotationalVelocityRearLeftValue = new QLabel(this);
-  mpRotationalVelocityRearLeftValue->setNum(0.0);
+  mpRotationalVelocityRearLeftValue->setText("n/a");
   mpRotationalVelocityRearLeftValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityRearLeftValue, 7, 1);
 
-  mpGyroAngleLabel = new QLabel(this);
-  mpGyroAngleLabel->setText("Gyro angle");
-  mpGyroAngleLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-  mpGridLayout->addWidget(mpGyroAngleLabel, 8, 0);
-
-  mpGyroAngleValue = new QLabel(this);
-  mpGyroAngleValue->setNum(0.0);
-  mpGyroAngleValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  mpGridLayout->addWidget(mpGyroAngleValue, 8, 1);
-
-  mpGridLayout->setRowStretch(9, 1);
+  mpGridLayout->setRowStretch(8, 1);
 
   this->setLayout(mpGridLayout);
 };
@@ -216,43 +205,32 @@ void CStatusPlot::updateStatus(double dGasPedalValue,
   sprintf(macBuffer, "%.2lf", dGasPedalValue);
   mpGasPedalValue->setText(macBuffer);
 
-  mpGearValue->setNum(iGearValue);
+  if (iGearValue == 0)
+    mpGearValue->setText("N");
+  else if (iGearValue < 6)
+    mpGearValue->setNum(iGearValue);
+  else if (iGearValue == 6)
+    mpGearValue->setText("R");
 
-  sprintf(macBuffer, "%.2lf", dSteeringAngleValue * 180.0 / M_PI);
+
+  sprintf(macBuffer, "%.2lf deg", dSteeringAngleValue * 180.0 / M_PI);
   mpSteeringAngleValue->setText(macBuffer);
 
-  sprintf(macBuffer, "%.2lf", dTranslationalVelocity);
+  sprintf(macBuffer, "%.2lf m/s", dTranslationalVelocity);
   mpTranslationalVelocityValue->setText(macBuffer);
 
-  sprintf(macBuffer, "%.2lf", dRotationalVelocityFrontRight);
+  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityFrontRight);
   mpRotationalVelocityFrontRightValue->setText(macBuffer);
 
-  sprintf(macBuffer, "%.2lf", dRotationalVelocityFrontRight);
+  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityFrontRight);
   mpRotationalVelocityFrontLeftValue->setText(macBuffer);
 
-  sprintf(macBuffer, "%.2lf", dRotationalVelocityRearRight);
+  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityRearRight);
   mpRotationalVelocityRearRightValue->setText(macBuffer);
 
-  sprintf(macBuffer, "%.2lf", dRotationalVelocityRearLeft);
+  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityRearLeft);
   mpRotationalVelocityRearLeftValue->setText(macBuffer);
 };
-
-///
-/// \fn void updateGyro(double dTheta)
-///
-/// \brief This function updates the gyro angle.
-///
-/// \param[in] dTheta integrated gyro angle
-///
-/// \return void
-///
-void CStatusPlot::updateGyro(double dTheta)
-{
-  // display the gyro angle
-  sprintf(macBuffer, "%.2lf", dTheta * 180.0 / M_PI);
-  mpGyroAngleValue->setText(macBuffer);
-};
-
 
 //------------------------------------------------------------------------------
 // End of StatusPlot.cpp

@@ -134,7 +134,7 @@ size_t CFrequencyPlot::getFrequencyListCapacity () const {
 };
 
 QSize CFrequencyPlot::sizeHint() const {
-  return fontMetrics().boundingRect(mTitle+" 000 Hz").size()+QSize(20, 25);
+  return fontMetrics().boundingRect(mTitle+" 000 Hz").size()+QSize(20, 20);
 };
 
 void CFrequencyPlot::paintEvent(QPaintEvent* event) {
