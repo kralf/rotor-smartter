@@ -19,10 +19,10 @@ public:
   void resetLaserData();
   void steeringAngle( double value );
   void commandSteeringAngle( double value );
-  
+
 protected:
   void paintEvent( QPaintEvent * event );
-  
+
 private:
   const Configuration * _configuration;
   QTimer                _timer;
@@ -34,19 +34,19 @@ private:
 
   void drawLaserPoints( QPainter & painter );
   void drawCar( QPainter & painter );
-  QPointF drawArc( 
-    QPainter & painter, 
-    double x, 
-    double y, 
-    double radius, 
-    double a1, 
-    double a2, 
-    bool center = true 
+  QPointF drawArc(
+    QPainter & painter,
+    double x,
+    double y,
+    double radius,
+    double a1,
+    double a2,
+    bool center = true
   );
   void drawSteeringArc( QPainter & painter, double steeringAngle );
-  QPointF drawClearArc( 
-    QPainter & painter, 
-    double steeringAngle, 
+  QPointF drawClearArc(
+    QPainter & painter,
+    double steeringAngle,
     double offset );
   void drawSteering( QPainter & painter );
 };

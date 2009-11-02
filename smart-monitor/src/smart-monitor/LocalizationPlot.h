@@ -27,12 +27,12 @@ public slots:
   void reset();
   void save();
   void updateFigure();
-  
+
 private:
   typedef std::map<std::string, QwtPlotCurve*>        PlotCurves;
   typedef std::map<std::string, QwtPlotMarker*>       PointMarkers;
   typedef std::map<std::string, std::vector<double> > PointSeries;
-  
+
   QTimer         _timer;
   QReadWriteLock _lock;
   QGridLayout    _layout;
@@ -41,7 +41,7 @@ private:
   PointMarkers   _points;
   PointSeries    _x;
   PointSeries    _y;
-  
+
   void initializeCurve( const std::string & name );
 };
 

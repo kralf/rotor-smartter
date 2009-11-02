@@ -80,11 +80,11 @@ NavigationPlot::paintEvent( QPaintEvent * event )
     self.drawStatusMessage( painter, self.statusMessage )*/
   painter.translate( width() / 2.0, height() );
   if ( width() > height() ) {
-    double ar = 1.0 * height() / width();
-    painter.scale( ar * scale, -scale );
+    double ar = 1.5 * height() / width();
+    painter.scale( ar * scale, ar * -scale );
   } else {
-    double ar = 1.0 * width() / height();
-    painter.scale( scale, -scale * ar );
+    double ar = 1.5 * width() / height();
+    painter.scale( ar * scale, ar * -scale );
   }
   drawSteering( painter );
   drawCar( painter );
@@ -122,13 +122,13 @@ NavigationPlot::drawCar( QPainter & painter )
 //------------------------------------------------------------------------------
 
 QPointF
-NavigationPlot::drawArc( 
-  QPainter & painter, 
-  double x, 
-  double y, 
-  double radius, 
-  double a1, 
-  double a2, 
+NavigationPlot::drawArc(
+  QPainter & painter,
+  double x,
+  double y,
+  double radius,
+  double a1,
+  double a2,
   bool center
 )
 {
@@ -140,14 +140,14 @@ NavigationPlot::drawArc(
     QRectF rect( x - radius, y - radius, 2 * radius, 2 * radius );
     painter.drawArc( rect, -a1 * 2880 / M_PI, -a2 * 2880 / M_PI );
   } else {
-    painter.drawLine( QLineF( x1, y1, x2, y2 ) );
+    painter.drawLine( QLineF( x1, y1, x1, y2+a2 ) );
   }
 
   painter.setPen( QColor( 0, 0, 255 ) );
   QPainterPath p;
   p.addEllipse( QRectF( x1 - 0.2, y1 - 0.2, 0.4, 0.4 ) );
   painter.drawPath( p );
-  
+
   painter.setPen( QColor( 255, 0, 0 ) );
   QPainterPath p1;
   p1.addEllipse( QRectF( x2 - 0.2, y2 - 0.2, 0.4, 0.4 ) );
@@ -168,7 +168,7 @@ NavigationPlot::drawSteeringArc( QPainter & painter, double steeringAngle )
   } else {
     radius = 4000.0;
   }
-    
+
   double a1 = 0;
   double a2 = 0;
   if ( radius < 0 ) {
@@ -178,16 +178,16 @@ NavigationPlot::drawSteeringArc( QPainter & painter, double steeringAngle )
     a1 = -M_PI;
     a2 = -M_PI / 2.0;
   }
-  drawArc( painter, radius, 0, fabs( radius ), a1, a2 );
+  drawArc( painter, radius, 0, fabs( radius ), a1, a2, false );
 }
 
 //------------------------------------------------------------------------------
 
 QPointF
-NavigationPlot::drawClearArc( 
-  QPainter & painter, 
-  double steeringAngle, 
-  double offset 
+NavigationPlot::drawClearArc(
+  QPainter & painter,
+  double steeringAngle,
+  double offset
 )
 {
   double sign   = 0;

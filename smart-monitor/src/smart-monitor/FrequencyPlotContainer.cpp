@@ -57,18 +57,18 @@ CFrequencyPlotContainer::CFrequencyPlotContainer() {
 ///
 CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) : QWidget(pParent) {
   // create the layout
-  mpGridLayout = new QGridLayout(this);
+//   mpGridLayout = new QGridLayout(this);
 
   // set layout
-  this->setLayout(mpGridLayout);
+//   this->setLayout(mpGridLayout);
 
   // create alasca frequency plot and add it to the layout
-  mpAxtFreqPlot = new CFrequencyPlot(QwtText("Alasca"), this);
-  mpGridLayout->addWidget(mpAxtFreqPlot, 0, 0);
+//   mpAxtFreqPlot = new CFrequencyPlot(QwtText("Alasca"), this);
+//   mpGridLayout->addWidget(mpAxtFreqPlot, 0, 0);
 
   // create gyro frequency plot and add it to the layout
-  mpGyroFreqPlot = new CFrequencyPlot(QwtText("Gyro"), this);
-  mpGridLayout->addWidget(mpGyroFreqPlot, 1, 0);
+//   mpGyroFreqPlot = new CFrequencyPlot(QwtText("Gyro"), this);
+//   mpGridLayout->addWidget(mpGyroFreqPlot, 1, 0);
 
   // create odometry frequency plot and add it to the layout
   //mpOdometryFreqPlot = new CFrequencyPlot(this);
@@ -77,7 +77,7 @@ CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) : QWidget(pPa
   // create localize frequency plot and add it to the layout
   //mpLocalizeFreqPlot = new CFrequencyPlot(this);
   //mpGridLayout->addWidget(mpLocalizeFreqPlot, 3, 0);
-  
+
   // create update timer
   mpTimer = new QTimer(this);
 
@@ -124,8 +124,8 @@ CFrequencyPlotContainer& CFrequencyPlotContainer::operator = (const CFrequencyPl
 ///
 void CFrequencyPlotContainer::updatePlots() {
   // trigger the update figure of the frequency plots
-  mpAxtFreqPlot->updateFigure();
-  mpGyroFreqPlot->updateFigure();
+//   mpAxtFreqPlot->updateFigure();
+//   mpGyroFreqPlot->updateFigure();
 };
 
 

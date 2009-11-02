@@ -1,6 +1,7 @@
 #include "LocalizationPlot.h"
 #include <rotor/Logger.h>
 #include <qwt-qt4/qwt_plot_layout.h>
+#include <qwt-qt4/qwt_plot_canvas.h>
 #include <qwt-qt4/qwt_symbol.h>
 #include <QPen>
 #include <fstream>
@@ -15,13 +16,26 @@ LocalizationPlot::LocalizationPlot( QWidget * parent )
   : QWidget( parent )
 {
   setLayout( &_layout );
-  _plot.setCanvasBackground( Qt::white );
+
+  _plot.canvas()->setFrameShape( QFrame::NoFrame );
+  _plot.setCanvasBackground( palette().color( QPalette::Base ) );
   _plot.plotLayout()->setCanvasMargin( 0 );
   _plot.plotLayout()->setAlignCanvasToScales( true );
-  
+
+  QFont axisFont = font();
+  axisFont.setPixelSize( 8 );
+  _plot.enableAxis( QwtPlot::yLeft, true );
+  _plot.setAxisFont( QwtPlot::yLeft, axisFont );
+  _plot.enableAxis( QwtPlot::yRight, true );
+  _plot.setAxisFont( QwtPlot::yRight, axisFont );
+  _plot.enableAxis( QwtPlot::xBottom, true );
+  _plot.setAxisFont( QwtPlot::xBottom, axisFont );
+  _plot.enableAxis( QwtPlot::xTop, true );
+  _plot.setAxisFont( QwtPlot::xTop, axisFont );
+
   _layout.addWidget( &_plot, 1, 1 );
   _plot.replot();
-  
+
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( updateFigure() ) );
   _timer.start( 500 );
 }
@@ -51,7 +65,7 @@ LocalizationPlot::save()
   ofstream f( "path.txt" );
   std::vector<double> & x = _x["Global"];
   std::vector<double> & y = _y["Global"];
-  if ( x.size() > 0 ) 
+  if ( x.size() > 0 )
   {
     for ( size_t i = 0; i < x.size(); ++i ) {
       f << x[i] << " " << y[i] << endl;
@@ -82,7 +96,7 @@ void
 LocalizationPlot::updateFigure()
 {
   _lock.lockForRead();
-  
+
   double maxX = DBL_MIN;
   double minX = DBL_MAX;
   double maxY = DBL_MIN;
@@ -96,7 +110,7 @@ LocalizationPlot::updateFigure()
     QwtPlotMarker & point    = *(_points[name]);
     std::vector<double> & tx = _x[name];
     std::vector<double> & ty = _y[name];
-    
+
     curve.setData( &(tx[0]), &(ty[0]), tx.size() );
     if ( tx.size() > 0 ) {
       point.setValue( tx.back(), ty.back() );
@@ -109,10 +123,10 @@ LocalizationPlot::updateFigure()
   double dX = maxX - minX + 1.0;
   double dY = maxY - minY + 1.0;
   double delta = std::max( dX, dY ) / 2.0;
-  
+
   double x  = ( minX + maxX ) / 2.0;
   double y  = ( minY + maxY ) / 2.0;
-  
+
   double sx = size().width();
   double sy = size().height();
   double x1 = 0.0;
@@ -120,7 +134,7 @@ LocalizationPlot::updateFigure()
   double x2 = 0.0;
   double y2 = 0.0;
   double factor = 1.0;
-  
+
   if ( sx > sy ) {
     factor = 1.0 * sx / sy;
     x1 = x - delta * factor;
@@ -134,8 +148,10 @@ LocalizationPlot::updateFigure()
     y1 = y - delta * factor;
     y2 = y + delta * factor;
   }
-  _plot.setAxisScale( QwtPlot::xBottom, x1, x2 );
   _plot.setAxisScale( QwtPlot::yLeft, y1, y2 );
+  _plot.setAxisScale( QwtPlot::yRight, y1, y2 );
+  _plot.setAxisScale( QwtPlot::xBottom, x1, x2 );
+  _plot.setAxisScale( QwtPlot::xTop, x1, x2 );
   _plot.replot();
   _lock.unlock();
 }
@@ -168,7 +184,7 @@ LocalizationPlot::initializeCurve( const std::string & name )
     _points[name]         = new QwtPlotMarker();
     QwtPlotCurve & curve  = *(_curves[name]);
     QwtPlotMarker & point = *(_points[name]);
-    
+
     curve.attach( &_plot );
     curve.setPen( QPen( Qt::blue ) );
 
