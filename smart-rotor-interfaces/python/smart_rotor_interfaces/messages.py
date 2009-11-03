@@ -132,7 +132,7 @@ smart_velocity_message = '''
 smart_status_message = '''
   struct smart_status_message {
     double gas_pos;
-    int gear;      
+    int32_t gear;      
     double steering_angle;
     double tv;
     double rv_front_right;
