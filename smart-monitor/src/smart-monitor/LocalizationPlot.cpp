@@ -118,14 +118,14 @@ LocalizationPlot::updateFigure()
     std::vector<double> & tx = _x[name];
     std::vector<double> & ty = _y[name];
 
-    curve.setData( &(tx[0]), &(ty[0]), tx.size() );
     if ( tx.size() > 0 ) {
+      curve.setData( &(tx[0]), &(ty[0]), tx.size() );
       point.setValue( tx.back(), ty.back() );
+      maxX = max( maxX, curve.maxXValue() );
+      minX = min( minX, curve.minXValue() );
+      maxY = max( maxY, curve.maxYValue() );
+      minY = min( minY, curve.minYValue() );
     }
-    maxX = max( maxX, curve.maxXValue() );
-    minX = min( minX, curve.minXValue() );
-    maxY = max( maxY, curve.maxYValue() );
-    minY = min( minY, curve.minYValue() );
   }
   double dX = maxX - minX + 1.0;
   double dY = maxY - minY + 1.0;

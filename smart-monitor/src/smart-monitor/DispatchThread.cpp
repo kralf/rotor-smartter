@@ -41,7 +41,7 @@ DispatchThread::DispatchThread(
   _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 100 );
 
   _window.mainWidget().frequencyPlot->addPlot( "axt_message", 25 );
-  _window.mainWidget().frequencyPlot->addPlot( "carmen_robot_front_laser", 25 );
+  _window.mainWidget().frequencyPlot->addPlot( "carmen_robot_frontlaser", 25 );
 
   _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 100 );
   _window.mainWidget().frequencyPlot->addPlot( "carmen_localize_globalpos", 20 );
