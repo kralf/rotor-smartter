@@ -26,49 +26,56 @@ using namespace std;
 void
 setupMessages( Registry & registry )
 {
-  registry.registerMessageType( 
-    "axt_message", 
-    ROTOR_DEFINITION_STRING( axt_message ) 
+  registry.registerMessageType(
+    "axt_message",
+    ROTOR_DEFINITION_STRING( axt_message )
   );
   registry.subscribeToMessage( "axt_message", false, 4 );
-  
+
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) );
-  
-  registry.registerMessageType( 
-    "carmen_localize_globalpos", 
-    ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message ) 
+
+  registry.registerMessageType(
+    "carmen_localize_globalpos",
+    ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message )
   );
   registry.subscribeToMessage( "carmen_localize_globalpos", false, 4 );
 
-  registry.registerMessageType( 
-    "carmen_base_odometry", 
-    ROTOR_DEFINITION_STRING( carmen_base_odometry_message ) 
+  registry.registerMessageType(
+    "carmen_base_odometry",
+    ROTOR_DEFINITION_STRING( carmen_base_odometry_message )
   );
   registry.subscribeToMessage( "carmen_base_odometry", false, 4 );
 
-  registry.registerMessageType( 
-    "locfilter_filteredpos_message", 
-    ROTOR_DEFINITION_STRING( locfilter_filteredpos_message ) 
+  registry.registerMessageType(
+    "locfilter_filteredpos_message",
+    ROTOR_DEFINITION_STRING( locfilter_filteredpos_message )
   );
   registry.subscribeToMessage( "locfilter_filteredpos_message", false, 4 );
 
-  registry.registerMessageType( 
-    "smart_velocity_message", 
-    ROTOR_DEFINITION_STRING( smart_velocity_message ) 
+  registry.registerMessageType(
+    "smart_velocity_message",
+    ROTOR_DEFINITION_STRING( smart_velocity_message )
   );
   registry.subscribeToMessage( "smart_velocity_message", false, 4 );
 
-  registry.registerMessageType( 
-    "smart_status_message", 
-    ROTOR_DEFINITION_STRING( smart_status_message ) 
+  registry.registerMessageType(
+    "smart_status_message",
+    ROTOR_DEFINITION_STRING( smart_status_message )
   );
   registry.subscribeToMessage( "smart_status_message", false, 4 );
 
-  registry.registerMessageType( 
-    "gyro_integrated_message", 
-    ROTOR_DEFINITION_STRING( gyro_integrated_message ) 
+  registry.registerMessageType(
+    "gyro_integrated_message",
+    ROTOR_DEFINITION_STRING( gyro_integrated_message )
   );
   registry.subscribeToMessage( "gyro_integrated_message", false, 4 );
+
+  registry.registerType( ROTOR_DEFINITION_STRING( carmen_laser_laser_config_t ) );
+  registry.registerMessageType(
+    "carmen_robot_front_laser",
+    ROTOR_DEFINITION_STRING( carmen_robot_laser_message )
+  );
+  registry.subscribeToMessage( "carmen_robot_front_laser", false, 4 );
 }
 
 
@@ -82,18 +89,18 @@ main( int argc, char * argv[] )
     Logger::error( "Usage: " + command + " <config.ini>" );
     exit( 1 );
   }
-  
+
   BaseOptions options;
   options.fromString( fileContents( argv[1] ) );
   RemoteRegistry registry( "CarmenRegistry", "monitor", options, "lib" );
   Configuration configuration( command, options );
-  
+
   setupMessages( registry );
-  
+
   QApplication application( argc, argv );
   ApplicationWindow * window = new ApplicationWindow( configuration );
   DispatchThread dispatch( registry, *window );
-  
+
   dispatch.start();
   window->show();
   exit( application.exec() );
