@@ -45,6 +45,7 @@ CGyroPlot::CGyroPlot() {
 CGyroPlot::CGyroPlot(QWidget *pParent) : QWidget(pParent) {
   // create the grid layout to put further objects in it
   mpGridLayout = new QGridLayout(this);
+  mpGridLayout->setSpacing(2);
 
   // create all the labels and corresponding values that we want to display
   mpIntegratedAngleLabel = new QLabel(this);

@@ -61,7 +61,7 @@ LocalizationPlot::~LocalizationPlot()
 void
 LocalizationPlot::save()
 {
-  writePath( "path.txt" );
+  writePath("path.txt");
 }
 
 //------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ LocalizationPlot::save()
 void
 LocalizationPlot::saveAs()
 {
-  QFileDialog dialog(this,"Save Path");
+  QFileDialog dialog(this, "Save Path");
 
   dialog.setFilter("Path Files (*.txt)");
   dialog.selectFile("path.txt");
@@ -187,7 +187,7 @@ void
 LocalizationPlot::writePath( const std::string & filename )
 {
   _lock.lockForRead();
-  ofstream f( filename.c_str() );
+  std::ofstream f( filename.c_str() );
   std::vector<double> & x = _x["Global"];
   std::vector<double> & y = _y["Global"];
   if ( x.size() > 0 )

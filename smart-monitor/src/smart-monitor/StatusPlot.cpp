@@ -45,10 +45,11 @@ CStatusPlot::CStatusPlot() {
 CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   // create the grid layout to put further objects in it
   mpGridLayout = new QGridLayout(this);
+  mpGridLayout->setSpacing(2);
 
   // create all the labels and corresponding values that we want to display
   mpGasPedalLabel = new QLabel(this);
-  mpGasPedalLabel->setText("Gas Pedal Position");
+  mpGasPedalLabel->setText("Gas pedal position");
   mpGasPedalLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpGasPedalLabel, 0, 0);
 
@@ -68,7 +69,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpGearValue, 1, 1);
 
   mpSteeringAngleLabel = new QLabel(this);
-  mpSteeringAngleLabel->setText("Steering Angle");
+  mpSteeringAngleLabel->setText("Steering angle");
   mpSteeringAngleLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpSteeringAngleLabel, 2, 0);
 
@@ -78,7 +79,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpSteeringAngleValue, 2, 1);
 
   mpTranslationalVelocityLabel = new QLabel(this);
-  mpTranslationalVelocityLabel->setText("Trans. Velocity");
+  mpTranslationalVelocityLabel->setText("Trans. velocity");
   mpTranslationalVelocityLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpTranslationalVelocityLabel, 3, 0);
 
@@ -88,7 +89,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpTranslationalVelocityValue, 3, 1);
 
   mpRotationalVelocityFrontRightLabel = new QLabel(this);
-  mpRotationalVelocityFrontRightLabel->setText("Front Right Rot. Velocity");
+  mpRotationalVelocityFrontRightLabel->setText("Front right rot. velocity");
   mpRotationalVelocityFrontRightLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityFrontRightLabel, 4, 0);
 
@@ -98,7 +99,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpRotationalVelocityFrontRightValue, 4, 1);
 
   mpRotationalVelocityFrontLeftLabel = new QLabel(this);
-  mpRotationalVelocityFrontLeftLabel->setText("Front Left Rot. Velocity");
+  mpRotationalVelocityFrontLeftLabel->setText("Front left rot. velocity");
   mpRotationalVelocityFrontLeftLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityFrontLeftLabel, 5, 0);
 
@@ -108,7 +109,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpRotationalVelocityFrontLeftValue, 5, 1);
 
   mpRotationalVelocityRearRightLabel = new QLabel(this);
-  mpRotationalVelocityRearRightLabel->setText("Rear Right Rot. Velocity");
+  mpRotationalVelocityRearRightLabel->setText("Rear right rot. velocity");
   mpRotationalVelocityRearRightLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityRearRightLabel, 6, 0);
 
@@ -118,7 +119,7 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   mpGridLayout->addWidget(mpRotationalVelocityRearRightValue, 6, 1);
 
   mpRotationalVelocityRearLeftLabel = new QLabel(this);
-  mpRotationalVelocityRearLeftLabel->setText("Rear Left Rot. Velocity");
+  mpRotationalVelocityRearLeftLabel->setText("Rear left rot. velocity");
   mpRotationalVelocityRearLeftLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   mpGridLayout->addWidget(mpRotationalVelocityRearLeftLabel, 7, 0);
 

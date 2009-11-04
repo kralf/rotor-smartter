@@ -46,6 +46,7 @@ CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) :
   mpVBoxLayout(new QVBoxLayout(this)),
   mpTimer(new QTimer(this)) {
   setLayout(mpVBoxLayout);
+  mpVBoxLayout->setSpacing(2);
   mpVBoxLayout->addStretch(1);
 
   /// update function of the plot is called periodically

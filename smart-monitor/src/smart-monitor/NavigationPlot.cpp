@@ -2,17 +2,31 @@
 #include "Configuration.h"
 #include <QPaintEvent>
 #include <QPainter>
+#include <QFileDialog>
 #include <cmath>
+#include <fstream>
+#include <sstream>
+
+using namespace std;
 
 //------------------------------------------------------------------------------
 
 
 NavigationPlot::NavigationPlot( QWidget * parent )
   : QWidget( parent ),
+    _registry ( 0 ),
     _scale ( 1.0 )
 {
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( repaint() ) );
   _timer.start( 200 );
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::setRegistry( Rotor::Registry & registry )
+{
+  _registry = &registry;
 }
 
 //------------------------------------------------------------------------------
@@ -66,9 +80,72 @@ NavigationPlot::commandSteeringAngle( double value )
 //------------------------------------------------------------------------------
 
 void
+NavigationPlot::readPath( const std::string & filename )
+{
+  _lock.lockForRead();
+  ifstream f( filename.c_str() );
+  std::vector<double> & x = _x["Global"];
+  std::vector<double> & y = _y["Global"];
+
+  x.clear();
+  y.clear();
+
+  string s;
+  while ( getline( f, s ) ) {
+    stringstream line( s );
+    x.resize( x.size() + 1 );
+    y.resize( y.size() + 1 );
+    line >> x.back();
+    line >> y.back();
+  }
+  _lock.unlock();
+}
+
+//------------------------------------------------------------------------------
+
+void
 NavigationPlot::setScale( int value ) {
   _scale = exp(0.01*value);
   repaint();
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::load()
+{
+  readPath("path.txt");
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::loadFrom()
+{
+  QFileDialog dialog(this, "Load Path");
+
+  dialog.setFilter("Path Files (*.txt)");
+  dialog.selectFile("path.txt");
+  dialog.setAcceptMode(QFileDialog::AcceptOpen);
+  dialog.setDirectory(QDir::current());
+
+  if (dialog.exec())
+    readPath(dialog.selectedFiles().front().toLatin1().constData());
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::stop()
+{
+  if (_registry) {
+    Rotor::Structure sPath = _registry->newStructure("path_message");
+
+    sPath["point_count"]   = 0;
+    sPath["velocity"]      = 0;
+
+    _registry->sendStructure( "path_message", sPath );
+  }
 }
 
 //------------------------------------------------------------------------------

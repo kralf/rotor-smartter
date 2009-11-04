@@ -76,6 +76,8 @@ setupMessages( Registry & registry )
     ROTOR_DEFINITION_STRING( carmen_robot_laser_message )
   );
   registry.subscribeToMessage( "carmen_robot_front_laser", false, 4 );
+
+  registry.registerMessageType( "path_message", ROTOR_DEFINITION_STRING( path_message ) );
 }
 
 

@@ -5,7 +5,11 @@
 #include <QWidget>
 #include <QReadWriteLock>
 #include <QTimer>
+#include <map>
+#include <vector>
+#include <string>
 
+#include <rotor/Registry.h>
 
 class Configuration;
 
@@ -16,19 +20,29 @@ class NavigationPlot : public QWidget
 
 public:
   NavigationPlot( QWidget * parent );
+
+  void setRegistry( Rotor::Registry& registry );
+
   void configuration( const Configuration & configuration );
   void addLaserPoint( double x, double y, unsigned char status );
   void resetLaserData();
   void steeringAngle( double value );
   void commandSteeringAngle( double value );
+  void readPath( const std::string & filename );
 
 public slots:
   void setScale( int value );
+  void stop();
+  void load();
+  void loadFrom();
 
 protected:
   void paintEvent( QPaintEvent * event );
 
 private:
+  typedef std::map<std::string, std::vector<double> > PointSeries;
+
+  Rotor::Registry*            _registry;
   const Configuration *       _configuration;
   QTimer                      _timer;
   QReadWriteLock              _lock;
@@ -37,6 +51,8 @@ private:
   std::vector<unsigned char>  _laserStatus;
   double                      _steeringAngle;
   double                      _commandSteeringAngle;
+  PointSeries                 _x;
+  PointSeries                 _y;
 
   double                      _scale;
 

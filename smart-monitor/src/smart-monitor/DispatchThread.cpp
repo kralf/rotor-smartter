@@ -32,13 +32,19 @@ DispatchThread::DispatchThread(
     _window( window ),
     _configuration( window.configuration() )
 {
+  _window.mainWidget().navigationPlot->setRegistry( registry );
+
   _window.mainWidget().frequencyPlot->setRegistry( registry );
   _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 125 );
   _window.mainWidget().frequencyPlot->addPlot( "carmen_base_odometry", 125 );
+
   _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 100 );
-  _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 100 );
+
   _window.mainWidget().frequencyPlot->addPlot( "axt_message", 25 );
   _window.mainWidget().frequencyPlot->addPlot( "carmen_robot_front_laser", 25 );
+
+  _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 100 );
+  _window.mainWidget().frequencyPlot->addPlot( "carmen_localize_globalpos", 20 );
 }
 
 //------------------------------------------------------------------------------
