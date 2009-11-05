@@ -33,6 +33,8 @@ LocalizationPlot::LocalizationPlot( QWidget * parent )
   _plot.enableAxis( QwtPlot::xTop, true );
   _plot.setAxisFont( QwtPlot::xTop, axisFont );
 
+  _plot.insertLegend( &_legend, QwtPlot::TopLegend );
+
   _layout.addWidget( &_plot, 1, 1 );
   _plot.replot();
 
@@ -211,7 +213,8 @@ LocalizationPlot::initializeCurve( const std::string & name )
     QwtPlotMarker & point = *(_points[name]);
 
     curve.attach( &_plot );
-    curve.setPen( QPen( Qt::blue ) );
+    curve.setPen( QPen( QColor( Qt::red+distance(
+      _curves.begin(), _curves.find( name ) ) ) ) );
 
     point.attach( &_plot );
     QwtSymbol symbol;

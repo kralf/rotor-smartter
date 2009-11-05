@@ -6,6 +6,7 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
+#include <rotor/Time.h>
 
 using namespace std;
 
@@ -139,12 +140,12 @@ void
 NavigationPlot::stop()
 {
   if (_registry) {
-    Rotor::Structure sPath = _registry->newStructure("path_message");
+    Rotor::Structure pathMessage = _registry->newStructure("path_message");
 
-    sPath["point_count"]   = 0;
-    sPath["velocity"]      = 0;
-
-    _registry->sendStructure( "path_message", sPath );
+    pathMessage["point_count"]   = 0;
+    pathMessage.adjust();
+    pathMessage["timestamp"] = Rotor::seconds();
+    _registry->sendStructure( "path_message", pathMessage );
   }
 }
 

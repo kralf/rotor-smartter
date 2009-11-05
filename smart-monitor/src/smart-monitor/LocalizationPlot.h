@@ -7,6 +7,7 @@
 #include <QGridLayout>
 #include <QTimer>
 #include <qwt-qt4/qwt_plot.h>
+#include <qwt-qt4/qwt_legend.h>
 #include <qwt-qt4/qwt_plot_curve.h>
 #include <qwt-qt4/qwt_plot_marker.h>
 #include <map>
@@ -39,6 +40,7 @@ private:
   QReadWriteLock _lock;
   QGridLayout    _layout;
   QwtPlot        _plot;
+  QwtLegend      _legend;
   PlotCurves     _curves;
   PointMarkers   _points;
   PointSeries    _x;
