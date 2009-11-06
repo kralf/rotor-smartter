@@ -111,6 +111,8 @@ LocalizationPlot::updateFigure()
   double maxY = DBL_MIN;
   double minY = DBL_MAX;
 
+  bool flag = false;
+
   PlotCurves::iterator it;
   PlotCurves::iterator end = _curves.end();
   for ( it = _curves.begin(); it != end; ++it ) {
@@ -127,40 +129,53 @@ LocalizationPlot::updateFigure()
       minX = min( minX, curve.minXValue() );
       maxY = max( maxY, curve.maxYValue() );
       minY = min( minY, curve.minYValue() );
+      flag = true;
     }
   }
-  double dX = maxX - minX + 1.0;
-  double dY = maxY - minY + 1.0;
-  double delta = std::max( dX, dY ) / 2.0;
 
-  double x  = ( minX + maxX ) / 2.0;
-  double y  = ( minY + maxY ) / 2.0;
+  if (flag == true)
+  {
+    double dX = maxX - minX + 1.0;
+    double dY = maxY - minY + 1.0;
+    double delta = std::max( dX, dY ) / 2.0;
 
-  double sx = size().width();
-  double sy = size().height();
-  double x1 = 0.0;
-  double y1 = 0.0;
-  double x2 = 0.0;
-  double y2 = 0.0;
-  double factor = 1.0;
+    double x  = ( minX + maxX ) / 2.0;
+    double y  = ( minY + maxY ) / 2.0;
 
-  if ( sx > sy ) {
-    factor = 1.0 * sx / sy;
-    x1 = x - delta * factor;
-    x2 = x + delta * factor;
-    y1 = y - delta;
-    y2 = y + delta;
-  } else {
-    factor = 1.0 * sy / sx;
-    x1 = x - delta;
-    x2 = x + delta;
-    y1 = y - delta * factor;
-    y2 = y + delta * factor;
+    double sx = size().width();
+    double sy = size().height();
+    double x1 = 0.0;
+    double y1 = 0.0;
+    double x2 = 0.0;
+    double y2 = 0.0;
+    double factor = 1.0;
+
+    if ( sx > sy ) {
+      factor = 1.0 * sx / sy;
+      x1 = x - delta * factor;
+      x2 = x + delta * factor;
+      y1 = y - delta;
+      y2 = y + delta;
+    } else {
+      factor = 1.0 * sy / sx;
+      x1 = x - delta;
+      x2 = x + delta;
+      y1 = y - delta * factor;
+      y2 = y + delta * factor;
+    }
+    _plot.setAxisScale( QwtPlot::yLeft, y1, y2 );
+    _plot.setAxisScale( QwtPlot::yRight, y1, y2 );
+    _plot.setAxisScale( QwtPlot::xBottom, x1, x2 );
+    _plot.setAxisScale( QwtPlot::xTop, x1, x2 );
   }
-  _plot.setAxisScale( QwtPlot::yLeft, y1, y2 );
-  _plot.setAxisScale( QwtPlot::yRight, y1, y2 );
-  _plot.setAxisScale( QwtPlot::xBottom, x1, x2 );
-  _plot.setAxisScale( QwtPlot::xTop, x1, x2 );
+  else
+  {
+    _plot.setAxisAutoScale( QwtPlot::yLeft );
+    _plot.setAxisAutoScale( QwtPlot::yRight );
+    _plot.setAxisAutoScale( QwtPlot::xBottom );
+    _plot.setAxisAutoScale( QwtPlot::xTop );
+  }
+
   _plot.replot();
   _lock.unlock();
 }
