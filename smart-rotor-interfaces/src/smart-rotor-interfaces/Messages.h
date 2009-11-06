@@ -3,6 +3,7 @@
 
 
 #include <rotor/Rotor.h>
+#include <stdint.h>
 
 ROTOR_DEFINE_TYPE( axt_message,
   struct axt_message {
