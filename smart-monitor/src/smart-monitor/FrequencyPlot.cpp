@@ -95,7 +95,7 @@ double CFrequencyPlot::getMaxFrequency() const {
 }
 
 QSize CFrequencyPlot::sizeHint() const {
-  return fontMetrics().boundingRect(mTitle+" 000 Hz").size()+QSize(8, 8);
+  return fontMetrics().boundingRect(mTitle+" 000 Hz").size()+QSize(8, 18);
 };
 
 void CFrequencyPlot::paintEvent(QPaintEvent* event) {
