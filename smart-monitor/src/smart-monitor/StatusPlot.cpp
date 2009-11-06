@@ -33,7 +33,7 @@
 
 // system includes
 #include <cmath>
-
+#include <cstdio>
 
 //------------------------------------------------------------------------------
 // Functions Implementations
@@ -177,7 +177,7 @@ void CStatusPlot::updateStatus(double dGasPedalValue,
   sprintf(macBuffer, "%.2lf rps", dRotationalVelocityFrontRight);
   mpRotationalVelocityFrontRightValue->setText(macBuffer);
 
-  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityFrontRight);
+  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityFrontLeft);
   mpRotationalVelocityFrontLeftValue->setText(macBuffer);
 
   sprintf(macBuffer, "%.2lf rps", dRotationalVelocityRearRight);
