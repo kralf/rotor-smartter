@@ -55,9 +55,6 @@ CFrequencyPlotContainer::CFrequencyPlotContainer(QWidget *pParent) :
   mpTimer->start(500);
 };
 
-CFrequencyPlotContainer::CFrequencyPlotContainer(const CFrequencyPlotContainer &other) {
-};
-
 CFrequencyPlotContainer::~CFrequencyPlotContainer() {
 };
 

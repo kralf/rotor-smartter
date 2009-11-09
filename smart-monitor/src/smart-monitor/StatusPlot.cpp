@@ -133,9 +133,6 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
   this->setLayout(mpGridLayout);
 };
 
-CStatusPlot::CStatusPlot(const CStatusPlot &other) {
-};
-
 CStatusPlot::~CStatusPlot() {
 };
 

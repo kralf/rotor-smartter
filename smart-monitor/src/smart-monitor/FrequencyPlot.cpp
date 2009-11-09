@@ -52,9 +52,6 @@ CFrequencyPlot::CFrequencyPlot(const QString &rTitle, double dMaxFrequency,
   setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 };
 
-CFrequencyPlot::CFrequencyPlot(const CFrequencyPlot &other) {
-};
-
 CFrequencyPlot::~CFrequencyPlot() {
 };
 

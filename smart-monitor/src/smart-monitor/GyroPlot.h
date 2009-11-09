@@ -64,13 +64,6 @@ class CGyroPlot : public QWidget {
   CGyroPlot();
 
   ///
-  /// \fn CGyroPlot(const CGyroPlot &other)
-  ///
-  /// \brief Copy constructor.
-  ///
-  CGyroPlot(const CGyroPlot &other);
-
-  ///
   /// \brief Assignement operator.
   ///
   CGyroPlot& operator = (const CGyroPlot &other);

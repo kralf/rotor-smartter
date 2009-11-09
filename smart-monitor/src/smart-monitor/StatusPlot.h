@@ -64,13 +64,6 @@ class CStatusPlot : public QWidget {
   CStatusPlot();
 
   ///
-  /// \fn CStatusPlot(const CStatusPlot &other)
-  ///
-  /// \brief Copy constructor.
-  ///
-  CStatusPlot(const CStatusPlot &other);
-
-  ///
   /// \brief Assignement operator.
   ///
   CStatusPlot& operator = (const CStatusPlot &other);

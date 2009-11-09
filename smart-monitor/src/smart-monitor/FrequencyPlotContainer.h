@@ -67,13 +67,6 @@ class CFrequencyPlotContainer : public QWidget {
   CFrequencyPlotContainer();
 
   ///
-  /// \fn CFrequencyPlotContainer(const CFrequencyPlotContainer &other)
-  ///
-  /// \brief Copy constructor.
-  ///
-  CFrequencyPlotContainer(const CFrequencyPlotContainer &other);
-
-  ///
   /// \brief Assignement operator.
   ///
   CFrequencyPlotContainer& operator = (const CFrequencyPlotContainer &other);

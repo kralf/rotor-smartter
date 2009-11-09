@@ -64,9 +64,6 @@ CGyroPlot::CGyroPlot(QWidget *pParent) : QWidget(pParent) {
   this->setLayout(mpGridLayout);
 };
 
-CGyroPlot::CGyroPlot(const CGyroPlot &other) {
-};
-
 CGyroPlot::~CGyroPlot() {
 };
 
