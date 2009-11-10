@@ -16,6 +16,8 @@ using namespace std;
 NavigationPlot::NavigationPlot( QWidget * parent )
   : QWidget( parent ),
     _registry ( 0 ),
+    _steeringAngle( 0.0 ),
+    _commandSteeringAngle( 0.0 ),
     _scale ( 1.0 )
 {
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( repaint() ) );
