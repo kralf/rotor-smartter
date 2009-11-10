@@ -39,10 +39,60 @@
 // Functions Implementations
 //------------------------------------------------------------------------------
 
-CStatusPlot::CStatusPlot() {
-};
+CStatusPlot::UpdateEvent::UpdateEvent(
+  double gasPedalValue,
+  int    gearValue,
+  double steeringAngleValue,
+  double translationalVelocity,
+  double rotationalVelocityFrontRight,
+  double rotationalVelocityFrontLeft,
+  double rotationalVelocityRearRight,
+  double rotationalVelocityRearLeft) :
+  QEvent(QEvent::User),
+  _gasPedalValue(gasPedalValue),
+  _gearValue(gearValue),
+  _steeringAngleValue(steeringAngleValue),
+  _translationalVelocity(translationalVelocity),
+  _rotationalVelocityFrontRight(rotationalVelocityFrontRight),
+  _rotationalVelocityFrontLeft(rotationalVelocityFrontLeft),
+  _rotationalVelocityRearRight(rotationalVelocityRearRight),
+  _rotationalVelocityRearLeft(rotationalVelocityRearLeft) {
+}
 
-CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
+double CStatusPlot::UpdateEvent::gasPedalValue() {
+  return _gasPedalValue;
+}
+
+int CStatusPlot::UpdateEvent::gearValue() {
+  return _gearValue;
+}
+
+double CStatusPlot::UpdateEvent::steeringAngleValue() {
+  return _steeringAngleValue;
+}
+
+double CStatusPlot::UpdateEvent::translationalVelocity() {
+  return _translationalVelocity;
+}
+
+double CStatusPlot::UpdateEvent::rotationalVelocityFrontRight() {
+  return _rotationalVelocityFrontRight;
+}
+
+double CStatusPlot::UpdateEvent::rotationalVelocityFrontLeft() {
+  return _rotationalVelocityFrontLeft;
+}
+
+double CStatusPlot::UpdateEvent::rotationalVelocityRearRight() {
+  return _rotationalVelocityRearRight;
+}
+
+double CStatusPlot::UpdateEvent::rotationalVelocityRearLeft() {
+  return _rotationalVelocityRearLeft;
+}
+
+CStatusPlot::CStatusPlot(QWidget *pParent) :
+  QWidget(pParent) {
   // create the grid layout to put further objects in it
   mpGridLayout = new QGridLayout(this);
   mpGridLayout->setSpacing(2);
@@ -136,53 +186,68 @@ CStatusPlot::CStatusPlot(QWidget *pParent) : QWidget(pParent) {
 CStatusPlot::~CStatusPlot() {
 };
 
-CStatusPlot& CStatusPlot::operator = (const CStatusPlot &other) {
-  if (this != &other) { // protect against invalid self-assignment
+void CStatusPlot::updateStatus(
+  double gasPedalValue,
+  int    gearValue,
+  double steeringAngleValue,
+  double translationalVelocity,
+  double rotationalVelocityFrontRight,
+  double rotationalVelocityFrontLeft,
+  double rotationalVelocityRearRight,
+  double rotationalVelocityRearLeft) {
+  QEvent* event = new UpdateEvent(
+    gasPedalValue,
+    gearValue,
+    steeringAngleValue,
+    translationalVelocity,
+    rotationalVelocityFrontRight,
+    rotationalVelocityFrontLeft,
+    rotationalVelocityRearRight,
+    rotationalVelocityRearLeft);
+
+  QCoreApplication::postEvent(this, event);
+};
+
+bool CStatusPlot::event(QEvent* event) {
+  if (event->type() == QEvent::User) {
+    UpdateEvent* updateEvent = (UpdateEvent*)event;
+
+    sprintf(macBuffer, "%.2lf", 
+      updateEvent->gasPedalValue());
+    mpGasPedalValue->setText(macBuffer);
+
+    if (updateEvent->gearValue() == 0)
+      mpGearValue->setText("N");
+    else if (updateEvent->gearValue() < 6)
+      mpGearValue->setNum(updateEvent->gearValue());
+    else if (updateEvent->gearValue() == 6)
+      mpGearValue->setText("R");
+
+    sprintf(macBuffer, "%.2lf deg",
+      updateEvent->steeringAngleValue() * 180.0 / M_PI);
+    mpSteeringAngleValue->setText(macBuffer);
+    sprintf(macBuffer, "%.2lf m/s",
+      updateEvent->translationalVelocity());
+    mpTranslationalVelocityValue->setText(macBuffer);
+
+    sprintf(macBuffer, "%.2lf rps",
+      updateEvent->rotationalVelocityFrontRight());
+    mpRotationalVelocityFrontRightValue->setText(macBuffer);
+    sprintf(macBuffer, "%.2lf rps",
+      updateEvent->rotationalVelocityFrontLeft());
+    mpRotationalVelocityFrontLeftValue->setText(macBuffer);
+    sprintf(macBuffer, "%.2lf rps",
+      updateEvent->rotationalVelocityRearRight());
+    mpRotationalVelocityRearRightValue->setText(macBuffer);
+    sprintf(macBuffer, "%.2lf rps",
+      updateEvent->rotationalVelocityRearLeft());
+    mpRotationalVelocityRearLeftValue->setText(macBuffer);
+
+    return true;
   }
-
-  // by convention, always return *this
-  return *this;
-};
-
-void CStatusPlot::updateStatus(double dGasPedalValue,
-                               int    iGearValue,
-                               double dSteeringAngleValue,
-                               double dTranslationalVelocity,
-                               double dRotationalVelocityFrontRight,
-                               double dRotationalVelocityFrontLeft,
-                               double dRotationalVelocityRearRight,
-                               double dRotationalVelocityRearLeft) {
-
-  // display all the incoming information
-  sprintf(macBuffer, "%.2lf", dGasPedalValue);
-  mpGasPedalValue->setText(macBuffer);
-
-  if (iGearValue == 0)
-    mpGearValue->setText("N");
-  else if (iGearValue < 6)
-    mpGearValue->setNum(iGearValue);
-  else if (iGearValue == 6)
-    mpGearValue->setText("R");
-
-
-  sprintf(macBuffer, "%.2lf deg", dSteeringAngleValue * 180.0 / M_PI);
-  mpSteeringAngleValue->setText(macBuffer);
-
-  sprintf(macBuffer, "%.2lf m/s", dTranslationalVelocity);
-  mpTranslationalVelocityValue->setText(macBuffer);
-
-  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityFrontRight);
-  mpRotationalVelocityFrontRightValue->setText(macBuffer);
-
-  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityFrontLeft);
-  mpRotationalVelocityFrontLeftValue->setText(macBuffer);
-
-  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityRearRight);
-  mpRotationalVelocityRearRightValue->setText(macBuffer);
-
-  sprintf(macBuffer, "%.2lf rps", dRotationalVelocityRearLeft);
-  mpRotationalVelocityRearLeftValue->setText(macBuffer);
-};
+  else
+    return QWidget::event(event);
+}
 
 //------------------------------------------------------------------------------
 // End of StatusPlot.cpp

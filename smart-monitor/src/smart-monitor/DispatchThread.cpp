@@ -35,8 +35,8 @@ DispatchThread::DispatchThread(
   _window.mainWidget().navigationPlot->setRegistry( registry );
 
   _window.mainWidget().frequencyPlot->setRegistry( registry );
-  _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 125 );
-  _window.mainWidget().frequencyPlot->addPlot( "carmen_base_odometry", 125 );
+  _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 175 );
+  _window.mainWidget().frequencyPlot->addPlot( "carmen_base_odometry", 175 );
 
   _window.mainWidget().frequencyPlot->addPlot( "gyro_integrated_message", 100 );
 
@@ -61,14 +61,6 @@ DispatchThread::run()
     } else if ( message.name() == "carmen_base_odometry" ) {
       carmen_base_odometry_message & odometry = ROTOR_VARIABLE( carmen_base_odometry_message, data );
       _window.mainWidget().localizationPlot->updatePath( "Odometry", odometry.x, odometry.y );
-      double steeringAngle = 0;
-      if ( fabs( odometry.rv ) > 1E-6 && fabs( odometry.tv ) > 1E-6 )
-      {
-        double radius = odometry.tv / odometry.rv;
-        int sign      = radius / fabs( radius );
-        steeringAngle = sign * shortestAngle( atan2( _configuration.axesDistance(), fabs( radius ) ) );
-      }
-      _window.mainWidget().navigationPlot->steeringAngle( steeringAngle );
     } else if ( message.name() == "axt_message" ) {
         axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
         _window.mainWidget().navigationPlot->resetLaserData();
@@ -89,6 +81,7 @@ DispatchThread::run()
                                                     status.rv_front_left,
                                                     status.rv_rear_right,
                                                     status.rv_rear_left);
+      _window.mainWidget().navigationPlot->steeringAngle( status.steering_angle );
     } else if (message.name() == "gyro_integrated_message") {
       gyro_integrated_message &gyro = ROTOR_VARIABLE(gyro_integrated_message, data);
       _window.mainWidget().gyroPlot->updateGyro(gyro.theta);

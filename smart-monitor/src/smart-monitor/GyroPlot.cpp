@@ -40,10 +40,17 @@
 // Functions Implementations
 //------------------------------------------------------------------------------
 
-CGyroPlot::CGyroPlot() {
-};
+CGyroPlot::UpdateEvent::UpdateEvent(double integratedTheta) :
+  QEvent(QEvent::User),
+  _integratedTheta(integratedTheta) {
+}
 
-CGyroPlot::CGyroPlot(QWidget *pParent) : QWidget(pParent) {
+double CGyroPlot::UpdateEvent::integratedTheta() const {
+  return _integratedTheta;
+}
+
+CGyroPlot::CGyroPlot(QWidget *pParent) : 
+  QWidget(pParent) {
   // create the grid layout to put further objects in it
   mpGridLayout = new QGridLayout(this);
   mpGridLayout->setSpacing(2);
@@ -67,19 +74,24 @@ CGyroPlot::CGyroPlot(QWidget *pParent) : QWidget(pParent) {
 CGyroPlot::~CGyroPlot() {
 };
 
-CGyroPlot& CGyroPlot::operator = (const CGyroPlot &other) {
-  if (this != &other) { // protect against invalid self-assignment
+void CGyroPlot::updateGyro(double integratedTheta) {
+  QEvent* event = new UpdateEvent(integratedTheta);
+  QCoreApplication::postEvent(this, event);
+};
+
+bool CGyroPlot::event(QEvent* event) {
+  if (event->type() == QEvent::User) {
+    UpdateEvent* updateEvent = (UpdateEvent*)event;
+
+    sprintf(macBuffer, "%.2lf deg", 
+      updateEvent->integratedTheta() * 180.0 / M_PI);
+    mpIntegratedAngleValue->setText(macBuffer);
+
+    return true;
   }
-
-  // by convention, always return *this
-  return *this;
-};
-
-void CGyroPlot::updateGyro(double dIntegratedTheta) {
-  // display the gyro angle
-  sprintf(macBuffer, "%.2lf deg", dIntegratedTheta * 180.0 / M_PI);
-  mpIntegratedAngleValue->setText(macBuffer);
-};
+  else
+    return QWidget::event(event);
+}
 
 //------------------------------------------------------------------------------
 // End of GyroPlot.cpp

@@ -228,7 +228,7 @@ NavigationPlot::drawArc(
   double y1 = y + radius * sin( a1 );
   double x2 = x + radius * cos( a1 + a2 );
   double y2 = y + radius * sin( a1 + a2 );
-  if ( radius < 40 || center ) {
+  if ( radius < 1000 || center ) {
     QRectF rect( x - radius, y - radius, 2 * radius, 2 * radius );
     painter.drawArc( rect, -a1 * 2880 / M_PI, -a2 * 2880 / M_PI );
   } else {
@@ -270,6 +270,7 @@ NavigationPlot::drawSteeringArc( QPainter & painter, double steeringAngle )
     a1 = -M_PI;
     a2 = -M_PI / 2.0;
   }
+
   drawArc( painter, radius, 0, fabs( radius ), a1, a2, false );
 }
 

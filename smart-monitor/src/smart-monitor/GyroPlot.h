@@ -38,6 +38,8 @@
 #include <QWidget>
 #include <QLabel>
 #include <QGridLayout>
+#include <QEvent>
+#include <QCoreApplication>
 
 
 //------------------------------------------------------------------------------
@@ -56,73 +58,28 @@
 class CGyroPlot : public QWidget {
   Q_OBJECT
 
-  ///
-  /// \fn CGyroPlot()
-  ///
-  /// \brief Default constructor.
-  ///
-  CGyroPlot();
-
-  ///
-  /// \brief Assignement operator.
-  ///
-  CGyroPlot& operator = (const CGyroPlot &other);
-
-  /// \var QLabel *mpIntegrateAngleLabel
-  ///
-  /// \brief Handle on the integrated angle value label.
-  ///
-  QLabel *mpIntegratedAngleLabel;
-
-  /// \var QLabel *mpIntegratedAngleValue
-  ///
-  /// \brief Handle on the integrated angle value.
-  ///
-  QLabel *mpIntegratedAngleValue;
-
-  /// \var QGridLayout *mpGridLayout
-  ///
-  /// \brief Handle on the grid layout of our gyro plot.
-  ///
-  QGridLayout *mpGridLayout;
-
-  /// \var char macBuffer[128]
-  ///
-  /// \brief Character array for displaying stuff.
-  ///
-  char macBuffer[128];
-
 public:
-  ///
-  /// \fn CGyroPlot(QWidget *pParent)
-  ///
-  /// \brief Constructor called automatically by QT.
-  ///
-  /// \param[in] pParent pointer to the parent's widget
-  ///
-  CGyroPlot(QWidget *pParent);
+  class UpdateEvent : public QEvent {
+  public:
+    UpdateEvent(double integratedTheta);
 
-  ///
-  /// \fn virtual ~CGyroPlot()
-  ///
-  /// \brief Destructor.
-  ///
+    double integratedTheta() const;
+  protected:
+    double _integratedTheta;
+  };
+
+  CGyroPlot(QWidget *pParent);
   ~CGyroPlot();
 
-  ///
-  /// \fn void updateGyro(double dIntegratedTheta)
-  ///
-  /// \brief This function updates the gyro angles.
-  ///
-  /// \param[in] dIntegratedTheta integrated gyro angle
-  ///
-  /// \return void
-  ///
-  void updateGyro(double dIntegratedTheta);
-
+  void updateGyro(double integratedTheta);
 protected:
-// accessible by inheritance
+  QLabel *mpIntegratedAngleLabel;
+  QLabel *mpIntegratedAngleValue;
+  QGridLayout *mpGridLayout;
 
+  char macBuffer[128];
+
+  virtual bool event(QEvent* event);
 };
 
 #endif // GYROPLOT_H

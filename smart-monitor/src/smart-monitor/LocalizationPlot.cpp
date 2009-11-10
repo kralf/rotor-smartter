@@ -113,10 +113,15 @@ LocalizationPlot::updateFigure()
 
   bool flag = false;
 
-  PlotCurves::iterator it;
-  PlotCurves::iterator end = _curves.end();
-  for ( it = _curves.begin(); it != end; ++it ) {
+  PointSeries::iterator it;
+  PointSeries::iterator end = _x.end();
+  for ( it = _x.begin(); it != end; ++it ) {
     const string & name      = it->first;
+
+    PlotCurves::iterator it = _curves.find( name );
+    if ( it == _curves.end() )
+      initializeCurve( name );
+
     QwtPlotCurve & curve     = *(_curves[name]);
     QwtPlotMarker & point    = *(_points[name]);
     std::vector<double> & tx = _x[name];
@@ -186,7 +191,6 @@ void
 LocalizationPlot::updatePath( const std::string & name, double x, double y )
 {
   _lock.lockForWrite();
-  initializeCurve( name );
   std::vector<double> & tx = _x[name];
   std::vector<double> & ty = _y[name];
   tx.push_back( x );
@@ -222,21 +226,27 @@ void
 LocalizationPlot::initializeCurve( const std::string & name )
 {
   if ( _curves.find( name ) == _curves.end() ) {
-    _curves[name]         = new QwtPlotCurve();
+    _curves[name]         = new QwtPlotCurve( name.c_str() );
     _points[name]         = new QwtPlotMarker();
     QwtPlotCurve & curve  = *(_curves[name]);
     QwtPlotMarker & point = *(_points[name]);
 
     curve.attach( &_plot );
-    curve.setPen( QPen( QColor( Qt::red+distance(
-      _curves.begin(), _curves.find( name ) ) ) ) );
-
     point.attach( &_plot );
-    QwtSymbol symbol;
-    symbol.setStyle( QwtSymbol::Cross );
-    symbol.setPen(  QPen( _curves.size() ) );
-    symbol.setSize( 10 );
-    point.setSymbol( symbol );
+  }
+
+  PlotCurves::iterator it;
+  for ( it = _curves.begin(); it != _curves.end(); ++it ) {
+    const string & name      = it->first;
+    Qt::GlobalColor color = ( Qt::GlobalColor ) ( Qt::red +
+        distance( _curves.begin(), it ) );
+
+    _curves[name]->setPen( QPen( color ) );
+
+      QwtSymbol symbol;
+      symbol.setStyle( QwtSymbol::Cross );
+      symbol.setPen( QPen( color ) );
+      symbol.setSize( 10 );
+      _points[name]->setSymbol( symbol );
   }
 }
-
