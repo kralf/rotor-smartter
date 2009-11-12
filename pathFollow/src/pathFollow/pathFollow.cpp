@@ -11,9 +11,18 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <signal.h>
 
 using namespace std;
 using namespace Rotor;
+
+bool quit = false;
+
+//------------------------------------------------------------------------------
+
+void quitLoop(int q __attribute__((unused))) {
+  quit = true;
+}
 
 //------------------------------------------------------------------------------
 
@@ -77,7 +86,7 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
   double appliedVelocity = velocity;
 
   Logger::info( "Starting main loop", "pathFollow" );
-  while ( true ) {
+  while ( !quit ) {
     try
     {
       Message msg      = registry.receiveMessage( 1 );
@@ -111,6 +120,20 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
           tmp[0] = data["globalpos"]["x"];
           tmp[1] = data["globalpos"]["y"];
           Vector pose( tmp, data["globalpos"]["theta"] );
+
+          steeringAngle = controller.step( pose );
+
+//           next.x = nextPoint.origin[0]
+//           next.y = nextPoint.origin[1]
+//           next.timestamp = rotorc.seconds()*/
+
+          Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
+            " " + toString( pose.origin()[1] ), "pathFollow" );
+        } else if ( msg.name() == "locfilter_filteredpos_message" ) {
+          Point tmp;
+          tmp[0] = data["filteredpos"]["x"];
+          tmp[1] = data["filteredpos"]["y"];
+          Vector pose( tmp, data["filteredpos"]["theta"] );
 
           steeringAngle = controller.step( pose );
 
@@ -166,6 +189,12 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
       registry.sendStructure( "smart_velocity_message", commandStructure );
     }
   }
+
+  command.tv = 0;
+  command.steering_angle = 0;
+  command.timestamp = seconds();
+  cout << commandStructure.toString();
+  registry.sendStructure( "smart_velocity_message", commandStructure );
 }
 
 //------------------------------------------------------------------------------
@@ -175,11 +204,17 @@ registerMessages( Registry & registry )
 {
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) );
 
+//   registry.registerMessageType(
+//     "carmen_localize_globalpos",
+//     ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message )
+//   );
+//   registry.subscribeToMessage( "carmen_localize_globalpos", true );
+
   registry.registerMessageType(
-    "carmen_localize_globalpos",
-    ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message )
+    "locfilter_filteredpos_message",
+    ROTOR_DEFINITION_STRING( locfilter_filteredpos_message )
   );
-  registry.subscribeToMessage( "carmen_localize_globalpos", true );
+  registry.subscribeToMessage( "locfilter_filteredpos_message", true );
 
   registry.registerMessageType(
     "axt_message",
@@ -263,6 +298,8 @@ int main( int argc, char * argv[] )
 
     controller.path( path );
   }
+
+  signal(SIGINT, quitLoop);
 
   mainLoop( registry, controller, velocity );
 

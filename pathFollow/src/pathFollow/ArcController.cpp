@@ -69,7 +69,7 @@ ArcController::step( const Vector & pose )
 bool
 ArcController::finished()
 {
-  return _current == _path.size() - 1 && ! _cycle;
+  return _current >= _path.size() && ! _cycle;
 }
 
 //------------------------------------------------------------------------------

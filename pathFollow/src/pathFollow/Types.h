@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <Eigen/Core>
+#include <eigen2/Eigen/Core>
 #include <vector>
 
 class Vector;
