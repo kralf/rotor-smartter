@@ -24,7 +24,7 @@ public:
     double minUpdateDistance = 0.2 );
   virtual ~LocalizationPlot();
   void updatePath( const std::string & name, double x, double y );
-  void writePath( const std::string & filename );
+  void writePath( const std::string & name, const std::string & filename );
 
 public slots:
   void reset();

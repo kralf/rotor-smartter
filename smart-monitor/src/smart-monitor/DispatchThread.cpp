@@ -55,37 +55,48 @@ DispatchThread::run()
   while( true ) {
     Message message   = _registry.receiveMessage();
     Structure data    = message.data();
-    if ( message.name() == "locfilter_filteredpos_message" ) {
-      locfilter_filteredpos_message & filteredpos = ROTOR_VARIABLE( locfilter_filteredpos_message, data );
-      _window.mainWidget().localizationPlot->updatePath( "Global", filteredpos.filteredpos.x, filteredpos.filteredpos.y );
+    if ( message.name() == "carmen_localize_globalpos_message" ) {
+      carmen_localize_globalpos_message & globalpos = ROTOR_VARIABLE(
+        carmen_localize_globalpos_message, data );
+      _window.mainWidget().localizationPlot->updatePath( "Global",
+        globalpos.globalpos.x, globalpos.globalpos.y );
+    } else if ( message.name() == "locfilter_filteredpos_message" ) {
+      locfilter_filteredpos_message & filteredpos = ROTOR_VARIABLE(
+        locfilter_filteredpos_message, data );
+      _window.mainWidget().localizationPlot->updatePath( "Filter",
+        filteredpos.filteredpos.x, filteredpos.filteredpos.y );
     } else if ( message.name() == "carmen_base_odometry" ) {
-      carmen_base_odometry_message & odometry = ROTOR_VARIABLE( carmen_base_odometry_message, data );
-      _window.mainWidget().localizationPlot->updatePath( "Odometry", odometry.x, odometry.y );
+      carmen_base_odometry_message & odometry = ROTOR_VARIABLE(
+        carmen_base_odometry_message, data );
+      _window.mainWidget().localizationPlot->updatePath( "Odometry",
+        odometry.x, odometry.y );
     } else if ( message.name() == "axt_message" ) {
-        axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
-        _window.mainWidget().navigationPlot->resetLaserData();
-        for ( size_t i = 0; i < alasca.num_points; ++i ) {
-          if ( alasca.channel[i] == 2 ) {
-            _window.mainWidget().navigationPlot->addLaserPoint( -alasca.y[i], alasca.x[i], alasca.point_status[i] );
-          }
+      axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
+      _window.mainWidget().navigationPlot->resetLaserData();
+      for ( size_t i = 0; i < alasca.num_points; ++i ) {
+        if ( alasca.channel[i] == 2 ) {
+          _window.mainWidget().navigationPlot->addLaserPoint(
+            -alasca.y[i], alasca.x[i], alasca.point_status[i] );
         }
+      }
     } else if ( message.name() == "smart_velocity_message" ) {
-      smart_velocity_message & velocity = ROTOR_VARIABLE( smart_velocity_message, data );
-      _window.mainWidget().navigationPlot->commandSteeringAngle( velocity.steering_angle );
+      smart_velocity_message & velocity = ROTOR_VARIABLE(
+        smart_velocity_message, data );
+      _window.mainWidget().navigationPlot->commandSteeringAngle(
+        velocity.steering_angle );
     } else if (message.name() == "smart_status_message") {
-      smart_status_message &status = ROTOR_VARIABLE(smart_status_message, data);
-      _window.mainWidget().statusPlot->updateStatus(status.gas_pos, status.gear,
-                                                    status.steering_angle,
-                                                    status.tv,
-                                                    status.rv_front_right,
-                                                    status.rv_front_left,
-                                                    status.rv_rear_right,
-                                                    status.rv_rear_left);
-      _window.mainWidget().navigationPlot->steeringAngle( status.steering_angle );
+      smart_status_message &status = ROTOR_VARIABLE(
+        smart_status_message, data );
+      _window.mainWidget().statusPlot->updateStatus(
+          status.gas_pos, status.gear, status.steering_angle,
+          status.tv, status.rv_front_right, status.rv_front_left,
+          status.rv_rear_right, status.rv_rear_left );
+      _window.mainWidget().navigationPlot->steeringAngle(
+        status.steering_angle );
     } else if (message.name() == "gyro_integrated_message") {
-      gyro_integrated_message &gyro = ROTOR_VARIABLE(gyro_integrated_message, data);
-      _window.mainWidget().gyroPlot->updateGyro(gyro.theta);
+      gyro_integrated_message &gyro = ROTOR_VARIABLE(
+        gyro_integrated_message, data );
+      _window.mainWidget().gyroPlot->updateGyro( gyro.theta );
     }
   }
-
 }

@@ -66,7 +66,7 @@ LocalizationPlot::~LocalizationPlot()
 void
 LocalizationPlot::save()
 {
-  writePath("path.txt");
+  writePath("Filter", "path.txt");
 }
 
 //------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ LocalizationPlot::saveAs()
   dialog.setDirectory(QDir::current());
 
   if (dialog.exec())
-    writePath(dialog.selectedFiles().front().toLatin1().constData());
+    writePath("Filter", dialog.selectedFiles().front().toLatin1().constData());
 }
 
 //------------------------------------------------------------------------------
@@ -225,18 +225,23 @@ LocalizationPlot::updatePath( const std::string & name, double x, double y )
 //------------------------------------------------------------------------------
 
 void
-LocalizationPlot::writePath( const std::string & filename )
+LocalizationPlot::writePath( const std::string& name, const std::string &
+  filename )
 {
   _lock.lockForRead();
-  std::ofstream f( filename.c_str() );
-  std::vector<double> & x = _x["Global"];
-  std::vector<double> & y = _y["Global"];
-  if ( x.size() > 0 )
-  {
-    for ( size_t i = 0; i < x.size(); ++i ) {
-      f << x[i] << " " << y[i] << endl;
+
+  if ( _curves.find( name ) != _curves.end() ) {
+    std::ofstream f( filename.c_str() );
+    std::vector<double> & x = _x[name];
+    std::vector<double> & y = _y[name];
+    if ( x.size() > 0 )
+    {
+      for ( size_t i = 0; i < x.size(); ++i ) {
+        f << x[i] << " " << y[i] << endl;
+      }
     }
   }
+
   _lock.unlock();
 }
 

@@ -32,6 +32,7 @@ public:
 
 public slots:
   void setScale( int value );
+  void start( const std::string& name );
   void stop();
   void load();
   void loadFrom();

@@ -2,7 +2,7 @@
 #include "Vector.h"
 #include <rotor/Logger.h>
 #include <rotor/Conversion.h>
-#include <cfloat> 
+#include <cfloat>
 
 using namespace std;
 using namespace Rotor;
@@ -11,7 +11,7 @@ using namespace Rotor;
 
 double shortestAngle( double angle )
 {
-  while ( angle > M_PI ) 
+  while ( angle > M_PI )
   {
     angle = angle - M_PI;
   }
@@ -25,16 +25,14 @@ double shortestAngle( double angle )
 //------------------------------------------------------------------------------
 
 ArcController::ArcController(
-  const Path & path, 
-  double axesDistance, 
-  double orientationWeight, 
-  size_t lookAhead, 
-  size_t maxLookAhead, 
+  double axesDistance,
+  double orientationWeight,
+  size_t lookAhead,
+  size_t maxLookAhead,
   double angleThreshold,
   bool cycle
 )
-  : _path( path ),
-    _axesDistance( axesDistance ),
+  : _axesDistance( axesDistance ),
     _orientationWeight( orientationWeight ),
     _lookAhead( lookAhead ),
     _maxLookAhead( maxLookAhead ),
@@ -46,7 +44,16 @@ ArcController::ArcController(
 
 //------------------------------------------------------------------------------
 
-double 
+void
+ArcController::path ( const Path & path )
+{
+  _path = path;
+  _current = 0;
+}
+
+//------------------------------------------------------------------------------
+
+double
 ArcController::step( const Vector & pose )
 {
   _current = closest( pose );
@@ -78,7 +85,7 @@ ArcController::orientationComponent( const Vector & v1, const Vector & v2 )
 
 //------------------------------------------------------------------------------
 
-double 
+double
 ArcController::distanceComponent( const Vector & v1, const Vector & v2 )
 {
   Point origin    = ( v1.origin() + v2.origin() ) / 2.0;
@@ -91,7 +98,7 @@ ArcController::distanceComponent( const Vector & v1, const Vector & v2 )
 
 //------------------------------------------------------------------------------
 
-double 
+double
 ArcController::steeringAngle( const Vector & v1, const Vector & v2 )
 {
   pair<double, double> tmp = orientationComponent( v1, v2 );
@@ -107,7 +114,7 @@ ArcController::steeringAngle( const Vector & v1, const Vector & v2 )
 
 //------------------------------------------------------------------------------
 
-size_t 
+size_t
 ArcController::closest( const Vector & v1 )
 {
   size_t index = 0;
@@ -124,10 +131,10 @@ ArcController::closest( const Vector & v1 )
   }
   return index;
 }
-  
+
 //------------------------------------------------------------------------------
 
-double 
+double
 ArcController::radiusToSteeringAngle( double radius )
 {
   int sign = radius / fabs( radius );
@@ -136,7 +143,7 @@ ArcController::radiusToSteeringAngle( double radius )
 
 //------------------------------------------------------------------------------
 
-double 
+double
 ArcController::steeringAngleToRadius( double angle )
 {
   int sign = -angle / fabs( angle );
@@ -145,7 +152,7 @@ ArcController::steeringAngleToRadius( double angle )
 
 //------------------------------------------------------------------------------
 
-const Vector & 
+const Vector &
 ArcController::waypoint( size_t i )
 {
   return _path[i % _path.size()];
@@ -166,7 +173,7 @@ ArcController::next()
       break;
     }
     const Vector & tmpNext = waypoint( _current + i );
-    if (   i == _lookAhead 
+    if (   i == _lookAhead
         || fabs( shortestAngle( angle - tmpNext.angle() ) ) < _angleThreshold )
     {
       next = tmpNext;

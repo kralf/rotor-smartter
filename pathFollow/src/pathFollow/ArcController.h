@@ -9,20 +9,21 @@
 
 class ArcController
 {
-public:  
-  ArcController( 
-    const Path & path, 
-    double axesDistance, 
-    double orientationWeight, 
-    size_t lookAhead, 
-    size_t maxLookAhead, 
+public:
+  ArcController(
+    double axesDistance,
+    double orientationWeight,
+    size_t lookAhead,
+    size_t maxLookAhead,
     double angleThreshold,
-    bool cycle 
+    bool cycle
   );
-  
+
+  void path ( const Path & path );
+
   double radiusToSteeringAngle( double radius );
   double steeringAngleToRadius( double angle );
-    
+
   double step( const Vector & pose );
   bool finished();
 
@@ -34,7 +35,7 @@ private:
   const Vector & waypoint( size_t i );
   const Vector next();
 
-  const Path & _path;
+  Path         _path;
   double       _axesDistance;
   double       _orientationWeight;
   size_t       _lookAhead;

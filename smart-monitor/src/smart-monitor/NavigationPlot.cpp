@@ -102,9 +102,6 @@ NavigationPlot::readPath( const std::string & filename )
     line >> y.back();
   }
 
-  if (_registry) {
-    // send path_message
-  }
   _lock.unlock();
 }
 
@@ -122,6 +119,7 @@ void
 NavigationPlot::load()
 {
   readPath("path.txt");
+  start( "Global" );
 }
 
 //------------------------------------------------------------------------------
@@ -136,8 +134,41 @@ NavigationPlot::loadFrom()
   dialog.setAcceptMode(QFileDialog::AcceptOpen);
   dialog.setDirectory(QDir::current());
 
-  if (dialog.exec())
+  if (dialog.exec()) {
     readPath(dialog.selectedFiles().front().toLatin1().constData());
+    start( "Global" );
+  }
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::start( const std::string& name )
+{
+  if (_registry) {
+    PointSeries::iterator it = _x.find( name );
+
+    if ( it != _x.end()) {
+      Rotor::Structure pathMessage = _registry->newStructure("path_message");
+      pathMessage["point_count"] = static_cast<int>( _x.size() );
+      pathMessage.adjust();
+
+      std::vector<double> & x = _x[name];
+      std::vector<double> & y = _y[name];
+
+      for ( size_t i = 0; i < _x.size(); ++i )
+      {
+        pathMessage["x"][i]     = x[i];
+        pathMessage["y"][i]     = y[i];
+        pathMessage["theta"][i] = 0;
+      }
+
+      pathMessage["timestamp"] = Rotor::seconds();
+      _registry->sendStructure( "path_message", pathMessage );
+    }
+    else
+      stop();
+  }
 }
 
 //------------------------------------------------------------------------------
