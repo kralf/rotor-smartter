@@ -101,6 +101,10 @@ NavigationPlot::readPath( const std::string & filename )
     line >> x.back();
     line >> y.back();
   }
+
+  if (_registry) {
+    // send path_message
+  }
   _lock.unlock();
 }
 
@@ -144,7 +148,7 @@ NavigationPlot::stop()
   if (_registry) {
     Rotor::Structure pathMessage = _registry->newStructure("path_message");
 
-    pathMessage["point_count"]   = 0;
+    pathMessage["point_count"] = 0;
     pathMessage.adjust();
     pathMessage["timestamp"] = Rotor::seconds();
     _registry->sendStructure( "path_message", pathMessage );

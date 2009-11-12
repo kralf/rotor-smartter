@@ -218,10 +218,10 @@ bool CStatusPlot::event(QEvent* event) {
 
     if (updateEvent->gearValue() == 0)
       mpGearValue->setText("N");
-    else if (updateEvent->gearValue() < 6)
-      mpGearValue->setNum(updateEvent->gearValue());
-    else if (updateEvent->gearValue() == 6)
+    else if (updateEvent->gearValue() == 7)
       mpGearValue->setText("R");
+    else
+      mpGearValue->setNum(updateEvent->gearValue());
 
     sprintf(macBuffer, "%.2lf deg",
       updateEvent->steeringAngleValue() * 180.0 / M_PI);

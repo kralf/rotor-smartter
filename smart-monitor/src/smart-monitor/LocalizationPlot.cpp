@@ -13,8 +13,11 @@ using namespace std;
 
 //------------------------------------------------------------------------------
 
-LocalizationPlot::LocalizationPlot( QWidget * parent )
-  : QWidget( parent )
+LocalizationPlot::LocalizationPlot( QWidget * parent, size_t maxPathPoints,
+  double minUpdateDistance ) :
+  QWidget( parent ),
+  _maxPathPoints(maxPathPoints),
+  _minUpdateDistance(minUpdateDistance)
 {
   setLayout( &_layout );
 
@@ -191,14 +194,31 @@ void
 LocalizationPlot::updatePath( const std::string & name, double x, double y )
 {
   _lock.lockForWrite();
+
   std::vector<double> & tx = _x[name];
   std::vector<double> & ty = _y[name];
-  tx.push_back( x );
-  ty.push_back( y );
-  if ( tx.size() > 2000 ) {
+
+  if ( !tx.empty() ) {
+    double lx = tx.back();
+    double ly = ty.back();
+    double dist = ( lx - x ) * ( lx - x ) +
+      ( ly - y ) * ( ly - y );
+
+    if ( dist >= _minUpdateDistance ) {
+      tx.push_back( x );
+      ty.push_back( y );
+    }
+  }
+  else {
+    tx.push_back( x );
+    ty.push_back( y );
+  }
+
+  if ( tx.size() > _maxPathPoints ) {
     tx.erase( tx.begin() );
     ty.erase( ty.begin() );
   }
+
   _lock.unlock();
 }
 
@@ -243,10 +263,10 @@ LocalizationPlot::initializeCurve( const std::string & name )
 
     _curves[name]->setPen( QPen( color ) );
 
-      QwtSymbol symbol;
-      symbol.setStyle( QwtSymbol::Cross );
-      symbol.setPen( QPen( color ) );
-      symbol.setSize( 10 );
-      _points[name]->setSymbol( symbol );
+    QwtSymbol symbol;
+    symbol.setStyle( QwtSymbol::Cross );
+    symbol.setPen( QPen( color ) );
+    symbol.setSize( 10 );
+    _points[name]->setSymbol( symbol );
   }
 }
