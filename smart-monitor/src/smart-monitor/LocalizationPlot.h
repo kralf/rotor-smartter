@@ -23,6 +23,9 @@ public:
   LocalizationPlot( QWidget * parent, size_t maxPathPoints = 10000,
     double minUpdateDistance = 0.2 );
   virtual ~LocalizationPlot();
+
+  void setDefaultPath( const std::string & defaultPath );
+
   void updatePath( const std::string & name, double x, double y );
   void writePath( const std::string & name, const std::string & filename );
 
@@ -36,6 +39,8 @@ private:
   typedef std::map<std::string, QwtPlotCurve*>        PlotCurves;
   typedef std::map<std::string, QwtPlotMarker*>       PointMarkers;
   typedef std::map<std::string, std::vector<double> > PointSeries;
+
+  std::string    _defaultPath;
 
   size_t         _maxPathPoints;
   double         _minUpdateDistance;

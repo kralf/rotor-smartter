@@ -22,6 +22,7 @@ public:
   NavigationPlot( QWidget * parent );
 
   void setRegistry( Rotor::Registry& registry );
+  void setDefaultPath( const std::string & defaultPath );
 
   void configuration( const Configuration & configuration );
   void addLaserPoint( double x, double y, unsigned char status );
@@ -44,6 +45,7 @@ private:
   typedef std::map<std::string, std::vector<double> > PointSeries;
 
   Rotor::Registry*            _registry;
+  std::string                 _defaultPath;
   const Configuration *       _configuration;
   QTimer                      _timer;
   QReadWriteLock              _lock;

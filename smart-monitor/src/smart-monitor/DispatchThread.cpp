@@ -32,7 +32,13 @@ DispatchThread::DispatchThread(
     _window( window ),
     _configuration( window.configuration() )
 {
+  std::string defaultPath = _registry.options().getString( "smartMonitor",
+    "defaultPath" );
+
+  _window.mainWidget().localizationPlot->setDefaultPath( defaultPath );
+
   _window.mainWidget().navigationPlot->setRegistry( registry );
+  _window.mainWidget().navigationPlot->setDefaultPath( defaultPath );
 
   _window.mainWidget().frequencyPlot->setRegistry( registry );
   _window.mainWidget().frequencyPlot->addPlot( "smart_status_message", 175 );

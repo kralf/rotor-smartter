@@ -16,6 +16,7 @@ using namespace std;
 LocalizationPlot::LocalizationPlot( QWidget * parent, size_t maxPathPoints,
   double minUpdateDistance ) :
   QWidget( parent ),
+  _defaultPath ( "Global" ),
   _maxPathPoints(maxPathPoints),
   _minUpdateDistance(minUpdateDistance)
 {
@@ -64,9 +65,17 @@ LocalizationPlot::~LocalizationPlot()
 //------------------------------------------------------------------------------
 
 void
+LocalizationPlot::setDefaultPath( const std::string & defaultPath )
+{
+  _defaultPath = defaultPath;
+}
+
+//------------------------------------------------------------------------------
+
+void
 LocalizationPlot::save()
 {
-  writePath("Filter", "path.txt");
+  writePath(_defaultPath, "path.txt");
 }
 
 //------------------------------------------------------------------------------

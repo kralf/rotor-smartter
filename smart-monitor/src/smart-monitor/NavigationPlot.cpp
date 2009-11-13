@@ -16,6 +16,7 @@ using namespace std;
 NavigationPlot::NavigationPlot( QWidget * parent )
   : QWidget( parent ),
     _registry ( 0 ),
+    _defaultPath ( "Global" ),
     _steeringAngle( 0.0 ),
     _commandSteeringAngle( 0.0 ),
     _scale ( 1.0 )
@@ -30,6 +31,14 @@ void
 NavigationPlot::setRegistry( Rotor::Registry & registry )
 {
   _registry = &registry;
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::setDefaultPath( const std::string & defaultPath )
+{
+  _defaultPath = defaultPath;
 }
 
 //------------------------------------------------------------------------------
@@ -87,8 +96,8 @@ NavigationPlot::readPath( const std::string & filename )
 {
   _lock.lockForRead();
   ifstream f( filename.c_str() );
-  std::vector<double> & x = _x["Global"];
-  std::vector<double> & y = _y["Global"];
+  std::vector<double> & x = _x[_defaultPath];
+  std::vector<double> & y = _y[_defaultPath];
 
   x.clear();
   y.clear();
@@ -119,7 +128,7 @@ void
 NavigationPlot::load()
 {
   readPath("path.txt");
-  start( "Global" );
+  start( _defaultPath );
 }
 
 //------------------------------------------------------------------------------
@@ -136,7 +145,7 @@ NavigationPlot::loadFrom()
 
   if (dialog.exec()) {
     readPath(dialog.selectedFiles().front().toLatin1().constData());
-    start( "Global" );
+    start( _defaultPath );
   }
 }
 
