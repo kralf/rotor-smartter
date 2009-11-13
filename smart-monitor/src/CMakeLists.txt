@@ -29,6 +29,7 @@ set(
   smart-monitor/FrequencyPlot.h
   smart-monitor/StatusPlot.h
   smart-monitor/GyroPlot.h
+  smart-monitor/ControlPlot.h
 )
 
 qt4_automoc( ${SMART_MONITOR_SRC} )

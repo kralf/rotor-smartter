@@ -51,6 +51,8 @@ DispatchThread::DispatchThread(
 
   _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 100 );
   _window.mainWidget().frequencyPlot->addPlot( "carmen_localize_globalpos", 20 );
+
+  _window.mainWidget().frequencyPlot->addPlot( "smart_velocity_message", 100 );
 }
 
 //------------------------------------------------------------------------------
@@ -88,6 +90,8 @@ DispatchThread::run()
     } else if ( message.name() == "smart_velocity_message" ) {
       smart_velocity_message & velocity = ROTOR_VARIABLE(
         smart_velocity_message, data );
+      _window.mainWidget().controlPlot->updateControl(
+          velocity.steering_angle, velocity.tv );
       _window.mainWidget().navigationPlot->commandSteeringAngle(
         velocity.steering_angle );
     } else if (message.name() == "smart_status_message") {

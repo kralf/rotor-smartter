@@ -1,7 +1,7 @@
 ///
 /// \brief   This class represents the gyro plot interface.
 ///
-/// \file    GyroPlot.h
+/// \file    ControlPlot.h
 ///
 /// \author  Jerome Maye
 ///
@@ -25,8 +25,8 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 
-#ifndef GYROPLOT_H
-#define GYROPLOT_H
+#ifndef CONTROLPLOT_H
+#define CONTROLPLOT_H
 
 //------------------------------------------------------------------------------
 // Includes
@@ -51,31 +51,37 @@
 // Main Class Declaration
 //------------------------------------------------------------------------------
 ///
-/// \class CGyroPlot
+/// \class CControlPlot
 ///
-/// \brief Class for interfacing the gyro plot.
+/// \brief Class for interfacing the control plot.
 ///
-class CGyroPlot : public QWidget {
+class CControlPlot : public QWidget {
   Q_OBJECT
 
 public:
   class UpdateEvent : public QEvent {
   public:
-    UpdateEvent(double integratedTheta);
+    UpdateEvent(double steeringAngleValue,
+                double translationalVelocity);
 
-    double integratedTheta() const;
+    double steeringAngleValue();
+    double translationalVelocity();
   protected:
-    double _integratedTheta;
+    double _steeringAngleValue;
+    double _translationalVelocity;
   };
 
-  CGyroPlot(QWidget *pParent);
-  ~CGyroPlot();
+  CControlPlot(QWidget *pParent);
+  ~CControlPlot();
 
-  void updateGyro(double integratedTheta);
+  void updateControl(double steeringAngleValue,
+                     double translationalVelocity);
 
 protected:
-  QLabel *mpIntegratedAngleLabel;
-  QLabel *mpIntegratedAngleValue;
+  QLabel *mpSteeringAngleLabel;
+  QLabel *mpSteeringAngleValue;
+  QLabel *mpTranslationalVelocityLabel;
+  QLabel *mpTranslationalVelocityValue;
   QGridLayout *mpGridLayout;
 
   char macBuffer[128];
@@ -83,10 +89,10 @@ protected:
   virtual bool event(QEvent* event);
 };
 
-#endif // GYROPLOT_H
+#endif // CONTROLPLOT_H
 
 
 //------------------------------------------------------------------------------
-// End of GyroPlot.h
+// End of ControlPlot.h
 //------------------------------------------------------------------------------
 

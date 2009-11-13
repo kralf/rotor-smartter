@@ -106,8 +106,9 @@ void CFrequencyPlot::paintEvent(QPaintEvent* event) {
     -height()/(mdMaxFrequency*1.2));
   size_t i = 0;
   QLinearGradient gradient(0, 0, 0, mdMaxFrequency);
-  gradient.setColorAt(0, Qt::red);
-  gradient.setColorAt(1, Qt::green);
+  gradient.setColorAt(0.0, Qt::red);
+  gradient.setColorAt(0.5, Qt::yellow);
+  gradient.setColorAt(1.0, Qt::green);
   for (std::list<double>::const_iterator it = mFrequencyList.begin();
     it != mFrequencyList.end(); ++it, ++i)
     painter.fillRect(i, 0, 1, *it, gradient);

@@ -331,6 +331,24 @@
            </widget>
           </item>
           <item>
+           <widget class="QGroupBox" name="controlBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Vehicle Control</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="CControlPlot" name="controlPlot" native="true"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <widget class="QGroupBox" name="gyroBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
@@ -404,6 +422,12 @@
    <class>CGyroPlot</class>
    <extends>QWidget</extends>
    <header>smart-monitor/GyroPlot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CControlPlot</class>
+   <extends>QWidget</extends>
+   <header>smart-monitor/ControlPlot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
