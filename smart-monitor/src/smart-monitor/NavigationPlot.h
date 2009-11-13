@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QReadWriteLock>
 #include <QTimer>
+#include <QProcess>
+
 #include <map>
 #include <vector>
 #include <string>
@@ -33,6 +35,7 @@ public:
 
 public slots:
   void setScale( int value );
+  void gui();
   void start( const std::string& name );
   void stop();
   void load();
@@ -49,6 +52,7 @@ private:
   const Configuration *       _configuration;
   QTimer                      _timer;
   QReadWriteLock              _lock;
+  QProcess                    _gui;
   std::vector<double>         _laserX;
   std::vector<double>         _laserY;
   std::vector<unsigned char>  _laserStatus;

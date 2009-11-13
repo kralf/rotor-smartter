@@ -127,6 +127,17 @@ NavigationPlot::setScale( int value ) {
 //------------------------------------------------------------------------------
 
 void
+NavigationPlot::gui() {
+  if ( _registry && ( _gui.state() == QProcess::NotRunning ) )
+  {
+    _gui.start( _registry->options().getString( "smartMonitor",
+      "guiProcess" ).c_str() );
+  }
+}
+
+//------------------------------------------------------------------------------
+
+void
 NavigationPlot::load()
 {
   readPath("path.txt");

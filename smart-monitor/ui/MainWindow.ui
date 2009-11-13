@@ -61,36 +61,17 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <widget class="QLabel" name="localizationScaleLabel">
-                <property name="text">
-                 <string>Scale:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSlider" name="localizationScaleSlider">
-                <property name="minimum">
-                 <number>-100</number>
-                </property>
-                <property name="maximum">
-                 <number>100</number>
-                </property>
-                <property name="pageStep">
-                 <number>14</number>
-                </property>
-                <property name="value">
-                 <number>0</number>
-                </property>
-                <property name="sliderPosition">
-                 <number>0</number>
-                </property>
+               <spacer name="horizontalSpacer">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="tickPosition">
-                 <enum>QSlider::NoTicks</enum>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
                 </property>
-               </widget>
+               </spacer>
               </item>
               <item>
                <widget class="QPushButton" name="localizationResetButton">
@@ -245,6 +226,13 @@
                 </property>
                 <property name="tickPosition">
                  <enum>QSlider::NoTicks</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="navigationGUIButton">
+                <property name="text">
+                 <string>GUI</string>
                 </property>
                </widget>
               </item>
@@ -456,6 +444,7 @@
     <slot>stop()</slot>
     <slot>load()</slot>
     <slot>loadFrom()</slot>
+    <slot>gui()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -609,6 +598,22 @@
     </hint>
     <hint type="destinationlabel">
      <x>170</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>navigationGUIButton</sender>
+   <signal>clicked()</signal>
+   <receiver>navigationPlot</receiver>
+   <slot>gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>624</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>504</x>
      <y>252</y>
     </hint>
    </hints>
