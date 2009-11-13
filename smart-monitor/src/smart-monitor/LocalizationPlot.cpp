@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <cfloat>
 
+#include <rotor/Time.h>
+#include <rotor/NetUtils.h>
+
 using namespace std;
 
 //------------------------------------------------------------------------------
@@ -16,6 +19,7 @@ using namespace std;
 LocalizationPlot::LocalizationPlot( QWidget * parent, size_t maxPathPoints,
   double minUpdateDistance ) :
   QWidget( parent ),
+  _registry ( 0 ),
   _defaultPath ( "Global" ),
   _maxPathPoints(maxPathPoints),
   _minUpdateDistance(minUpdateDistance)
@@ -65,6 +69,14 @@ LocalizationPlot::~LocalizationPlot()
 //------------------------------------------------------------------------------
 
 void
+LocalizationPlot::setRegistry( Rotor::Registry & registry )
+{
+  _registry = &registry;
+}
+
+//------------------------------------------------------------------------------
+
+void
 LocalizationPlot::setDefaultPath( const std::string & defaultPath )
 {
   _defaultPath = defaultPath;
@@ -101,6 +113,41 @@ void
 LocalizationPlot::reset()
 {
   _lock.lockForRead();
+
+  if (_registry) {
+    Rotor::Structure smartMessage = _registry->newStructure(
+      "smart_init_odometrypos_message");
+    smartMessage["odometrypos"]["x"] = 0.0;
+    smartMessage["odometrypos"]["y"] = 0.0;
+    smartMessage["odometrypos"]["theta"] = 0.0;
+    smartMessage["timestamp"] = Rotor::seconds();
+    smartMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
+
+    Rotor::Structure locfilterMessage = _registry->newStructure(
+      "locfilter_init_filteredpos_message");
+    locfilterMessage["filteredpos"]["x"] = 0.0;
+    locfilterMessage["filteredpos"]["y"] = 0.0;
+    locfilterMessage["filteredpos"]["theta"] = 0.0;
+    locfilterMessage["timestamp"] = Rotor::seconds();
+    locfilterMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
+
+    _registry->sendStructure( "smart_init_odometrypos_message", smartMessage );
+    _registry->sendStructure( "locfilter_init_filteredpos_message",
+      locfilterMessage );
+  }
+
+  clear();
+
+  _lock.unlock();
+}
+
+//------------------------------------------------------------------------------
+
+void
+LocalizationPlot::clear()
+{
+  _lock.lockForRead();
+
   PlotCurves::iterator it;
   PlotCurves::iterator end = _curves.end();
   for ( it = _curves.begin(); it != end; ++it ) {
@@ -108,6 +155,7 @@ LocalizationPlot::reset()
     _x[name].clear();
     _y[name].clear();
   }
+
   _lock.unlock();
 }
 

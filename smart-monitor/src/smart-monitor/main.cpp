@@ -53,16 +53,26 @@ setupMessages( Registry & registry )
   registry.subscribeToMessage( "locfilter_filteredpos_message", false, 4 );
 
   registry.registerMessageType(
-    "smart_velocity_message",
-    ROTOR_DEFINITION_STRING( smart_velocity_message )
+    "locfilter_init_filteredpos_message",
+    ROTOR_DEFINITION_STRING( locfilter_init_filteredpos_message )
   );
-  registry.subscribeToMessage( "smart_velocity_message", false, 4 );
 
   registry.registerMessageType(
     "smart_status_message",
     ROTOR_DEFINITION_STRING( smart_status_message )
   );
   registry.subscribeToMessage( "smart_status_message", false, 4 );
+
+  registry.registerMessageType(
+    "smart_init_odometrypos_message",
+    ROTOR_DEFINITION_STRING( smart_init_odometrypos_message )
+  );
+
+  registry.registerMessageType(
+    "smart_velocity_message",
+    ROTOR_DEFINITION_STRING( smart_velocity_message )
+  );
+  registry.subscribeToMessage( "smart_velocity_message", false, 4 );
 
   registry.registerMessageType(
     "gyro_integrated_message",

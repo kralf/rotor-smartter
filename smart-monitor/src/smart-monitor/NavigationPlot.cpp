@@ -6,6 +6,7 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
+
 #include <rotor/Time.h>
 #include <rotor/NetUtils.h>
 
@@ -14,13 +15,13 @@ using namespace std;
 //------------------------------------------------------------------------------
 
 
-NavigationPlot::NavigationPlot( QWidget * parent )
-  : QWidget( parent ),
-    _registry ( 0 ),
-    _defaultPath ( "Global" ),
-    _steeringAngle( 0.0 ),
-    _commandSteeringAngle( 0.0 ),
-    _scale ( 1.0 )
+NavigationPlot::NavigationPlot( QWidget * parent ) :
+  QWidget( parent ),
+  _registry ( 0 ),
+  _defaultPath ( "Global" ),
+  _steeringAngle( 0.0 ),
+  _commandSteeringAngle( 0.0 ),
+  _scale ( 1.0 )
 {
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( repaint() ) );
   _timer.start( 200 );

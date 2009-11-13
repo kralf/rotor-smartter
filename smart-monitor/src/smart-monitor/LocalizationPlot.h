@@ -14,6 +14,8 @@
 #include <vector>
 #include <string>
 
+#include <rotor/Registry.h>
+
 
 class LocalizationPlot : public QWidget
 {
@@ -24,6 +26,7 @@ public:
     double minUpdateDistance = 0.2 );
   virtual ~LocalizationPlot();
 
+  void setRegistry( Rotor::Registry& registry );
   void setDefaultPath( const std::string & defaultPath );
 
   void updatePath( const std::string & name, double x, double y );
@@ -31,6 +34,7 @@ public:
 
 public slots:
   void reset();
+  void clear();
   void save();
   void saveAs();
   void updateFigure();
@@ -40,20 +44,21 @@ private:
   typedef std::map<std::string, QwtPlotMarker*>       PointMarkers;
   typedef std::map<std::string, std::vector<double> > PointSeries;
 
-  std::string    _defaultPath;
+  Rotor::Registry*  _registry;
+  std::string       _defaultPath;
 
-  size_t         _maxPathPoints;
-  double         _minUpdateDistance;
+  size_t            _maxPathPoints;
+  double            _minUpdateDistance;
 
-  QTimer         _timer;
-  QReadWriteLock _lock;
-  QGridLayout    _layout;
-  QwtPlot        _plot;
-  QwtLegend      _legend;
-  PlotCurves     _curves;
-  PointMarkers   _points;
-  PointSeries    _x;
-  PointSeries    _y;
+  QTimer            _timer;
+  QReadWriteLock    _lock;
+  QGridLayout       _layout;
+  QwtPlot           _plot;
+  QwtLegend         _legend;
+  PlotCurves        _curves;
+  PointMarkers      _points;
+  PointSeries       _x;
+  PointSeries       _y;
 
   void initializeCurve( const std::string & name );
 };

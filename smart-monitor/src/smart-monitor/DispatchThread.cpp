@@ -35,6 +35,7 @@ DispatchThread::DispatchThread(
   std::string defaultPath = _registry.options().getString( "smartMonitor",
     "defaultPath" );
 
+  _window.mainWidget().localizationPlot->setRegistry( registry );
   _window.mainWidget().localizationPlot->setDefaultPath( defaultPath );
 
   _window.mainWidget().navigationPlot->setRegistry( registry );
