@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <rotor/Time.h>
+#include <rotor/NetUtils.h>
 
 using namespace std;
 
@@ -158,14 +159,14 @@ NavigationPlot::start( const std::string& name )
     PointSeries::iterator it = _x.find( name );
 
     if ( it != _x.end()) {
-      Rotor::Structure pathMessage = _registry->newStructure("path_message");
-      pathMessage["point_count"] = static_cast<int>( _x.size() );
-      pathMessage.adjust();
-
       std::vector<double> & x = _x[name];
       std::vector<double> & y = _y[name];
 
-      for ( size_t i = 0; i < _x.size(); ++i )
+      Rotor::Structure pathMessage = _registry->newStructure("path_message");
+      pathMessage["point_count"] = static_cast<int>( x.size() );
+      pathMessage.adjust();
+
+      for ( size_t i = 0; i < x.size(); ++i )
       {
         pathMessage["x"][i]     = x[i];
         pathMessage["y"][i]     = y[i];
@@ -173,6 +174,7 @@ NavigationPlot::start( const std::string& name )
       }
 
       pathMessage["timestamp"] = Rotor::seconds();
+      pathMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
       _registry->sendStructure( "path_message", pathMessage );
     }
     else
