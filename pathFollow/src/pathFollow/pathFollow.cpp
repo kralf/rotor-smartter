@@ -302,17 +302,12 @@ int main( int argc, char * argv[] )
 
   signal( SIGINT, quitLoop );
 
-  double intervalStart   = 0.0;
-  double cycleStart      = 0.0;
   unsigned int numCycles = 0;
 
   while (!quit) {
-    double now         = seconds();
-    double updateFreq  = ( cycleStart > 0.0 ) ? 1.0 / ( now - cycleStart ) : 0.0;
-    intervalStart      = ( intervalStart > 0.0 ) ? intervalStart : now;
-    cycleStart         = now;
-
-    double updateStart = seconds();
+    double now           = seconds();
+    double intervalStart = ( intervalStart > 0.0 ) ? intervalStart : now;
+    double cycleStart    = now;
 
     mainLoop( registry, controller, velocity );
 
