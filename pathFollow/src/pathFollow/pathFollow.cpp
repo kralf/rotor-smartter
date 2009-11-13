@@ -123,10 +123,6 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
 
           steeringAngle = controller.step( pose );
 
-//           next.x = nextPoint.origin[0]
-//           next.y = nextPoint.origin[1]
-//           next.timestamp = rotorc.seconds()*/
-
           Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
             " " + toString( pose.origin()[1] ), "pathFollow" );
         } else if ( msg.name() == "locfilter_filteredpos_message" ) {
@@ -136,10 +132,6 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
           Vector pose( tmp, data["filteredpos"]["theta"] );
 
           steeringAngle = controller.step( pose );
-
-//           next.x = nextPoint.origin[0]
-//           next.y = nextPoint.origin[1]
-//           next.timestamp = rotorc.seconds()*/
 
           Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
             " " + toString( pose.origin()[1] ), "pathFollow" );
@@ -200,21 +192,26 @@ mainLoop( Registry & registry, ArcController & controller, double velocity )
 //------------------------------------------------------------------------------
 
 void
-registerMessages( Registry & registry )
+registerMessages( Registry & registry, const string & localizationMessage )
 {
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) );
 
-//   registry.registerMessageType(
-//     "carmen_localize_globalpos",
-//     ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message )
-//   );
-//   registry.subscribeToMessage( "carmen_localize_globalpos", true );
-
-  registry.registerMessageType(
-    "locfilter_filteredpos_message",
-    ROTOR_DEFINITION_STRING( locfilter_filteredpos_message )
-  );
-  registry.subscribeToMessage( "locfilter_filteredpos_message", true );
+  if ( localizationMessage == "carmen_localize_globalpos" )
+  {
+    registry.registerMessageType(
+      "carmen_localize_globalpos",
+      ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message )
+    );
+    registry.subscribeToMessage( "carmen_localize_globalpos", true );
+  }
+  else if ( localizationMessage == "locfilter_filteredpos_message" )
+  {
+    registry.registerMessageType(
+      "locfilter_filteredpos_message",
+      ROTOR_DEFINITION_STRING( locfilter_filteredpos_message )
+    );
+    registry.subscribeToMessage( "locfilter_filteredpos_message", true );
+  }
 
   registry.registerMessageType(
     "axt_message",
@@ -226,6 +223,7 @@ registerMessages( Registry & registry )
     "path_message",
     ROTOR_DEFINITION_STRING( path_message )
   );
+  registry.subscribeToMessage( "path_message", true );
 
   registry.registerMessageType(
     "smart_velocity_message",
@@ -271,7 +269,10 @@ int main( int argc, char * argv[] )
   BaseOptions options;
   options.fromString( fileContents( argv[1] ) );
   RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
-  registerMessages( registry );
+
+  string localizationMessage = options.getString( moduleName,
+    "localizationMessage" );
+  registerMessages( registry, localizationMessage );
 
   double velocity          = options.getDouble( moduleName, "velocity" );
   double orientationWeight = options.getDouble( moduleName, "orientationWeight" );
