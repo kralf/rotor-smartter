@@ -127,6 +127,13 @@ ROTOR_DEFINE_TYPE( path_message,
   };
 )
 
+ROTOR_DEFINE_TYPE( path_stop_message,
+  struct path_stop_message {
+    double timestamp;
+    char *host;
+  };
+)
+
 ROTOR_DEFINE_TYPE( smart_status_message,
   struct smart_status_message {
     double gas_pos;

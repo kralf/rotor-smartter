@@ -93,125 +93,140 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
   double actualSteering  = 0;
   double appliedVelocity = velocity;
 
+  double intervalStart = 0.0;
+  double cycleStart = 0.0;
   size_t numCycles = 0;
 
-  while (!quit) {
+  while ( !quit ) {
     double now           = seconds();
-    double intervalStart = ( intervalStart > 0.0 ) ? intervalStart : now;
-    double cycleStart    = now;
+    intervalStart = ( intervalStart > 0.0 ) ? intervalStart : now;
+    cycleStart    = now;
 
-    try
+    bool step = false;
+
+    while ( !step && !quit )
     {
-      Message msg      = registry.receiveMessage( 1 );
-      Structure & data = msg.data();
-
-      if ( msg.name() == "path_message" )
+      try
       {
-        Path path;
-        path_message & pathMessage = * reinterpret_cast<path_message *>(
-          data.buffer() );
+        Message msg = registry.receiveMessage( 1 );
 
-        path.resize( pathMessage.point_count );
-        for ( size_t i = 0; i < pathMessage.point_count; ++i )
+        if ( msg.name() == "path_message" )
         {
-          Point & p = path[i].origin();
-          p[0] = pathMessage.x[i];
-          p[1] = pathMessage.y[i];
-        }
+          Structure & data = msg.data();
+          Path path;
+          path_message & pathMessage = * reinterpret_cast<path_message *>(
+            data.buffer() );
 
-        computePathAngles( path );
-        controller.path( path );
+          path.resize( pathMessage.point_count );
+          for ( size_t i = 0; i < pathMessage.point_count; ++i )
+          {
+            Point & p = path[i].origin();
+            p[0] = pathMessage.x[i];
+            p[1] = pathMessage.y[i];
+          }
 
-        Logger::spam( "Path message has been received:" + data.toString(),
-          "pathFollow" );
+          computePathAngles( path );
+          controller.path( path );
 
-        msg = registry.receiveMessage( 1 );
-      }
+          Logger::spam( "Path message has been received:" + data.toString(),
+            "pathFollow" );
+        } else if ( msg.name() == "path_stop_message" ) {
+          Structure & data = msg.data();
 
-      if ( !controller.finished() ) {
-        if ( msg.name() == "carmen_localize_globalpos" )
-        {
-          Point tmp;
-          tmp[0] = data["globalpos"]["x"];
-          tmp[1] = data["globalpos"]["y"];
-          Vector pose( tmp, data["globalpos"]["theta"] );
+          controller.path( Path() );
 
-          steeringAngle = controller.step( pose );
+          Logger::spam( "Stop message has been received:" + data.toString(),
+            "pathFollow" );
+        } else if ( !controller.finished() ) {
+          Structure & data = msg.data();
 
-          Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
-            " " + toString( pose.origin()[1] ), "pathFollow" );
-          msg = registry.receiveMessage( 1 );
-        } else if ( msg.name() == "locfilter_filteredpos_message" ) {
-          Point tmp;
-          tmp[0] = data["filteredpos"]["x"];
-          tmp[1] = data["filteredpos"]["y"];
-          Vector pose( tmp, data["filteredpos"]["theta"] );
+          if ( msg.name() == "carmen_localize_globalpos" )
+          {
+            Point tmp;
 
-          steeringAngle = controller.step( pose );
+            tmp[0] = data["globalpos"]["x"];
+            tmp[1] = data["globalpos"]["y"];
+            Vector pose( tmp, data["globalpos"]["theta"] );
 
-          Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
-            " " + toString( pose.origin()[1] ), "pathFollow" );
-          msg = registry.receiveMessage( 1 );
-        } else if ( msg.name() == "smart_status_message" ) {
-          actualSteering = data["steering_angle"];
-        } else if ( msg.name() == "axt_message" ) {
-          axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
-          laserX.clear();
-          laserY.clear();
+            steeringAngle = controller.step( pose );
+            step = true;
 
-          for ( size_t i = 0; i < alasca.num_points; ++i ) {
-            if ( alasca.channel[i] == 2 ) {
-              laserX.push_back( alasca.x[i] );
-              laserY.push_back( -alasca.y[i] );
+            Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
+              " " + toString( pose.origin()[1] ), "pathFollow" );
+          } else if ( msg.name() == "locfilter_filteredpos_message" ) {
+            Point tmp;
+
+            tmp[0] = data["filteredpos"]["x"];
+            tmp[1] = data["filteredpos"]["y"];
+            Vector pose( tmp, data["filteredpos"]["theta"] );
+
+            steeringAngle = controller.step( pose );
+            step = true;
+
+            Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
+              " " + toString( pose.origin()[1] ), "pathFollow" );
+          } else if ( msg.name() == "smart_status_message" ) {
+            actualSteering = data["steering_angle"];
+          } else if ( msg.name() == "axt_message" ) {
+            axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
+
+            laserX.clear();
+            laserY.clear();
+
+            for ( size_t i = 0; i < alasca.num_points; ++i ) {
+              if ( alasca.channel[i] == 2 ) {
+                laserX.push_back( alasca.x[i] );
+                laserY.push_back( -alasca.y[i] );
+              }
             }
           }
+
+          appliedVelocity = safety.step( velocity, actualSteering, laserX, laserY );
+
+          if ( controller.finished() )
+          {
+            command.tv             = 0.0;
+            command.steering_angle = 0;
+
+            Logger::info( "Goal has been reached, going into idle mode",
+              "pathFollow" );
+          } else {
+            command.tv             = appliedVelocity;
+            command.steering_angle = steeringAngle;
+          }
         }
-
-        appliedVelocity = safety.step( velocity, actualSteering, laserX, laserY );
-
-        if ( controller.finished() )
-        {
-          command.tv             = 0.0;
+        else {
+          command.tv = 0.0;
           command.steering_angle = 0;
-
-          Logger::info( "Goal has been reached, going into idle mode",
-            "pathFollow" );
-        } else {
-          command.tv             = appliedVelocity;
-          command.steering_angle = steeringAngle;
         }
-      }
-      else {
-        command.tv = 0.0;
+
+        command.timestamp = seconds();
+        // cout << commandStructure.toString();
+        registry.sendStructure( "smart_velocity_message", commandStructure );
+      } catch( MessagingTimeout ) {
+        Logger::spam( "Timeout waiting for message", "pathFollow" );
+        command.tv = 0;
         command.steering_angle = 0;
+        registry.sendStructure( "smart_velocity_message", commandStructure );
       }
 
-      command.timestamp = seconds();
-      cout << commandStructure.toString();
-      registry.sendStructure( "smart_velocity_message", commandStructure );
-    } catch( MessagingTimeout ) {
-      Logger::spam( "Timeout waiting for message", "pathFollow" );
-      command.tv = 0;
-      command.steering_angle = 0;
-      registry.sendStructure( "smart_velocity_message", commandStructure );
+      now = seconds();
+
+      if ( ( now - cycleStart ) < ( 1.0 / maxControlFrequency ) )
+        usleep( ( 1.0 / maxControlFrequency - ( now - cycleStart ) ) * 1e6 );
+
+      now = seconds();
+
+      if ( ( now - intervalStart ) >= updateInterval ) {
+        fprintf( stderr, "Update frequency is %4.2f Hz\n",
+          numCycles / ( now - intervalStart ) );
+
+        numCycles     = 0;
+        intervalStart = now;
+      }
+      else
+        numCycles++;
     }
-
-    now = seconds();
-
-    if ( ( now - cycleStart ) < ( 1.0 / maxControlFrequency ) )
-      usleep( 1.0 / maxControlFrequency - ( now - cycleStart ) );
-
-    now = seconds();
-
-    if ( ( now - intervalStart ) >= updateInterval ) {
-      fprintf( stderr, "Update frequency is %4.2f Hz\n",
-        numCycles / ( now - intervalStart ) );
-
-      numCycles     = 0;
-      intervalStart = now;
-    }
-    else
-      numCycles++;
   }
 }
 
@@ -250,6 +265,12 @@ registerMessages( Registry & registry, const string & localizationMessage )
     ROTOR_DEFINITION_STRING( path_message )
   );
   registry.subscribeToMessage( "path_message", true );
+
+  registry.registerMessageType(
+    "path_stop_message",
+    ROTOR_DEFINITION_STRING( path_stop_message )
+  );
+  registry.subscribeToMessage( "path_stop_message", true );
 
   registry.registerMessageType(
     "smart_velocity_message",
@@ -347,6 +368,6 @@ int main( int argc, char * argv[] )
   command.tv = 0;
   command.steering_angle = 0;
   command.timestamp = seconds();
-  cout << commandStructure.toString();
+  // cout << commandStructure.toString();
   registry.sendStructure( "smart_velocity_message", commandStructure );
 }

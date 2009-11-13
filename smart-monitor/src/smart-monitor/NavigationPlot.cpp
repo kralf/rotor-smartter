@@ -200,12 +200,11 @@ void
 NavigationPlot::stop()
 {
   if (_registry) {
-    Rotor::Structure pathMessage = _registry->newStructure("path_message");
+    Rotor::Structure stopMessage = _registry->newStructure("path_stop_message");
 
-    pathMessage["point_count"] = 0;
-    pathMessage.adjust();
-    pathMessage["timestamp"] = Rotor::seconds();
-    _registry->sendStructure( "path_message", pathMessage );
+    stopMessage["timestamp"] = Rotor::seconds();
+    stopMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
+    _registry->sendStructure( "path_stop_message", stopMessage );
   }
 }
 
