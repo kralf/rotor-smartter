@@ -1,6 +1,9 @@
 #include "ArcController.h"
+#include "ArcSafety.h"
 #include "Vector.h"
+
 #include <smart-rotor-interfaces/Messages.h>
+
 #include <rotor/BaseOptions.h>
 #include <rotor/Conversion.h>
 #include <rotor/FileUtils.h>
@@ -8,6 +11,7 @@
 #include <rotor/NetUtils.h>
 #include <rotor/RemoteRegistry.h>
 #include <rotor/Time.h>
+
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -74,116 +78,140 @@ readPath(
 //------------------------------------------------------------------------------
 
 void
-mainLoop( Registry & registry, ArcController & controller, double velocity )
+mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
+  double velocity, double maxControlFrequency )
 {
   Structure commandStructure( "smart_velocity_message", 0, registry );
   commandStructure["host"] = const_cast<char*>( hostName().c_str() );
   smart_velocity_message & command = ROTOR_VARIABLE(smart_velocity_message,
     commandStructure );
 
- // points          = []
- // pose            = wp2.geometry.Vector( ( 0, 0 ), 0 )
+  std::vector<double> laserX;
+  std::vector<double> laserY;
 
   double steeringAngle   = 0;
   double actualSteering  = 0;
   double appliedVelocity = velocity;
 
-  try
-  {
-    Message msg      = registry.receiveMessage( 1 );
-    Structure & data = msg.data();
+  size_t numCycles = 0;
 
-    if ( msg.name() == "path_message" )
+  while (!quit) {
+    double now           = seconds();
+    double intervalStart = ( intervalStart > 0.0 ) ? intervalStart : now;
+    double cycleStart    = now;
+
+    try
     {
-      Path path;
-      path_message & pathMessage = * reinterpret_cast<path_message *>(
-        data.buffer() );
+      Message msg      = registry.receiveMessage( 1 );
+      Structure & data = msg.data();
 
-      path.resize( pathMessage.point_count );
-      for ( size_t i = 0; i < pathMessage.point_count; ++i )
+      if ( msg.name() == "path_message" )
       {
-        Point & p = path[i].origin();
-        p[0] = pathMessage.x[i];
-        p[1] = pathMessage.y[i];
-      }
+        Path path;
+        path_message & pathMessage = * reinterpret_cast<path_message *>(
+          data.buffer() );
 
-      computePathAngles( path );
-      controller.path( path );
+        path.resize( pathMessage.point_count );
+        for ( size_t i = 0; i < pathMessage.point_count; ++i )
+        {
+          Point & p = path[i].origin();
+          p[0] = pathMessage.x[i];
+          p[1] = pathMessage.y[i];
+        }
 
-      Logger::spam( "Path message has been received:" + data.toString(),
-        "pathFollow" );
+        computePathAngles( path );
+        controller.path( path );
 
-      msg = registry.receiveMessage( 1 );
-    }
-
-    if ( !controller.finished() ) {
-      if ( msg.name() == "carmen_localize_globalpos" )
-      {
-        Point tmp;
-        tmp[0] = data["globalpos"]["x"];
-        tmp[1] = data["globalpos"]["y"];
-        Vector pose( tmp, data["globalpos"]["theta"] );
-
-        steeringAngle = controller.step( pose );
-
-        Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
-          " " + toString( pose.origin()[1] ), "pathFollow" );
-        msg = registry.receiveMessage( 1 );
-      } else if ( msg.name() == "locfilter_filteredpos_message" ) {
-        Point tmp;
-        tmp[0] = data["filteredpos"]["x"];
-        tmp[1] = data["filteredpos"]["y"];
-        Vector pose( tmp, data["filteredpos"]["theta"] );
-
-        steeringAngle = controller.step( pose );
-
-        Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
-          " " + toString( pose.origin()[1] ), "pathFollow" );
-        msg = registry.receiveMessage( 1 );
-      } else if ( msg.name() == "smart_status_message" ) {
-        actualSteering = data["steering_angle"];
-//         } else if ( msg.name() == "axt_message" ) {
-//           points  = []
-//           dx      = data.x
-//           dy      = data.y
-//           channel = data.channel
-//           for ( int i = 0; i < data["num_points"]; ++i )
-//           {
-//             if ( channel[i] == 2 )
-//             {
-//               points.append( ( dx[i], dy[i] ) )
-//             }
-//           }
-//         }
-      }
-
-//         appliedVelocity = safety.step( velocity, actualSteering, points )
-
-      if ( controller.finished() )
-      {
-        command.tv             = 0.0;
-        command.steering_angle = 0;
-
-        Logger::info( "Goal has been reached, going into idle mode",
+        Logger::spam( "Path message has been received:" + data.toString(),
           "pathFollow" );
-      } else {
-        command.tv             = appliedVelocity;
-        command.steering_angle = steeringAngle;
+
+        msg = registry.receiveMessage( 1 );
       }
-    }
-    else {
-      command.tv = 0.0;
+
+      if ( !controller.finished() ) {
+        if ( msg.name() == "carmen_localize_globalpos" )
+        {
+          Point tmp;
+          tmp[0] = data["globalpos"]["x"];
+          tmp[1] = data["globalpos"]["y"];
+          Vector pose( tmp, data["globalpos"]["theta"] );
+
+          steeringAngle = controller.step( pose );
+
+          Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
+            " " + toString( pose.origin()[1] ), "pathFollow" );
+          msg = registry.receiveMessage( 1 );
+        } else if ( msg.name() == "locfilter_filteredpos_message" ) {
+          Point tmp;
+          tmp[0] = data["filteredpos"]["x"];
+          tmp[1] = data["filteredpos"]["y"];
+          Vector pose( tmp, data["filteredpos"]["theta"] );
+
+          steeringAngle = controller.step( pose );
+
+          Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
+            " " + toString( pose.origin()[1] ), "pathFollow" );
+          msg = registry.receiveMessage( 1 );
+        } else if ( msg.name() == "smart_status_message" ) {
+          actualSteering = data["steering_angle"];
+        } else if ( msg.name() == "axt_message" ) {
+          axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
+          laserX.clear();
+          laserY.clear();
+
+          for ( size_t i = 0; i < alasca.num_points; ++i ) {
+            if ( alasca.channel[i] == 2 ) {
+              laserX.push_back( alasca.x[i] );
+              laserY.push_back( -alasca.y[i] );
+            }
+          }
+        }
+
+        appliedVelocity = safety.step( velocity, actualSteering, laserX, laserY );
+
+        if ( controller.finished() )
+        {
+          command.tv             = 0.0;
+          command.steering_angle = 0;
+
+          Logger::info( "Goal has been reached, going into idle mode",
+            "pathFollow" );
+        } else {
+          command.tv             = appliedVelocity;
+          command.steering_angle = steeringAngle;
+        }
+      }
+      else {
+        command.tv = 0.0;
+        command.steering_angle = 0;
+      }
+
+      command.timestamp = seconds();
+      cout << commandStructure.toString();
+      registry.sendStructure( "smart_velocity_message", commandStructure );
+    } catch( MessagingTimeout ) {
+      Logger::spam( "Timeout waiting for message", "pathFollow" );
+      command.tv = 0;
       command.steering_angle = 0;
+      registry.sendStructure( "smart_velocity_message", commandStructure );
     }
 
-    command.timestamp = seconds();
-    cout << commandStructure.toString();
-    registry.sendStructure( "smart_velocity_message", commandStructure );
-  } catch( MessagingTimeout ) {
-    Logger::spam( "Timeout waiting for message", "pathFollow" );
-    command.tv = 0;
-    command.steering_angle = 0;
-    registry.sendStructure( "smart_velocity_message", commandStructure );
+    now = seconds();
+
+    if ( ( now - cycleStart ) < ( 1.0 / maxControlFrequency ) )
+      usleep( 1.0 / maxControlFrequency - ( now - cycleStart ) );
+
+    now = seconds();
+
+    if ( ( now - intervalStart ) >= updateInterval ) {
+      fprintf( stderr, "Update frequency is %4.2f Hz\n",
+        numCycles / ( now - intervalStart ) );
+
+      numCycles     = 0;
+      intervalStart = now;
+    }
+    else
+      numCycles++;
   }
 }
 
@@ -292,6 +320,13 @@ int main( int argc, char * argv[] )
     false
   );
 
+  ArcSafety safety(
+    axesDistance,
+    laserDistance,
+    securityDistance,
+    wheelDistance
+  );
+
   if ( argc == 3 )
   {
     Path path;
@@ -302,32 +337,7 @@ int main( int argc, char * argv[] )
 
   signal( SIGINT, quitLoop );
 
-  unsigned int numCycles = 0;
-
-  while (!quit) {
-    double now           = seconds();
-    double intervalStart = ( intervalStart > 0.0 ) ? intervalStart : now;
-    double cycleStart    = now;
-
-    mainLoop( registry, controller, velocity );
-
-    now = seconds();
-
-    if ( ( now - cycleStart ) < ( 1.0 / maxControlFrequency ) )
-      usleep( 1.0 / maxControlFrequency - ( now - cycleStart ) );
-
-    now = seconds();
-
-    if ( ( now - intervalStart ) >= updateInterval ) {
-      fprintf( stderr, "Update frequency is %4.2f Hz\n",
-        numCycles / ( now - intervalStart ) );
-
-      numCycles     = 0;
-      intervalStart = now;
-    }
-    else
-      numCycles++;
-  }
+  mainLoop( registry, controller, safety, velocity, maxControlFrequency );
 
   Structure commandStructure( "smart_velocity_message", 0, registry );
   commandStructure["host"] = const_cast<char*>( hostName().c_str() );
@@ -339,6 +349,4 @@ int main( int argc, char * argv[] )
   command.timestamp = seconds();
   cout << commandStructure.toString();
   registry.sendStructure( "smart_velocity_message", commandStructure );
-
-// safety     = wp2.ArcSafety( axesDistance, laserDistance, securityDistance, wheelDistance )
 }
