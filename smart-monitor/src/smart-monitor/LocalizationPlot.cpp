@@ -22,7 +22,8 @@ LocalizationPlot::LocalizationPlot( QWidget * parent, size_t maxPathPoints,
   _registry ( 0 ),
   _defaultPath ( "Global" ),
   _maxPathPoints(maxPathPoints),
-  _minUpdateDistance(minUpdateDistance)
+  _minUpdateDistance(minUpdateDistance),
+  _scale ( 1.0 )
 {
   setLayout( &_layout );
 
@@ -80,6 +81,14 @@ void
 LocalizationPlot::setDefaultPath( const std::string & defaultPath )
 {
   _defaultPath = defaultPath;
+}
+
+//------------------------------------------------------------------------------
+
+void
+LocalizationPlot::setScale( int value ) {
+  _scale = exp(0.01*value);
+  updateFigure();
 }
 
 //------------------------------------------------------------------------------
@@ -213,16 +222,16 @@ LocalizationPlot::updateFigure()
     double y1 = 0.0;
     double x2 = 0.0;
     double y2 = 0.0;
-    double factor = 1.0;
+    double factor = _scale;
 
     if ( sx > sy ) {
-      factor = 1.0 * sx / sy;
+      factor = _scale * sx / sy;
       x1 = x - delta * factor;
       x2 = x + delta * factor;
       y1 = y - delta;
       y2 = y + delta;
     } else {
-      factor = 1.0 * sy / sx;
+      factor = _scale * sy / sx;
       x1 = x - delta;
       x2 = x + delta;
       y1 = y - delta * factor;
@@ -258,10 +267,10 @@ LocalizationPlot::updatePath( const std::string & name, double x, double y )
   if ( !tx.empty() ) {
     double lx = tx.back();
     double ly = ty.back();
-    double dist = ( lx - x ) * ( lx - x ) +
-      ( ly - y ) * ( ly - y );
+    double dist = ( x - lx ) * ( x - lx ) +
+      ( y - ly ) * ( y - ly );
 
-    if ( dist >= _minUpdateDistance ) {
+    if ( dist >= _minUpdateDistance*_minUpdateDistance ) {
       tx.push_back( x );
       ty.push_back( y );
     }

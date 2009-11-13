@@ -33,6 +33,7 @@ public:
   void writePath( const std::string & name, const std::string & filename );
 
 public slots:
+  void setScale( int value );
   void reset();
   void clear();
   void save();
@@ -59,6 +60,8 @@ private:
   PointMarkers      _points;
   PointSeries       _x;
   PointSeries       _y;
+
+  double            _scale;
 
   void initializeCurve( const std::string & name );
 };
