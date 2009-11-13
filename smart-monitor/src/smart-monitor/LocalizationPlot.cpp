@@ -228,12 +228,12 @@ LocalizationPlot::updateFigure()
       factor = _scale * sx / sy;
       x1 = x - delta * factor;
       x2 = x + delta * factor;
-      y1 = y - delta;
-      y2 = y + delta;
+      y1 = y - delta * factor;
+      y2 = y + delta * factor;
     } else {
       factor = _scale * sy / sx;
-      x1 = x - delta;
-      x2 = x + delta;
+      x1 = x - delta * factor;
+      x2 = x + delta * factor;
       y1 = y - delta * factor;
       y2 = y + delta * factor;
     }
