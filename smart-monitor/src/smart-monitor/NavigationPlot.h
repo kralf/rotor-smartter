@@ -60,6 +60,7 @@ private:
   double                      _commandSteeringAngle;
   PointSeries                 _x;
   PointSeries                 _y;
+  std::vector<double>         _nextPoint;
 
   double                      _scale;
 

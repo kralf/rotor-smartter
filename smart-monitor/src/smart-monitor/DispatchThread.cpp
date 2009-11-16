@@ -87,6 +87,11 @@ DispatchThread::run()
           path.x[i], path.y[i] );
     } else if ( message.name() == "path_stop_message" ) {
       _window.mainWidget().localizationPlot->clearPath( "Path" );
+    } else if ( message.name() == "path_status_message" ) {
+      path_status_message & status = ROTOR_VARIABLE( path_status_message,
+        data );
+      _window.mainWidget().localizationPlot->updatePoint( "Goto",
+        status.x, status.y );
     } else if ( message.name() == "axt_message" ) {
       axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
       _window.mainWidget().navigationPlot->resetLaserData();

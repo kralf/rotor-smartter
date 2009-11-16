@@ -98,6 +98,12 @@ setupMessages( Registry & registry )
     ROTOR_DEFINITION_STRING( path_stop_message )
   );
   registry.subscribeToMessage( "path_stop_message", false, 4 );
+
+  registry.registerMessageType(
+    "path_status_message",
+    ROTOR_DEFINITION_STRING( path_status_message )
+  );
+  registry.subscribeToMessage( "path_status_message", false, 4 );
 }
 
 

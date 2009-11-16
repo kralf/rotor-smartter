@@ -311,6 +311,15 @@ LocalizationPlot::updatePath( const std::string & name, double x, double y )
 //------------------------------------------------------------------------------
 
 void
+LocalizationPlot::updatePoint( const std::string & name, double x, double y )
+{
+  clearPath( name );
+  updatePath( name, x, y );
+}
+
+//------------------------------------------------------------------------------
+
+void
 LocalizationPlot::writePath( const std::string& name, const std::string &
   filename )
 {

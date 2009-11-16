@@ -97,6 +97,7 @@ void
 NavigationPlot::readPath( const std::string & filename )
 {
   _lock.lockForRead();
+
   ifstream f( filename.c_str() );
   std::vector<double> & x = _x[_defaultPath];
   std::vector<double> & y = _y[_defaultPath];

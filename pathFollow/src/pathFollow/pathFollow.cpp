@@ -78,14 +78,77 @@ readPath(
 //------------------------------------------------------------------------------
 
 void
-mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
-  double velocity, double maxControlFrequency )
+sendPathMessage( Registry & registry, const Path & path )
+{
+  Structure pathMessage( "path_message", 0, registry );
+  pathMessage["point_count"] = static_cast<int>( path.size() );
+  pathMessage.adjust();
+
+  for ( size_t i = 0; i < path.size(); ++i )
+  {
+    pathMessage["x"][i]     = path[i].origin()[0];
+    pathMessage["y"][i]     = path[i].origin()[1];
+    pathMessage["theta"][i] = path[i].angle();
+  }
+
+  pathMessage["timestamp"] = seconds();
+  registry.sendStructure( "path_message", pathMessage );
+  Logger::spam( "Path message has been sent:" + pathMessage.toString(),
+    "pathFollow" );
+}
+
+//------------------------------------------------------------------------------
+
+void
+sendCommandMessage(
+  Registry & registry,
+  double tv,
+  double steering_angle
+)
 {
   Structure commandStructure( "smart_velocity_message", 0, registry );
   commandStructure["host"] = const_cast<char*>( hostName().c_str() );
   smart_velocity_message & command = ROTOR_VARIABLE(smart_velocity_message,
     commandStructure );
 
+  command.tv = tv;
+  command.steering_angle = steering_angle;
+  command.timestamp = seconds();
+
+  // cout << commandStructure.toString();
+  registry.sendStructure( "smart_velocity_message", commandStructure );
+}
+
+//------------------------------------------------------------------------------
+
+void
+sendStatusMessage(
+  Registry & registry,
+  const Point & nextPoint,
+  State state
+)
+{
+  Structure statusStructure( "path_status_message", 0, registry );
+  statusStructure["host"] = const_cast<char*>( hostName().c_str() );
+  path_status_message & status = ROTOR_VARIABLE(path_status_message,
+    statusStructure );
+
+  status.x = nextPoint[0];
+  status.y = nextPoint[1];
+  status.state = state;
+
+  status.timestamp = seconds();
+
+  // cout << statusStructure.toString();
+  registry.sendStructure( "path_status_message", statusStructure );
+}
+
+//------------------------------------------------------------------------------
+
+void
+mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
+  double velocity, double maxControlFrequency )
+{
   std::vector<double> laserX;
   std::vector<double> laserY;
 
@@ -185,29 +248,26 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
 
           if ( controller.finished() )
           {
-            command.tv             = 0.0;
-            command.steering_angle = 0;
-
+            sendCommandMessage( registry, 0, 0 );
+            sendStatusMessage( registry, Point(0, 0), idle );
             Logger::info( "Goal has been reached, going into idle mode",
               "pathFollow" );
           } else {
-            command.tv             = appliedVelocity;
-            command.steering_angle = steeringAngle;
-          }
+            sendCommandMessage( registry, appliedVelocity, steeringAngle );
+
+            if ( appliedVelocity == 0 )
+              sendStatusMessage( registry, controller.current(), waiting );
+            else
+              sendStatusMessage( registry, controller.current(), following );
+        }
         }
         else {
-          command.tv = 0.0;
-          command.steering_angle = 0;
+          sendCommandMessage( registry, 0, 0 );
+          sendStatusMessage( registry, Point(0, 0), idle );
         }
-
-        command.timestamp = seconds();
-        // cout << commandStructure.toString();
-        registry.sendStructure( "smart_velocity_message", commandStructure );
       } catch( MessagingTimeout ) {
+        sendCommandMessage( registry, 0, 0 );
         Logger::spam( "Timeout waiting for message", "pathFollow" );
-        command.tv = 0;
-        command.steering_angle = 0;
-        registry.sendStructure( "smart_velocity_message", commandStructure );
       }
 
       now = seconds();
@@ -273,31 +333,14 @@ registerMessages( Registry & registry, const string & localizationMessage )
   registry.subscribeToMessage( "path_stop_message", true );
 
   registry.registerMessageType(
+    "path_status_message",
+    ROTOR_DEFINITION_STRING( path_status_message )
+  );
+
+  registry.registerMessageType(
     "smart_velocity_message",
     ROTOR_DEFINITION_STRING( smart_velocity_message )
   );
-}
-
-//------------------------------------------------------------------------------
-
-void
-sendPathMessage( Registry & registry, const Path & path )
-{
-  Structure pathMessage( "path_message", 0, registry );
-  pathMessage["point_count"] = static_cast<int>( path.size() );
-  pathMessage.adjust();
-
-  for ( size_t i = 0; i < path.size(); ++i )
-  {
-    pathMessage["x"][i]     = path[i].origin()[0];
-    pathMessage["y"][i]     = path[i].origin()[1];
-    pathMessage["theta"][i] = path[i].angle();
-  }
-
-  pathMessage["timestamp"] = seconds();
-  registry.sendStructure( "path_message", pathMessage );
-  Logger::spam( "Path message has been sent:" + pathMessage.toString(),
-    "pathFollow" );
 }
 
 //------------------------------------------------------------------------------
@@ -360,14 +403,6 @@ int main( int argc, char * argv[] )
 
   mainLoop( registry, controller, safety, velocity, maxControlFrequency );
 
-  Structure commandStructure( "smart_velocity_message", 0, registry );
-  commandStructure["host"] = const_cast<char*>( hostName().c_str() );
-  smart_velocity_message & command = ROTOR_VARIABLE(smart_velocity_message,
-    commandStructure );
-
-  command.tv = 0;
-  command.steering_angle = 0;
-  command.timestamp = seconds();
-  // cout << commandStructure.toString();
-  registry.sendStructure( "smart_velocity_message", commandStructure );
+  sendCommandMessage( registry, 0, 0 );
+  sendStatusMessage( registry, Point(0, 0), idle );
 }

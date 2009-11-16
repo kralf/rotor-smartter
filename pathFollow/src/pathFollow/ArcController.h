@@ -20,6 +20,7 @@ public:
   );
 
   void path ( const Path & path );
+  const Point& current () const;
 
   double radiusToSteeringAngle( double radius );
   double steeringAngleToRadius( double angle );

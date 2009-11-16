@@ -4,6 +4,12 @@
 #include <eigen2/Eigen/Core>
 #include <vector>
 
+enum State {
+  idle = 0,
+  following = 1,
+  waiting = 2
+};
+
 class Vector;
 
 typedef Eigen::Vector2d Point;

@@ -53,6 +53,14 @@ ArcController::path ( const Path & path )
 
 //------------------------------------------------------------------------------
 
+const Point &
+ArcController::current () const
+{
+  return _path[_current].origin();
+}
+
+//------------------------------------------------------------------------------
+
 double
 ArcController::step( const Vector & pose )
 {
