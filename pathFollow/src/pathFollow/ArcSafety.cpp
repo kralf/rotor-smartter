@@ -14,14 +14,16 @@ double sqr( double value )
 ArcSafety::ArcSafety(
   double axesDistance,
   double laserDistance,
-  double thresholdDistance,
-  double securityDistance,
+  double securityMinDistance,
+  double securityMaxDistance,
+  size_t securityMinHits,
   double width
 )
   : _axesDistance( axesDistance ),
     _laserDistance( laserDistance ),
-    _thresholdDistance( thresholdDistance ),
-    _securityDistance( securityDistance ),
+    _securityMinDistance( securityMinDistance ),
+    _securityMaxDistance( securityMaxDistance ),
+    _securityMinHits( securityMinHits ),
     _width( width ),
     _offset( width / 2.0 )
 {
@@ -34,6 +36,8 @@ ArcSafety::step( double velocity, double steeringAngle,
   const vector<double> & laserX, const vector<double> & laserY,
   const vector<unsigned char> & laserStatus )
 {
+  size_t numPoints = 0;
+
   double sign   = 0;
   double radius = 0;
   if ( fabs( steeringAngle ) > 1E-6 ) {
@@ -50,16 +54,16 @@ ArcSafety::step( double velocity, double steeringAngle,
   double a2 = atan2( _laserDistance, -radius - _offset );
 
   if ( radius < 0 )
-    a2 += _securityDistance / r1;
+    a2 += _securityMaxDistance / r1;
   else
-    a1 -= _securityDistance / r1;
+    a1 -= _securityMaxDistance / r1;
 
   for ( size_t i = 0; i < laserX.size(); ++i )
   {
     if ( !laserStatus[i]) {
       double d = sqrt( sqr( laserX[i] ) + sqr( laserY[i] ) );
 
-      if ( d >= _thresholdDistance )
+      if ( d >= _securityMinDistance )
       {
         double r = sqrt( sqr( radius + laserY[i] ) + sqr( laserX[i] +
           _laserDistance ) );
@@ -68,12 +72,15 @@ ArcSafety::step( double velocity, double steeringAngle,
           double a  = atan2( laserX[i] + _laserDistance, -radius - laserY[i] );
           if ( ( a >= a1 ) && ( a <= a2 ) )
           {
-            velocity = 0.0;
+            ++numPoints;
           }
         }
       }
     }
   }
 
-  return velocity;
+  if ( numPoints > _securityMinHits )
+    return 0.0;
+  else
+    return velocity;
 }

@@ -239,11 +239,9 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
             laserStatus.clear();
 
             for ( size_t i = 0; i < alasca.num_points; ++i ) {
-              if ( alasca.channel[i] == 2 ) {
-                laserX.push_back( alasca.x[i] );
-                laserY.push_back( alasca.y[i] );
-                laserStatus.push_back( alasca.point_status[i] );
-              }
+              laserX.push_back( alasca.x[i] );
+              laserY.push_back( alasca.y[i] );
+              laserStatus.push_back( alasca.point_status[i] );
             }
           }
 
@@ -382,11 +380,12 @@ int main( int argc, char * argv[] )
   double angleThreshold      = options.getDouble( moduleName, "angleThreshold" );
   double maxControlFrequency = options.getDouble( moduleName, "maxControlFrequency" );
 
+  double securityMinDistance  = options.getDouble( moduleName, "securityMinDistance" );
+  double securityMaxDistance  = options.getDouble( moduleName, "securityMaxDistance" );
+  size_t securityMinHits   = options.getInt( moduleName, "securityMinHits" );
 
   double axesDistance      = options.getDouble( "smart", "axesDistance" );
   double laserDistance     = options.getDouble( "smart", "laserDistance" );
-  double thresholdDistance = options.getDouble( "smart", "thresholdDistance" );
-  double securityDistance  = options.getDouble( "smart", "securityDistance" );
   double wheelDistance     = options.getDouble( "smart", "wheelDistance" );
 
   ArcController controller(
@@ -398,8 +397,8 @@ int main( int argc, char * argv[] )
   ArcSafety safety(
     axesDistance,
     laserDistance,
-    thresholdDistance,
-    securityDistance,
+    securityMinDistance, securityMaxDistance,
+    securityMinHits,
     wheelDistance
   );
 
