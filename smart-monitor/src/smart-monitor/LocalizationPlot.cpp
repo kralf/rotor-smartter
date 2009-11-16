@@ -204,6 +204,8 @@ LocalizationPlot::updateFigure()
       maxY = max( maxY, curve.maxYValue() );
       minY = min( minY, curve.minYValue() );
       flag = true;
+    } else {
+      curve.setData( 0, 0, 0 );
     }
   }
 
