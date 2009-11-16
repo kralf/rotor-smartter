@@ -17,11 +17,12 @@ using namespace std;
 
 NavigationPlot::NavigationPlot( QWidget * parent ) :
   QWidget( parent ),
-  _registry ( 0 ),
-  _defaultPath ( "Global" ),
+  _registry( 0 ),
+  _defaultPath( "Global" ),
   _steeringAngle( 0.0 ),
   _commandSteeringAngle( 0.0 ),
-  _scale ( 1.0 )
+  _state( 0 ),
+  _scale( 1.0 )
 {
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( repaint() ) );
   _timer.start( 200 );
@@ -89,6 +90,14 @@ void
 NavigationPlot::commandSteeringAngle( double value )
 {
   _commandSteeringAngle = value;
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::state( size_t value )
+{
+  _state = value;
 }
 
 //------------------------------------------------------------------------------
@@ -314,7 +323,8 @@ NavigationPlot::drawSteeringArc( QPainter & painter, double steeringAngle )
   double radius = 0;
   if ( fabs( steeringAngle ) > 1E-6 ) {
     sign   = -steeringAngle / fabs( steeringAngle );
-    radius = sign * sqrt( pow( _configuration->axesDistance() / sin( steeringAngle ), 2 ) - pow( _configuration->axesDistance(), 2 ) );
+    radius = sign * sqrt( pow( _configuration->axesDistance() /
+      sin( steeringAngle ), 2 ) - pow( _configuration->axesDistance(), 2 ) );
   } else {
     radius = 4000.0;
   }
@@ -353,6 +363,7 @@ NavigationPlot::drawClearArc(
   double a1      = 0;
   double a2      = 0;
   double nradius = 0;
+
   if ( radius < 0 ) {
     a1 = atan2( _configuration->laserDistance(), fabs( radius + offset ) );
     nradius = sqrt( pow( radius + offset, 2 ) + pow( _configuration->laserDistance(), 2 ) );
@@ -378,6 +389,20 @@ NavigationPlot::drawSteering( QPainter & painter )
   QPointF p1 = drawClearArc( painter, _steeringAngle, _configuration->wheelDistance() / 2.0 );
   painter.setPen( QColor( 128, 128, 128 ) );
   QPointF p2 = drawClearArc( painter, _steeringAngle, -_configuration->wheelDistance() / 2.0 );
-  painter.setPen( QColor( 128, 128, 128 ) );
+
+  QPen pen;
+  if ( _state == 1 )            // following
+  {
+    pen.setColor( QColor( 0, 128, 0 ) );
+    pen.setWidth( 5 );
+  } else if ( _state == 2 ) {   // waiting
+    pen.setColor( QColor( 128, 0, 0 ) );
+    pen.setWidth( 5 );
+  } else {                      // idle
+    pen.setColor( QColor( 128, 128, 128 ) );
+    pen.setWidth( 1 );
+  }
+
+  painter.setPen( pen );
   painter.drawLine( QLineF( p1.x(), p1.y(), p2.x(), p2.y() ) );
 }

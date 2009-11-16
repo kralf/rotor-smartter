@@ -31,6 +31,7 @@ public:
   void resetLaserData();
   void steeringAngle( double value );
   void commandSteeringAngle( double value );
+  void state( size_t state );
   void readPath( const std::string & filename );
 
 public slots:
@@ -60,6 +61,7 @@ private:
   double                      _commandSteeringAngle;
   PointSeries                 _x;
   PointSeries                 _y;
+  size_t                      _state;
   std::vector<double>         _nextPoint;
 
   double                      _scale;

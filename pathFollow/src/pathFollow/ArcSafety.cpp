@@ -29,15 +29,17 @@ ArcSafety::ArcSafety(
 
 double
 ArcSafety::step( double velocity, double steeringAngle,
-  const vector<double> & laserX, const vector<double> & laserY )
+  const vector<double> & laserX, const vector<double> & laserY,
+  const vector<unsigned char> & laserStatus )
 {
-  double radius = 400.0;
-
-  if ( steeringAngle != 0 )
-  {
-    double sign = -steeringAngle / abs( steeringAngle );
+  double sign   = 0;
+  double radius = 0;
+  if ( fabs( steeringAngle ) > 1E-6 ) {
+    sign   = -steeringAngle / fabs( steeringAngle );
     radius = sign * sqrt( sqr( _axesDistance / sin( steeringAngle ) ) -
       sqr( _axesDistance ) );
+  } else {
+    radius = 4000.0;
   }
 
   double r1 = sqrt( sqr( abs( radius ) - _offset ) + sqr( _laserDistance ) );
@@ -52,13 +54,16 @@ ArcSafety::step( double velocity, double steeringAngle,
 
   for ( size_t i = 0; i < laserX.size(); ++i )
   {
-    double r  = sqrt( sqr( radius + laserY[i] ) + sqr( laserX[i] + _laserDistance ) );
-    if ( ( r >= r1 ) && ( r <= r2 ) )
-    {
-      double a  = atan2( laserX[i] + _laserDistance, -radius - laserY[i] );
-      if ( ( a >= a1 ) && ( a <= a2 ) )
+    if ( laserStatus[i] ) {
+      double r  = sqrt( sqr( radius + laserY[i] ) + sqr( laserX[i] +
+        _laserDistance ) );
+      if ( ( r >= r1 ) && ( r <= r2 ) )
       {
-        velocity = 0.0;
+        double a  = atan2( laserX[i] + _laserDistance, -radius - laserY[i] );
+        if ( ( a >= a1 ) && ( a <= a2 ) )
+        {
+          velocity = 0.0;
+        }
       }
     }
   }

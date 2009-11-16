@@ -92,6 +92,7 @@ DispatchThread::run()
         data );
       _window.mainWidget().localizationPlot->updatePoint( "Goto",
         status.x, status.y );
+      _window.mainWidget().navigationPlot->state( status.state );
     } else if ( message.name() == "axt_message" ) {
       axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
       _window.mainWidget().navigationPlot->resetLaserData();

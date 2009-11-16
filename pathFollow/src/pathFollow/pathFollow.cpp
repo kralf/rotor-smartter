@@ -151,6 +151,7 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
 {
   std::vector<double> laserX;
   std::vector<double> laserY;
+  std::vector<unsigned char> laserStatus;
 
   double steeringAngle   = 0;
   double actualSteering  = 0;
@@ -235,16 +236,19 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
 
             laserX.clear();
             laserY.clear();
+            laserStatus.clear();
 
             for ( size_t i = 0; i < alasca.num_points; ++i ) {
               if ( alasca.channel[i] == 2 ) {
                 laserX.push_back( alasca.x[i] );
                 laserY.push_back( -alasca.y[i] );
+                laserStatus.push_back( alasca.point_status[i] );
               }
             }
           }
 
-          appliedVelocity = safety.step( velocity, actualSteering, laserX, laserY );
+          appliedVelocity = safety.step( velocity, actualSteering, laserX,
+            laserY, laserStatus );
 
           if ( controller.finished() )
           {

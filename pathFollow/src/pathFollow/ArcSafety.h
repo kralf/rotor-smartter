@@ -17,7 +17,8 @@ public:
   );
 
   double step( double velocity, double steeringAngle,
-    const std::vector<double> & laserX, const std::vector<double> & laserY );
+    const std::vector<double> & laserX, const std::vector<double> & laserY,
+    const std::vector<unsigned char> & laserStatus );
 private:
   double       _axesDistance;
   double       _laserDistance;
