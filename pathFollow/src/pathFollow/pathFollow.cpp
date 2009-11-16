@@ -241,7 +241,7 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
             for ( size_t i = 0; i < alasca.num_points; ++i ) {
               if ( alasca.channel[i] == 2 ) {
                 laserX.push_back( alasca.x[i] );
-                laserY.push_back( -alasca.y[i] );
+                laserY.push_back( alasca.y[i] );
                 laserStatus.push_back( alasca.point_status[i] );
               }
             }
@@ -259,11 +259,11 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
           } else {
             sendCommandMessage( registry, appliedVelocity, steeringAngle );
 
-            if ( appliedVelocity == 0 )
+            if ( appliedVelocity < velocity )
               sendStatusMessage( registry, controller.current(), waiting );
             else
               sendStatusMessage( registry, controller.current(), following );
-        }
+          }
         }
         else {
           sendCommandMessage( registry, 0, 0 );
@@ -342,6 +342,12 @@ registerMessages( Registry & registry, const string & localizationMessage )
   );
 
   registry.registerMessageType(
+    "smart_status_message",
+    ROTOR_DEFINITION_STRING( smart_status_message )
+  );
+  registry.subscribeToMessage( "smart_status_message", true );
+
+  registry.registerMessageType(
     "smart_velocity_message",
     ROTOR_DEFINITION_STRING( smart_velocity_message )
   );
@@ -379,6 +385,7 @@ int main( int argc, char * argv[] )
 
   double axesDistance      = options.getDouble( "smart", "axesDistance" );
   double laserDistance     = options.getDouble( "smart", "laserDistance" );
+  double thresholdDistance = options.getDouble( "smart", "thresholdDistance" );
   double securityDistance  = options.getDouble( "smart", "securityDistance" );
   double wheelDistance     = options.getDouble( "smart", "wheelDistance" );
 
@@ -391,6 +398,7 @@ int main( int argc, char * argv[] )
   ArcSafety safety(
     axesDistance,
     laserDistance,
+    thresholdDistance,
     securityDistance,
     wheelDistance
   );

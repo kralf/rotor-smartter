@@ -14,11 +14,13 @@ double sqr( double value )
 ArcSafety::ArcSafety(
   double axesDistance,
   double laserDistance,
+  double thresholdDistance,
   double securityDistance,
   double width
 )
   : _axesDistance( axesDistance ),
     _laserDistance( laserDistance ),
+    _thresholdDistance( thresholdDistance ),
     _securityDistance( securityDistance ),
     _width( width ),
     _offset( width / 2.0 )
@@ -54,15 +56,20 @@ ArcSafety::step( double velocity, double steeringAngle,
 
   for ( size_t i = 0; i < laserX.size(); ++i )
   {
-    if ( laserStatus[i] ) {
-      double r  = sqrt( sqr( radius + laserY[i] ) + sqr( laserX[i] +
-        _laserDistance ) );
-      if ( ( r >= r1 ) && ( r <= r2 ) )
+    if ( !laserStatus[i]) {
+      double d = sqrt( sqr( laserX[i] ) + sqr( laserY[i] ) );
+
+      if ( d >= _thresholdDistance )
       {
-        double a  = atan2( laserX[i] + _laserDistance, -radius - laserY[i] );
-        if ( ( a >= a1 ) && ( a <= a2 ) )
+        double r = sqrt( sqr( radius + laserY[i] ) + sqr( laserX[i] +
+          _laserDistance ) );
+        if ( ( r >= r1 ) && ( r <= r2 ) )
         {
-          velocity = 0.0;
+          double a  = atan2( laserX[i] + _laserDistance, -radius - laserY[i] );
+          if ( ( a >= a1 ) && ( a <= a2 ) )
+          {
+            velocity = 0.0;
+          }
         }
       }
     }

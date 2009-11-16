@@ -12,6 +12,7 @@ public:
   ArcSafety(
     double axesDistance,
     double laserDistance,
+    double thresholdDistance,
     double securityDistance,
     double width
   );
@@ -22,6 +23,7 @@ public:
 private:
   double       _axesDistance;
   double       _laserDistance;
+  double       _thresholdDistance;
   double       _securityDistance;
   double       _width;
   double       _offset;

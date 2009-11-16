@@ -393,14 +393,14 @@ NavigationPlot::drawSteering( QPainter & painter )
   QPen pen;
   if ( _state == 1 )            // following
   {
-    pen.setColor( QColor( 0, 128, 0 ) );
-    pen.setWidth( 5 );
+    pen.setColor( QColor( 0, 255, 0 ) );
+    pen.setWidthF( 0.2 );
   } else if ( _state == 2 ) {   // waiting
-    pen.setColor( QColor( 128, 0, 0 ) );
-    pen.setWidth( 5 );
+    pen.setColor( QColor( 255, 0, 0 ) );
+    pen.setWidthF( 0.2 );
   } else {                      // idle
     pen.setColor( QColor( 128, 128, 128 ) );
-    pen.setWidth( 1 );
+    pen.setWidthF( 0 );
   }
 
   painter.setPen( pen );
