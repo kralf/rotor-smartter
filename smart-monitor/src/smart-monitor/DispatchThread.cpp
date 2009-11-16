@@ -79,6 +79,12 @@ DispatchThread::run()
         carmen_base_odometry_message, data );
       _window.mainWidget().localizationPlot->updatePath( "Odometry",
         odometry.x, odometry.y );
+    } else if ( message.name() == "path_message" ) {
+      _window.mainWidget().localizationPlot->clearPath( "Path" );
+      path_message & path = ROTOR_VARIABLE( path_message, data );
+      for ( size_t i = 0; i < path.point_count; ++i )
+        _window.mainWidget().localizationPlot->updatePath( "Path",
+          path.x[i], path.y[i] );
     } else if ( message.name() == "axt_message" ) {
       axt_message & alasca = ROTOR_VARIABLE( axt_message, data );
       _window.mainWidget().navigationPlot->resetLaserData();

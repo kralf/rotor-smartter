@@ -29,6 +29,7 @@ public:
   void setRegistry( Rotor::Registry& registry );
   void setDefaultPath( const std::string & defaultPath );
 
+  void clearPath( const std::string & name );
   void updatePath( const std::string & name, double x, double y );
   void writePath( const std::string & name, const std::string & filename );
 

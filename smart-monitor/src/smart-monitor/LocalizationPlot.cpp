@@ -257,6 +257,22 @@ LocalizationPlot::updateFigure()
 //------------------------------------------------------------------------------
 
 void
+LocalizationPlot::clearPath( const std::string & name )
+{
+  _lock.lockForWrite();
+
+  std::vector<double> & tx = _x[name];
+  std::vector<double> & ty = _y[name];
+
+  tx.clear();
+  ty.clear();
+
+  _lock.unlock();
+}
+
+//------------------------------------------------------------------------------
+
+void
 LocalizationPlot::updatePath( const std::string & name, double x, double y )
 {
   _lock.lockForWrite();
