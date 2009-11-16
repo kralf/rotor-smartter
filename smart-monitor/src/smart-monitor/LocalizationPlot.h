@@ -65,6 +65,7 @@ private:
   double            _scale;
 
   void initializeCurve( const std::string & name );
+  void removeCurve( const std::string & name );
 };
 
 

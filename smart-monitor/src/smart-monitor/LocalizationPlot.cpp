@@ -187,16 +187,17 @@ LocalizationPlot::updateFigure()
   for ( it = _x.begin(); it != end; ++it ) {
     const string & name      = it->first;
 
-    PlotCurves::iterator it = _curves.find( name );
-    if ( it == _curves.end() )
-      initializeCurve( name );
-
-    QwtPlotCurve & curve     = *(_curves[name]);
-    QwtPlotMarker & point    = *(_points[name]);
     std::vector<double> & tx = _x[name];
     std::vector<double> & ty = _y[name];
+    PlotCurves::iterator it  = _curves.find( name );
 
-    if ( tx.size() > 0 ) {
+    if ( !tx.empty() ) {
+      if ( it == _curves.end() )
+        initializeCurve( name );
+
+      QwtPlotCurve & curve     = *(_curves[name]);
+      QwtPlotMarker & point    = *(_points[name]);
+
       curve.setData( &(tx[0]), &(ty[0]), tx.size() );
       point.setValue( tx.back(), ty.back() );
       maxX = max( maxX, curve.maxXValue() );
@@ -205,7 +206,8 @@ LocalizationPlot::updateFigure()
       minY = min( minY, curve.minYValue() );
       flag = true;
     } else {
-      curve.setData( 0, 0, 0 );
+      if ( it != _curves.end() )
+        removeCurve( name );
     }
   }
 
@@ -357,5 +359,22 @@ LocalizationPlot::initializeCurve( const std::string & name )
     symbol.setPen( QPen( color ) );
     symbol.setSize( 10 );
     _points[name]->setSymbol( symbol );
+  }
+}
+
+//------------------------------------------------------------------------------
+
+void
+LocalizationPlot::removeCurve( const std::string & name )
+{
+  if ( _curves.find( name ) != _curves.end() ) {
+    _curves[name]->detach();
+    _points[name]->detach();
+
+    delete _curves[name];
+    delete _points[name];
+
+    _points.erase( name );
+    _curves.erase( name );
   }
 }
