@@ -11,7 +11,7 @@ axt_message = '''
 
     int8_t * channel;
     int8_t * point_status;
-    
+
     float *x;
     float *y;
     float *z;
@@ -53,7 +53,7 @@ carmen_base_velocity_message = '''
 carmen_laser_laser_config_t = '''
   struct carmen_laser_laser_config_t {
     int32_t  laser_type;
-    double start_angle;                   
+    double start_angle;
     double fov;
     double angular_resolution;
     double maximum_range;
@@ -79,20 +79,20 @@ carmen_robot_laser_message = '''
   struct carmen_robot_laser_message {
     int32_t id;
     carmen_laser_laser_config_t config;
-    int32_t num_readings;                  
-    float * range;                      
-    int8_t * tooclose;                    
-    int32_t num_remissions;                
-    float * remission;                  
-    carmen_point_t laser_pose;         
-    carmen_point_t robot_pose;         
+    int32_t num_readings;
+    float * range;
+    int8_t * tooclose;
+    int32_t num_remissions;
+    float * remission;
+    carmen_point_t laser_pose;
+    carmen_point_t robot_pose;
     double tv;
-    double rv;                     
+    double rv;
     double forward_safety_dist;
     double side_safety_dist;
     double turn_axis;
-    double timestamp;                    
-    char *host;                          
+    double timestamp;
+    char *host;
   };
 '''
 
@@ -120,10 +120,17 @@ path_message = '''
   };
 '''
 
+path_stop_message = '''
+  struct path_stop_message {
+    double timestamp;
+    char *host;
+  };
+'''
+
 smart_velocity_message = '''
   struct smart_velocity_message {
     double tv;
-    double steering_angle; 
+    double steering_angle;
     double timestamp;
     char* host;
   };
@@ -132,13 +139,13 @@ smart_velocity_message = '''
 smart_status_message = '''
   struct smart_status_message {
     double gas_pos;
-    int32_t gear;      
+    int32_t gear;
     double steering_angle;
     double tv;
     double rv_front_right;
-    double rv_front_left; 
-    double rv_rear_right; 
-    double rv_rear_left;  
+    double rv_front_left;
+    double rv_rear_right;
+    double rv_rear_left;
     double timestamp;
     char* host;
   };

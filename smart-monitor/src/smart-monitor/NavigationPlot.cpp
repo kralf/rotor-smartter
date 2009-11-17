@@ -183,21 +183,22 @@ NavigationPlot::start( const std::string& name )
     if ( it != _x.end()) {
       std::vector<double> & x = _x[name];
       std::vector<double> & y = _y[name];
+      if ( x.size() > 0 ) {
+        Rotor::Structure pathMessage = _registry->newStructure("path_message");
+        pathMessage["point_count"] = static_cast<int>( x.size() );
+        pathMessage.adjust();
 
-      Rotor::Structure pathMessage = _registry->newStructure("path_message");
-      pathMessage["point_count"] = static_cast<int>( x.size() );
-      pathMessage.adjust();
+        for ( size_t i = 0; i < x.size(); ++i )
+        {
+          pathMessage["x"][i]     = x[i];
+          pathMessage["y"][i]     = y[i];
+          pathMessage["theta"][i] = 0;
+        }
 
-      for ( size_t i = 0; i < x.size(); ++i )
-      {
-        pathMessage["x"][i]     = x[i];
-        pathMessage["y"][i]     = y[i];
-        pathMessage["theta"][i] = 0;
+        pathMessage["timestamp"] = Rotor::seconds();
+        pathMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
+        _registry->sendStructure( "path_message", pathMessage );
       }
-
-      pathMessage["timestamp"] = Rotor::seconds();
-      pathMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
-      _registry->sendStructure( "path_message", pathMessage );
     }
     else
       stop();

@@ -324,7 +324,6 @@ LocalizationPlot::writePath( const std::string& name, const std::string &
   filename )
 {
   _lock.lockForRead();
-
   if ( _curves.find( name ) != _curves.end() ) {
     std::ofstream f( filename.c_str() );
     std::vector<double> & x = _x[name];

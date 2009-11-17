@@ -64,7 +64,7 @@ DispatchThread::run()
   while( true ) {
     Message message   = _registry.receiveMessage();
     Structure data    = message.data();
-    if ( message.name() == "carmen_localize_globalpos_message" ) {
+    if ( message.name() == "carmen_localize_globalpos" ) {
       carmen_localize_globalpos_message & globalpos = ROTOR_VARIABLE(
         carmen_localize_globalpos_message, data );
       _window.mainWidget().localizationPlot->updatePath( "Global",

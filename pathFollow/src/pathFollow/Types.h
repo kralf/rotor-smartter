@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <eigen2/Eigen/Core>
+#include <Eigen/Core>
 #include <vector>
 
 enum State {
