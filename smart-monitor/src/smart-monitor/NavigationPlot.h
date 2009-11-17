@@ -22,6 +22,7 @@ class NavigationPlot : public QWidget
 
 public:
   NavigationPlot( QWidget * parent );
+  virtual ~NavigationPlot();
 
   void setRegistry( Rotor::Registry& registry );
   void setDefaultPath( const std::string & defaultPath );

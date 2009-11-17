@@ -14,7 +14,6 @@ using namespace std;
 
 //------------------------------------------------------------------------------
 
-
 NavigationPlot::NavigationPlot( QWidget * parent ) :
   QWidget( parent ),
   _registry( 0 ),
@@ -26,6 +25,14 @@ NavigationPlot::NavigationPlot( QWidget * parent ) :
 {
   connect( &_timer, SIGNAL( timeout() ), this, SLOT( repaint() ) );
   _timer.start( 200 );
+}
+
+//------------------------------------------------------------------------------
+
+NavigationPlot::~NavigationPlot()
+{
+  if ( _gui.state() != QProcess::NotRunning )
+    _gui.terminate();
 }
 
 //------------------------------------------------------------------------------
