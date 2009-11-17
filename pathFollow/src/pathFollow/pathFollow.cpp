@@ -380,8 +380,8 @@ int main( int argc, char * argv[] )
   double angleThreshold      = options.getDouble( moduleName, "angleThreshold" );
   double maxControlFrequency = options.getDouble( moduleName, "maxControlFrequency" );
 
+  double securityDeceleration  = options.getDouble( moduleName, "securityDeceleration" );
   double securityMinDistance  = options.getDouble( moduleName, "securityMinDistance" );
-  double securityMaxDistance  = options.getDouble( moduleName, "securityMaxDistance" );
   size_t securityMinHits   = options.getInt( moduleName, "securityMinHits" );
 
   double axesDistance      = options.getDouble( "smart", "axesDistance" );
@@ -397,7 +397,8 @@ int main( int argc, char * argv[] )
   ArcSafety safety(
     axesDistance,
     laserDistance,
-    securityMinDistance, securityMaxDistance,
+    securityDeceleration,
+    securityMinDistance,
     securityMinHits,
     wheelDistance
   );

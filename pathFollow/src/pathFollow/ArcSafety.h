@@ -12,8 +12,8 @@ public:
   ArcSafety(
     double axesDistance,
     double laserDistance,
+    double securityDeceleration,
     double securityMinDistance,
-    double securityMaxDistance,
     size_t securityMinHits,
     double width
   );
@@ -24,8 +24,8 @@ public:
 private:
   double       _axesDistance;
   double       _laserDistance;
+  double       _securityDeceleration;
   double       _securityMinDistance;
-  double       _securityMaxDistance;
   size_t       _securityMinHits;
   double       _width;
   double       _offset;
