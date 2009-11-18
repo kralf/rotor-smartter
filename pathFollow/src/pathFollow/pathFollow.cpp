@@ -11,6 +11,7 @@
 #include <rotor/NetUtils.h>
 #include <rotor/RemoteRegistry.h>
 #include <rotor/Time.h>
+#include <rotor/Thread.h>
 
 #include <string>
 #include <sstream>
@@ -279,7 +280,7 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
       now = seconds();
 
       if ( ( now - cycleStart ) < ( 1.0 / maxControlFrequency ) )
-        usleep( ( 1.0 / maxControlFrequency - ( now - cycleStart ) ) * 1e6 );
+        Thread::sleep( ( 1.0 / maxControlFrequency - ( now - cycleStart ) ) );
 
       now = seconds();
 
