@@ -51,7 +51,7 @@ DispatchThread::DispatchThread(
   _window.mainWidget().frequencyPlot->addPlot( "carmen_robot_frontlaser", 25 );
 
   _window.mainWidget().frequencyPlot->addPlot( "locfilter_filteredpos_message", 100 );
-  _window.mainWidget().frequencyPlot->addPlot( "carmen_localize_globalpos", 20 );
+  _window.mainWidget().frequencyPlot->addPlot( "carmen_localize_globalpos", 25 );
 
   _window.mainWidget().frequencyPlot->addPlot( "smart_velocity_message", 100 );
 }

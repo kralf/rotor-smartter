@@ -50,34 +50,34 @@ ArcSafety::step( double velocity, double steeringAngle,
 
   double r1 = sqrt( sqr( abs( radius ) - _offset ) + sqr( _laserDistance ) );
   double r2 = sqrt( sqr( abs( radius ) + _offset ) + sqr( _laserDistance ) );
-  double d_max = sqr( velocity ) / _securityDeceleration;
-  double ds_min = d_max;
+  double a1 = atan2( _laserDistance, -radius + _offset );
+  double a2 = atan2( _laserDistance, -radius - _offset );
+
+  if ( radius < 0 )
+    a2 += _securityMinDistance / r1;
+  else
+    a1 -= _securityMinDistance / r1;
 
   for ( size_t i = 0; i < laserX.size(); ++i )
   {
     if ( !laserStatus[i]) {
+      double d = sqrt( sqr( laserX[i] ) + sqr( laserY[i] ) );
+
       double r = sqrt( sqr( radius + laserY[i] ) + sqr( laserX[i] +
         _laserDistance ) );
-      double a = atan2( laserX[i] + _laserDistance, -radius - laserY[i] );
-      double d = fabs( r * a );
-
       if ( ( r >= r1 ) && ( r <= r2 ) )
       {
-        if ( d <= _securityMinDistance )
+        double a  = atan2( laserX[i] + _laserDistance, -radius - laserY[i] );
+        if ( ( a >= a1 ) && ( a <= a2 ) )
         {
           ++numPoints;
-          if ( numPoints > _securityMinHits )
-            return 0.0;
-        } else {
-          if ( d - _securityMinDistance < ds_min )
-            ds_min = d - _securityMinDistance;
         }
       }
     }
   }
 
-  if ( ds_min < d_max )
-    return sqrt( ( ds_min - _securityMinDistance ) * _securityDeceleration );
+  if ( numPoints > _securityMinHits )
+    return 0.0;
   else
     return velocity;
 }
