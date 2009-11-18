@@ -212,7 +212,9 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
             tmp[1] = data["globalpos"]["y"];
             Vector pose( tmp, data["globalpos"]["theta"] );
 
-            steeringAngle = controller.step( pose );
+            pair<double, double> command = controller.step( pose );
+            steeringAngle = command.first;
+            velocity = command.second;
             step = true;
 
             Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
@@ -224,7 +226,9 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
             tmp[1] = data["filteredpos"]["y"];
             Vector pose( tmp, data["filteredpos"]["theta"] );
 
-            steeringAngle = controller.step( pose );
+            pair<double, double> command = controller.step( pose );
+            steeringAngle = command.first;
+            velocity = command.second;
             step = true;
 
             Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
@@ -380,6 +384,8 @@ int main( int argc, char * argv[] )
   double angleThreshold      = options.getDouble( moduleName, "angleThreshold" );
   double maxControlFrequency = options.getDouble( moduleName, "maxControlFrequency" );
 
+  double deceleration  = options.getDouble( moduleName, "deceleration" );
+
   double securityDeceleration  = options.getDouble( moduleName, "securityDeceleration" );
   double securityMinDistance  = options.getDouble( moduleName, "securityMinDistance" );
   size_t securityMinHits   = options.getInt( moduleName, "securityMinHits" );
@@ -391,6 +397,7 @@ int main( int argc, char * argv[] )
   ArcController controller(
     axesDistance, orientationWeight,
     lookahead, maxLookahead, angleThreshold,
+    velocity, deceleration,
     false
   );
 

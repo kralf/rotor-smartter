@@ -16,6 +16,8 @@ public:
     size_t lookAhead,
     size_t maxLookAhead,
     double angleThreshold,
+    double velocity,
+    double deceleration,
     bool cycle
   );
 
@@ -25,13 +27,14 @@ public:
   double radiusToSteeringAngle( double radius );
   double steeringAngleToRadius( double angle );
 
-  double step( const Vector & pose );
+  std::pair<double, double> step( const Vector & pose );
   bool finished();
 
 private:
   std::pair<double, double> orientationComponent( const Vector & v1, const Vector & v2 );
   double distanceComponent( const Vector & v1, const Vector & v2 );
   double steeringAngle( const Vector & v1, const Vector & v2 );
+  double velocity( const Vector & v1, const Vector & v2 );
   size_t closest( const Vector & v1 );
   const Vector & waypoint( size_t i );
   const Vector next();
@@ -42,6 +45,8 @@ private:
   size_t       _lookAhead;
   size_t       _maxLookAhead;
   double       _angleThreshold;
+  double       _velocity;
+  double       _deceleration;
   bool         _cycle;
   size_t       _current;
 };

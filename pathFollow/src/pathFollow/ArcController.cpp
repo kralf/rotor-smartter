@@ -30,6 +30,8 @@ ArcController::ArcController(
   size_t lookAhead,
   size_t maxLookAhead,
   double angleThreshold,
+  double velocity,
+  double deceleration,
   bool cycle
 )
   : _axesDistance( axesDistance ),
@@ -37,6 +39,8 @@ ArcController::ArcController(
     _lookAhead( lookAhead ),
     _maxLookAhead( maxLookAhead ),
     _angleThreshold( angleThreshold ),
+    _velocity( velocity ),
+    _deceleration( deceleration ),
     _cycle( cycle ),
     _current( 0 )
 {
@@ -61,7 +65,7 @@ ArcController::current () const
 
 //------------------------------------------------------------------------------
 
-double
+std::pair<double, double>
 ArcController::step( const Vector & pose )
 {
   _current = closest( pose );
@@ -69,7 +73,10 @@ ArcController::step( const Vector & pose )
   {
     _current = _path.size() - 1;
   }
-  return steeringAngle( pose, next() );
+
+  Vector nextPose = next();
+  return make_pair( steeringAngle( pose, nextPose ),
+    velocity( pose, nextPose ) );
 }
 
 //------------------------------------------------------------------------------
@@ -118,6 +125,23 @@ ArcController::steeringAngle( const Vector & v1, const Vector & v2 )
   double w2 = tmp.first;
   double angle = ( w1 * a1 + w2 * a2 ) / ( w1 + w2 );
   return angle;
+}
+
+//------------------------------------------------------------------------------
+
+double
+ArcController::velocity( const Vector & v1, const Vector & v2 )
+{
+  const Vector & goal = _path.back();
+
+  double d_min = _velocity * _velocity / _deceleration;
+  double d = sqrt( pow( goal.origin()[0] - v1.origin()[0], 2 ) +
+    pow( goal.origin()[1] - v1.origin()[1], 2 ) );
+
+  if ( d < d_min )
+    return sqrt( 0.5 * _deceleration * d );
+  else
+    return _velocity;
 }
 
 //------------------------------------------------------------------------------
