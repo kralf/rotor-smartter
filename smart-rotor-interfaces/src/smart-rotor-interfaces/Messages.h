@@ -188,6 +188,8 @@ ROTOR_DEFINE_TYPE( locfilter_filteredpos_message,
   struct locfilter_filteredpos_message {
     carmen_point_t filteredpos;
     carmen_point_t odometrypos;
+    double tv;
+    double rv;
     double timestamp;
     char *host;
   };
