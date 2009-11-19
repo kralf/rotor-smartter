@@ -1,4 +1,4 @@
-project( path-planner )
+project( path-control )
 
 cmake_minimum_required( VERSION 2.6 )
 
@@ -7,9 +7,9 @@ set( PACKAGE_VERSION 0.0.1 )
 set( PACKAGE_RELEASE 0 )
 set( PACKAGE_MAINTAINER_NAME "Dizan Vasquez" )
 set( PACKAGE_MAINTAINER_EMAIL "vasquez@mavt.ethz.ch" )
-set( PACKAGE_DESCRIPTION_SUMMARY "Simple path planner module for the Smartter" )
-set( PACKAGE_DESCRIPTION "Path planner used on the Smartter autonomous vehicle" )
-set( PACKAGE_DEPENDS rotor )
+set( PACKAGE_DESCRIPTION_SUMMARY "Monitoring tool for elrob" )
+set( PACKAGE_DESCRIPTION "Visualization tool for the smartter platorm" )
+set( PACKAGE_DEPENDS rotor,libqtgui4 )
 
 execute_process(
   COMMAND dpkg --print-architecture

@@ -120,7 +120,7 @@ main( int argc, char * argv[] )
 
   BaseOptions options;
   options.fromString( fileContents( argv[1] ) );
-  RemoteRegistry registry( "CarmenRegistry", "monitor", options, "lib" );
+  RemoteRegistry registry( "CarmenRegistry", "smartMonitor", options, "lib" );
   Configuration configuration( command, options );
 
   setupMessages( registry );
