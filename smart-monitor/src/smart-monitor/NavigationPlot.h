@@ -37,14 +37,16 @@ public:
 
 public slots:
   void setScale( int value );
-  void gui();
+  void setGoal();
   void start( const std::string& name );
   void stop();
   void load();
   void loadFrom();
 
 protected:
-  void paintEvent( QPaintEvent * event );
+  virtual void paintEvent( QPaintEvent * event );
+  virtual void mousePressEvent( QMouseEvent * event );
+
 
 private:
   typedef std::map<std::string, std::vector<double> > PointSeries;

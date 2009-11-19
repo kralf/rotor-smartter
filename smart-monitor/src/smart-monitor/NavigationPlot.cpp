@@ -1,8 +1,10 @@
 #include "NavigationPlot.h"
 #include "Configuration.h"
+
 #include <QPaintEvent>
 #include <QPainter>
 #include <QFileDialog>
+
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -144,11 +146,11 @@ NavigationPlot::setScale( int value ) {
 //------------------------------------------------------------------------------
 
 void
-NavigationPlot::gui() {
+NavigationPlot::setGoal() {
   if ( _registry && ( _gui.state() == QProcess::NotRunning ) )
   {
     _gui.start( _registry->options().getString( "smartMonitor",
-      "guiProcess" ).c_str() );
+      "setGoalProcess" ).c_str() );
   }
 }
 
@@ -254,6 +256,15 @@ NavigationPlot::paintEvent( QPaintEvent * event )
   drawLaserPoints( painter );
   painter.end();
   _lock.unlock();
+}
+
+//------------------------------------------------------------------------------
+
+void
+NavigationPlot::mousePressEvent( QMouseEvent * event )
+{
+  setGoal();
+  QWidget::mousePressEvent( event );
 }
 
 //------------------------------------------------------------------------------

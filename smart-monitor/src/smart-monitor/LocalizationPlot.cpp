@@ -1,14 +1,18 @@
 #include "LocalizationPlot.h"
-#include <rotor/Logger.h>
+#include "Configuration.h"
+
 #include <qwt-qt4/qwt_plot_layout.h>
 #include <qwt-qt4/qwt_plot_canvas.h>
 #include <qwt-qt4/qwt_symbol.h>
+
 #include <QPen>
 #include <QFileDialog>
+
 #include <fstream>
 #include <algorithm>
 #include <cfloat>
 
+#include <rotor/Logger.h>
 #include <rotor/Time.h>
 #include <rotor/NetUtils.h>
 
@@ -55,6 +59,9 @@ LocalizationPlot::LocalizationPlot( QWidget * parent, size_t maxPathPoints,
 
 LocalizationPlot::~LocalizationPlot()
 {
+  if ( _gui.state() != QProcess::NotRunning )
+    _gui.terminate();
+
   PlotCurves::iterator curveIt;
   PlotCurves::iterator curveEnd = _curves.end();
   for ( curveIt = _curves.begin(); curveIt != curveEnd; ++curveIt ) {
@@ -171,6 +178,18 @@ LocalizationPlot::clear()
 //------------------------------------------------------------------------------
 
 void
+LocalizationPlot::setPose()
+{
+  if ( _registry && ( _gui.state() == QProcess::NotRunning ) )
+  {
+    _gui.start( _registry->options().getString( "smartMonitor",
+      "setPoseProcess" ).c_str() );
+  }
+}
+
+//------------------------------------------------------------------------------
+
+void
 LocalizationPlot::updateFigure()
 {
   _lock.lockForRead();
@@ -213,12 +232,18 @@ LocalizationPlot::updateFigure()
 
   if (flag == true)
   {
+    double x  = ( minX + maxX ) / 2.0;
+    double y  = ( minY + maxY ) / 2.0;
+
+    if ( ( _curves.find( _defaultPath ) != _curves.end() )  &&
+      !_x[_defaultPath].empty() ) {
+      x = _x[ _defaultPath ].back();
+      y = _y[ _defaultPath ].back();
+    }
+
     double dX = maxX - minX + 1.0;
     double dY = maxY - minY + 1.0;
     double delta = std::max( dX, dY ) / 2.0;
-
-    double x  = ( minX + maxX ) / 2.0;
-    double y  = ( minY + maxY ) / 2.0;
 
     double sx = size().width();
     double sy = size().height();
@@ -241,6 +266,7 @@ LocalizationPlot::updateFigure()
       y1 = y - delta * factor;
       y2 = y + delta * factor;
     }
+
     _plot.setAxisScale( QwtPlot::yLeft, y1, y2 );
     _plot.setAxisScale( QwtPlot::yRight, y1, y2 );
     _plot.setAxisScale( QwtPlot::xBottom, x1, x2 );
@@ -256,6 +282,15 @@ LocalizationPlot::updateFigure()
 
   _plot.replot();
   _lock.unlock();
+}
+
+//------------------------------------------------------------------------------
+
+void
+LocalizationPlot::mousePressEvent( QMouseEvent * event )
+{
+  setPose();
+  QWidget::mousePressEvent( event );
 }
 
 //------------------------------------------------------------------------------

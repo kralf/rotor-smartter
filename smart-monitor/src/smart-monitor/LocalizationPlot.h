@@ -1,21 +1,22 @@
 #ifndef LOCALIZATION_PLOT_H
 #define LOCALIZATION_PLOT_H
 
-
 #include <QWidget>
 #include <QReadWriteLock>
 #include <QGridLayout>
 #include <QTimer>
+#include <QProcess>
+
 #include <qwt-qt4/qwt_plot.h>
 #include <qwt-qt4/qwt_legend.h>
 #include <qwt-qt4/qwt_plot_curve.h>
 #include <qwt-qt4/qwt_plot_marker.h>
+
 #include <map>
 #include <vector>
 #include <string>
 
 #include <rotor/Registry.h>
-
 
 class LocalizationPlot : public QWidget
 {
@@ -38,9 +39,13 @@ public slots:
   void setScale( int value );
   void reset();
   void clear();
+  void setPose();
   void save();
   void saveAs();
   void updateFigure();
+
+protected:
+  virtual void mousePressEvent( QMouseEvent * event );
 
 private:
   typedef std::map<std::string, QwtPlotCurve*>        PlotCurves;
@@ -56,6 +61,7 @@ private:
   QTimer            _timer;
   QReadWriteLock    _lock;
   QGridLayout       _layout;
+  QProcess          _gui;
   QwtPlot           _plot;
   QwtLegend         _legend;
   PlotCurves        _curves;
