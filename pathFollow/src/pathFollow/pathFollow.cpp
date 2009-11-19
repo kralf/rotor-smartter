@@ -163,14 +163,17 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
   size_t numCycles = 0;
 
   while ( !quit ) {
-    double now           = seconds();
-    intervalStart = ( intervalStart > 0.0 ) ? intervalStart : now;
-    cycleStart    = now;
+    double now = seconds();
+    cycleStart = now;
 
     bool step = false;
+    bool sent = false;
 
-    while ( !step && !quit )
+    while ( !sent && !quit )
     {
+      now = seconds();
+      intervalStart = ( intervalStart > 0.0 ) ? intervalStart : now;
+
       try
       {
         Message msg = registry.receiveMessage( 1 );
@@ -250,40 +253,42 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
             }
           }
 
-          appliedVelocity = safety.step( velocity, actualSteering, laserX,
-            laserY, laserStatus );
-
           if ( controller.finished() )
           {
             sendCommandMessage( registry, 0, 0 );
             sendStatusMessage( registry, Point(0, 0), idle );
             Logger::info( "Goal has been reached, going into idle mode",
               "pathFollow" );
-          } else {
+
+            sent = true;
+          } else if ( step ) {
+            appliedVelocity = safety.step( velocity, actualSteering, laserX,
+              laserY, laserStatus );
+
             sendCommandMessage( registry, appliedVelocity, steeringAngle );
 
             if ( appliedVelocity < velocity )
               sendStatusMessage( registry, controller.current(), waiting );
             else
               sendStatusMessage( registry, controller.current(), following );
+
+            sent = true;
           }
         }
         else {
           sendCommandMessage( registry, 0, 0 );
           sendStatusMessage( registry, Point(0, 0), idle );
+
+          sent = true;
         }
       } catch( MessagingTimeout ) {
         sendCommandMessage( registry, 0, 0 );
         Logger::spam( "Timeout waiting for message", "pathFollow" );
+
+        sent = true;
       }
 
       now = seconds();
-
-      if ( ( now - cycleStart ) < ( 1.0 / maxControlFrequency ) )
-        Thread::sleep( ( 1.0 / maxControlFrequency - ( now - cycleStart ) ) );
-
-      now = seconds();
-
       if ( ( now - intervalStart ) >= updateInterval ) {
         fprintf( stderr, "Update frequency is %4.2f Hz\n",
           numCycles / ( now - intervalStart ) );
@@ -291,9 +296,13 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
         numCycles     = 0;
         intervalStart = now;
       }
-      else
+      else if ( sent )
         numCycles++;
     }
+
+    now = seconds();
+    if ( ( now - cycleStart ) < ( 1.0 / maxControlFrequency ) )
+      Thread::sleep( ( 1.0 / maxControlFrequency - ( now - cycleStart ) ) );
   }
 }
 
