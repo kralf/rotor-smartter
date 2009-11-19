@@ -1,0 +1,51 @@
+#!/usr/bin/python
+import sys
+import os
+from opencv.cv import *
+from opencv.highgui import *
+
+
+#-------------------------------------------------------------------------------
+
+def toImage( n, cellsize, x, y ):
+  return ( int( n[0] / cellsize + x ), int( -n[1] / cellsize + y ) )
+
+#-------------------------------------------------------------------------------
+
+def toWorld( n, cellsize, x, y ):
+  return ( (n[0] - x ) * cellsize, ( -n[1] + y ) * cellsize )
+
+#-------------------------------------------------------------------------------
+
+def drawPath( dst, path, cellsize, x, y ):
+  for i in xrange( len( path ) - 1 ):
+    n1 = toImage( ( path[i].origin[0], path[i].origin[1] ), cellsize, x, y )
+    n2 = toImage( ( path[i+1].origin[0], path[i+1].origin[1] ), cellsize, x, y )
+    cvLine( dst, n1, n2, ( 128, 0, 0) )
+  for i in xrange( len( path ) ):
+    n1 = toImage( path[i].origin, cellsize, x, y )
+    cvCircle( dst, n1, 3, (255, 0, 0), -1 )
+
+#-------------------------------------------------------------------------------
+
+if len( sys.argv ) != 2:
+  print "Usage: display_map <map>"
+  exit( 1 )
+
+#-------------------------------------------------------------------------------
+
+edges    = cvLoadImage( sys.argv[1], 0 )
+output   = cvCreateImage( cvSize( edges.width, edges.height), IPL_DEPTH_8U, 3 );
+
+#-------------------------------------------------------------------------------
+
+wndname = "Map"
+cvNamedWindow( wndname, 1 )
+
+while True:
+  cvMerge( edges, edges, edges, None, output )
+  cvShowImage( wndname, output );
+  key = cvWaitKey( 10 )
+  if key == "\033":
+    break
+cvDestroyWindow( wndname )
