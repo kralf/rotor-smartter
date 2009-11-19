@@ -224,6 +224,20 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
 
             Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
               " " + toString( pose.origin()[1] ), "pathFollow" );
+          } else if ( msg.name() == "carmen_base_odometry" ) {
+            Point tmp;
+
+            tmp[0] = data["x"];
+            tmp[1] = data["y"];
+            Vector pose( tmp, data["theta"] );
+
+            pair<double, double> command = controller.step( pose );
+            steeringAngle = command.first;
+            velocity = command.second;
+            step = true;
+
+            Logger::spam( "Received pose " + toString( pose.origin()[0] ) +
+              " " + toString( pose.origin()[1] ), "pathFollow" );
           } else if ( msg.name() == "locfilter_filteredpos_message" ) {
             Point tmp;
 
@@ -321,9 +335,13 @@ registerMessages( Registry & registry, const string & localizationMessage )
       ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message )
     );
     registry.subscribeToMessage( "carmen_localize_globalpos", true );
-  }
-  else if ( localizationMessage == "locfilter_filteredpos_message" )
-  {
+  } else if ( localizationMessage == "carmen_base_odometry" ) {
+    registry.registerMessageType(
+      "carmen_base_odometry",
+      ROTOR_DEFINITION_STRING( carmen_base_odometry_message )
+    );
+    registry.subscribeToMessage( "carmen_base_odometry", true );
+  } else if ( localizationMessage == "locfilter_filteredpos_message" ) {
     registry.registerMessageType(
       "locfilter_filteredpos_message",
       ROTOR_DEFINITION_STRING( locfilter_filteredpos_message )
