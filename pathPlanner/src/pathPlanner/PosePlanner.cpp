@@ -1,10 +1,12 @@
 #include "PosePlanner.h"
+#include <rotor/Time.h>
 #include <rana-graph/AStar.h>
 #include <algorithm>
 #include <iostream>
 
 using namespace Urus::Wp2;
 using namespace Rana::Graph;
+using namespace Rotor;
 
 //------------------------------------------------------------------------------
 
@@ -49,20 +51,43 @@ struct G
 
 //------------------------------------------------------------------------------
 
-bool
-termination( const Pose & p1, const Pose & p2 )
+struct Termination
 {
-/*  double thetaDiff = p1.theta() - p2.theta();
-  while( thetaDiff > M_PI ) {
-    thetaDiff -= 2 * M_PI;
+  Termination( double timeoutSeconds, unsigned long int counterMax )
+    : _startTimeSeconds( seconds() ),
+      _timeoutSeconds( timeoutSeconds ),
+      _terminationFailure(false),
+      _counter( 0 ),
+      _counterMax( counterMax )
+  {
   }
-  while( thetaDiff < -M_PI ) {
-    thetaDiff += 2 * M_PI;
-  }*/
-  return     fabs( p1.x() - p2.x() ) < 0.2
-          && fabs( p1.y() - p2.y() ) < 0.2;
-//           && fabs( thetaDiff ) < 0.4;
-}
+
+  double operator()( const Pose & p1, const Pose & p2 )
+  {
+    bool evaluation =    fabs( p1.x() - p2.x() ) < 0.2
+                      && fabs( p1.y() - p2.y() ) < 0.2;
+
+    _counter++;
+
+    bool timeout = false;
+
+    if ( _counter >= _counterMax ) {
+      if (seconds() - _startTimeSeconds >= _timeoutSeconds) {
+        timeout = true;
+        _terminationFailure = true;
+      }
+      _counter = 0;
+    }
+
+    return evaluation || timeout;
+  }
+
+  const double            _startTimeSeconds;
+  const double            _timeoutSeconds;
+  bool                    _terminationFailure;
+  unsigned long int       _counter;
+  const unsigned long int _counterMax;
+};
 
 //------------------------------------------------------------------------------
 
@@ -89,12 +114,17 @@ PosePlanner::PosePlanner(
 PosePlanner::Path
 PosePlanner::plan(
     double x1, double y1, double theta1,
-    double x2, double y2, double theta2
+    double x2, double y2, double theta2,
+    double timeoutSecond, unsigned long int counterMax
 )
 {
   Path result;
   G g( _map, _robotRadius, _margin, _arcLength );
+  Termination termination( timeoutSecond, counterMax );
   aStar( _graph, result, Pose( x1, y1, theta1 ), Pose( x2, y2, theta2 ), g, h, termination );
+  if ( termination._terminationFailure == true ) {
+    result.clear();
+  }
   return result;
 }
 

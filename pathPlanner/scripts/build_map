@@ -1,0 +1,87 @@
+#!/usr/bin/python
+
+import sys
+from bisect import *
+from math import *
+from opencv.cv import *
+from opencv.highgui import *
+
+#===============================================================================
+# Map Building
+#===============================================================================
+
+#-------------------------------------------------------------------------------
+
+def palette( v ):
+  r = 0
+  g = 0
+  b = 0
+  if ( v < 0.11 ):
+    b = int(64 + (256 - 64) * v / 0.1)
+  elif (v < 0.37):
+    b = 255
+    g = int(255 * (v - 0.11) / 0.26 )
+  elif (v < 0.63):
+    b = 255 - int(255 * (v - 0.37) / 0.26 )
+    g = 255
+    r = int(255 * (v - 0.37) / 0.26 )
+  elif (v < 0.89 ):
+    g = 255 - int(255 * (v - 0.63) / 0.26 )
+    r = 255
+  else:
+    r = 255 - int( (255 - 64) * (v - 0.89) / 0.11 )
+  return CV_RGB( r, g, b )
+ 
+#-------------------------------------------------------------------------------
+
+def temperature( src, dst, scale, robotSize ):
+  for x in xrange( src.width ):
+    for y in xrange( src.height ):
+      value = cvGet2D( src, y, x )[0]
+      if value > robotSize:
+        cvSet2D( dst, y, x, palette( 1 - value * scale ) )
+      else:
+        cvSet2D( dst, y, x, CV_RGB( 255, 255, 255 ) )
+      
+#-------------------------------------------------------------------------------
+
+def transform( n, cellsize, x, y ):
+  return ( (n[0] - x ) * cellsize, ( -n[1] + y ) * cellsize )
+
+#-------------------------------------------------------------------------------
+
+if len(sys.argv) != 4 :
+  print "usage: urus_build_map <input_image> <output_map> <cellsize>"
+  exit( 1 )
+  
+filename    = sys.argv[1]
+outputMap   = sys.argv[2]
+cellsize    = float( sys.argv[3] )
+#cellsize  = 0.27359521389
+robotRadius = 1.0
+maxDistance = robotRadius * 6
+  
+
+edges = cvLoadImage( filename, 0 )
+if not edges:
+    print "Failed to load %s" % filename
+    sys.exit(-1)
+
+distanceTransform = cvCreateImage( cvSize( edges.width, edges.height), IPL_DEPTH_32F, 1 );
+tmp               = cvCreateImage( cvSize( edges.width, edges.height), IPL_DEPTH_32F, 1 );
+output            = cvCreateImage( cvSize( edges.width, edges.height), IPL_DEPTH_8U, 3 );
+
+
+cvDistTransform( edges, tmp, CV_DIST_L2, CV_DIST_MASK_PRECISE, None, None );
+cvConvertScale( tmp, distanceTransform, cellsize, 0.0 );
+
+temperature( distanceTransform, output, 1.0 / maxDistance, robotRadius )
+
+cvSaveImage( outputMap + ".png", output )
+cvSave( outputMap, distanceTransform )
+
+
+wndname = "Distance transform";
+cvNamedWindow( wndname, 1 );
+cvShowImage( wndname, output );    
+cvWaitKey(0);
