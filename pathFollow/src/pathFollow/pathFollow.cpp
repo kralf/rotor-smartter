@@ -162,7 +162,8 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
   double cycleStart = 0.0;
   size_t numCycles = 0;
 
-  while ( !quit ) {
+  while ( !quit )
+  {
     double now = seconds();
     cycleStart = now;
 

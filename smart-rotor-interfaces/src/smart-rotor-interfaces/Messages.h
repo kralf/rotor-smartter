@@ -203,4 +203,13 @@ ROTOR_DEFINE_TYPE( locfilter_init_filteredpos_message,
   };
 )
 
+ROTOR_DEFINE_TYPE( planner_plan_message,
+  struct planner_plan_message {
+    carmen_point_t start;
+    carmen_point_t goal;
+    double timestamp;
+    char *host;
+  };
+)
+
 #endif SMART_ROTOR_INTERFACES_H
