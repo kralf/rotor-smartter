@@ -203,7 +203,7 @@ ArcController::next( const Vector & pose )
       break;
     }
     const Vector & tmpNext = waypoint( _current + i );
-    double distance = v1.distance( v1.projection( tmpNext.origin() ) );
+    double distance = pose.distance( pose.projection( tmpNext.origin() ) );
     if (   i == _lookAhead
         || distance < _lookAheadThreshold )
     {
