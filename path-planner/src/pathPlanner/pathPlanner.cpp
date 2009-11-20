@@ -32,7 +32,8 @@ void quitLoop(int q __attribute__((unused))) {
 //------------------------------------------------------------------------------
 
 void
-mainLoop( Registry & registry, PosePlanner & planner )
+mainLoop( Registry & registry, PosePlanner & planner,
+  double offsetX, double offsetY )
 {
   while ( !quit )
   {
@@ -52,8 +53,12 @@ mainLoop( Registry & registry, PosePlanner & planner )
         double planStart = seconds();
 
         PosePlanner::Path path = planner.plan (
-          planMessage.start.x, planMessage.start.y, planMessage.start.theta,
-          planMessage.goal.x,  planMessage.goal.y,  planMessage.goal.theta
+          planMessage.start.x + offsetX,
+          planMessage.start.y + offsetY,
+          planMessage.start.theta,
+          planMessage.goal.x + offsetX,
+          planMessage.goal.y + offsetY,
+          planMessage.goal.theta
         );
 
         cout << "Generated path of length " << path.size() << " in " <<
@@ -69,8 +74,8 @@ mainLoop( Registry & registry, PosePlanner & planner )
         {
           const Pose & pose = *it;
 
-          pathMessage["x"][i]     = pose.x();
-          pathMessage["y"][i]     = pose.y();
+          pathMessage["x"][i]     = pose.x() - offsetX;
+          pathMessage["y"][i]     = pose.y() - offsetX;
           pathMessage["theta"][i] = pose.theta();
         }
 
@@ -126,6 +131,9 @@ int main( int argc, char * argv[] )
 
   double robotRadius = options.getDouble( "smart", "radius" );
 
+  double offsetX = options.getDouble( moduleName, "offsetX" );
+  double offsetY = options.getDouble( moduleName, "offsetY" );
+
   double originX = options.getDouble( moduleName, "originX" );
   double originY = options.getDouble( moduleName, "originY" );
   double cellSize = options.getDouble( moduleName, "cellSize" );
@@ -142,5 +150,5 @@ int main( int argc, char * argv[] )
 
   signal( SIGINT, quitLoop );
 
-  mainLoop( registry, planner );
+  mainLoop( registry, planner, offsetX, offsetY );
 }

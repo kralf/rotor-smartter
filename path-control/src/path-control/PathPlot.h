@@ -47,6 +47,8 @@ private:
   double                      _cellSize;
   double                      _robotRadius;
 
+  double                      _offsetX;
+  double                      _offsetY;
   double                      _robotX;
   double                      _robotY;
   double                      _robotTheta;

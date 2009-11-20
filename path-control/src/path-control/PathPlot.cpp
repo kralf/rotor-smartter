@@ -22,6 +22,8 @@ PathPlot::PathPlot( QWidget * parent ) :
   _registry( 0 ),
   _cellSize( 0 ),
   _robotRadius( 1 ),
+  _offsetX( 0 ),
+  _offsetY( 0 ),
   _robotX( 0 ),
   _robotY( 0 ),
   _robotTheta( 0 )
@@ -43,9 +45,15 @@ PathPlot::setRegistry( Rotor::Registry & registry )
 {
   _registry = &registry;
 
-  _origin.setX( _registry->options().getDouble( "pathPlanner", "originX" ) );
-  _origin.setY( _registry->options().getDouble( "pathPlanner", "originY" ) );
   _cellSize = _registry->options().getDouble( "pathPlanner", "cellSize" );
+  _offsetX = _registry->options().getDouble( "pathPlanner", "offsetX" );
+  _offsetY = _registry->options().getDouble( "pathPlanner", "offsetY" );
+  _origin.setX(
+    _registry->options().getDouble( "pathPlanner", "originX" ) +
+    _offsetX / _cellSize );
+  _origin.setY(
+    _registry->options().getDouble( "pathPlanner", "originY" ) +
+    -_offsetY / _cellSize );
   _robotRadius = _registry->options().getDouble( "smart", "radius" );
 }
 

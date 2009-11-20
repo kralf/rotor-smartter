@@ -266,6 +266,8 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
               laserY.push_back( alasca.y[i] );
               laserStatus.push_back( alasca.point_status[i] );
             }
+
+            step = true;
           }
 
           if ( controller.finished() )
