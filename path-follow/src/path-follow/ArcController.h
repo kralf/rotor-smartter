@@ -15,7 +15,7 @@ public:
     double orientationWeight,
     size_t lookAhead,
     size_t maxLookAhead,
-    double angleThreshold,
+    double lookAheadThreshold,
     double velocity,
     double deceleration,
     bool cycle
@@ -37,14 +37,14 @@ private:
   double velocity( const Vector & v1, const Vector & v2 );
   size_t closest( const Vector & v1 );
   const Vector & waypoint( size_t i );
-  const Vector next();
+  const Vector next( const Vector & v1  );
 
   Path         _path;
   double       _axesDistance;
   double       _orientationWeight;
   size_t       _lookAhead;
   size_t       _maxLookAhead;
-  double       _angleThreshold;
+  double       _lookAheadThreshold;
   double       _velocity;
   double       _deceleration;
   bool         _cycle;

@@ -410,7 +410,7 @@ int main( int argc, char * argv[] )
   double waypointSpacing     = options.getDouble( moduleName, "waypointSpacing" );
   int lookahead              = options.getInt( moduleName, "lookahead" );
   int maxLookahead           = options.getInt( moduleName, "maxLookahead" );
-  double angleThreshold      = options.getDouble( moduleName, "angleThreshold" );
+  double lookAheadThreshold  = options.getDouble( moduleName, "lookAheadThreshold" );
   double maxControlFrequency = options.getDouble( moduleName, "maxControlFrequency" );
 
   double deceleration  = options.getDouble( moduleName, "deceleration" );
@@ -425,7 +425,7 @@ int main( int argc, char * argv[] )
 
   ArcController controller(
     axesDistance, orientationWeight,
-    lookahead, maxLookahead, angleThreshold,
+    lookahead, maxLookahead, lookAheadThreshold,
     velocity, deceleration,
     false
   );

@@ -61,8 +61,6 @@ ArcSafety::step( double velocity, double steeringAngle,
   for ( size_t i = 0; i < laserX.size(); ++i )
   {
     if ( !laserStatus[i]) {
-      double d = sqrt( sqr( laserX[i] ) + sqr( laserY[i] ) );
-
       double r = sqrt( sqr( radius + laserY[i] ) + sqr( laserX[i] +
         _laserDistance ) );
       if ( ( r >= r1 ) && ( r <= r2 ) )

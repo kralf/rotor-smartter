@@ -29,7 +29,7 @@ ArcController::ArcController(
   double orientationWeight,
   size_t lookAhead,
   size_t maxLookAhead,
-  double angleThreshold,
+  double lookAheadThreshold,
   double velocity,
   double deceleration,
   bool cycle
@@ -38,7 +38,7 @@ ArcController::ArcController(
     _orientationWeight( orientationWeight ),
     _lookAhead( lookAhead ),
     _maxLookAhead( maxLookAhead ),
-    _angleThreshold( angleThreshold ),
+    _lookAheadThreshold( lookAheadThreshold ),
     _velocity( velocity ),
     _deceleration( deceleration ),
     _cycle( cycle ),
@@ -74,7 +74,7 @@ ArcController::step( const Vector & pose )
     _current = _path.size() - 1;
   }
 
-  Vector nextPose = next();
+  Vector nextPose = next( pose );
   return make_pair( steeringAngle( pose, nextPose ),
     velocity( pose, nextPose ) );
 }
@@ -193,10 +193,8 @@ ArcController::waypoint( size_t i )
 //------------------------------------------------------------------------------
 
 const Vector
-ArcController::next()
+ArcController::next( const Vector & v1 )
 {
-  const Vector & current = waypoint( _current );
-  double angle           = current.angle();
   Vector next            = _path.back();
   for ( size_t i = _lookAhead; i <= _maxLookAhead; ++i )
   {
@@ -205,8 +203,9 @@ ArcController::next()
       break;
     }
     const Vector & tmpNext = waypoint( _current + i );
+    double distance = v1.distance( v1.projection( tmpNext.origin() ) );
     if (   i == _lookAhead
-        || fabs( shortestAngle( angle - tmpNext.angle() ) ) < _angleThreshold )
+        || distance < _lookAheadThreshold )
     {
       next = tmpNext;
     }
