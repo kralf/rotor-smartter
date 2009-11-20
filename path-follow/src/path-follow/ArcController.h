@@ -37,7 +37,7 @@ private:
   double velocity( const Vector & v1, const Vector & v2 );
   size_t closest( const Vector & v1 );
   const Vector & waypoint( size_t i );
-  const Vector next( const Vector & v1  );
+  const Vector next( const Vector & pose );
 
   Path         _path;
   double       _axesDistance;

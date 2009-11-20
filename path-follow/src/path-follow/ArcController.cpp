@@ -193,7 +193,7 @@ ArcController::waypoint( size_t i )
 //------------------------------------------------------------------------------
 
 const Vector
-ArcController::next( const Vector & v1 )
+ArcController::next( const Vector & pose )
 {
   Vector next            = _path.back();
   for ( size_t i = _lookAhead; i <= _maxLookAhead; ++i )
