@@ -197,6 +197,7 @@ mainLoop( Registry & registry, ArcController & controller, ArcSafety & safety,
           computePathAngles( path );
           controller.path( path );
 
+          // cout << data.toString() << endl;
           Logger::spam( "Path message has been received:" + data.toString(),
             "pathFollow" );
         } else if ( msg.name() == "path_stop_message" ) {

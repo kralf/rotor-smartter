@@ -64,27 +64,39 @@ mainLoop( Registry & registry, PosePlanner & planner,
         cout << "Generated path of length " << path.size() << " in " <<
           seconds() - planStart << "s" << endl;
 
-        Rotor::Structure pathMessage = registry.newStructure("path_message");
-        pathMessage["point_count"] = static_cast<int>( path.size() );
-        pathMessage.adjust();
-
-        size_t i = 0;
-        for ( PosePlanner::Path::const_iterator it = path.begin();
-          it != path.end(); ++it, ++i )
+        if ( path.size() > 0 )
         {
-          const Pose & pose = *it;
+          Rotor::Structure pathMessage = registry.newStructure("path_message");
+          pathMessage["point_count"] = static_cast<int>( path.size() );
+          pathMessage.adjust();
 
-          pathMessage["x"][i]     = pose.x() - offsetX;
-          pathMessage["y"][i]     = pose.y() - offsetX;
-          pathMessage["theta"][i] = pose.theta();
+          size_t i = 0;
+          for ( PosePlanner::Path::const_iterator it = path.begin();
+            it != path.end(); ++it, ++i )
+          {
+            const Pose & pose = *it;
+
+            pathMessage["x"][i]     = pose.x() - offsetX;
+            pathMessage["y"][i]     = pose.y() - offsetX;
+            pathMessage["theta"][i] = pose.theta();
+          }
+
+          pathMessage["timestamp"] = Rotor::seconds();
+          pathMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
+          registry.sendStructure( "path_message", pathMessage );
+
+          Logger::spam( "Path message has been sent:" + pathMessage.toString(),
+            "pathPlanner" );
+        } else {
+          Rotor::Structure stopMessage = registry.newStructure("path_stop_message");
+
+          stopMessage["timestamp"] = Rotor::seconds();
+          stopMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
+          registry.sendStructure( "path_stop_message", stopMessage );
+
+          Logger::spam( "Stop message has been sent:" + stopMessage.toString(),
+            "pathPlanner" );
         }
-
-        pathMessage["timestamp"] = Rotor::seconds();
-        pathMessage["host"] = const_cast<char*>( Rotor::hostName().c_str() );
-        registry.sendStructure( "path_message", pathMessage );
-
-        Logger::spam( "Path message has been sent:" + pathMessage.toString(),
-          "pathPlanner" );
       }
     } catch( MessagingTimeout ) {
       Logger::spam( "Timeout waiting for message", "pathPlanner" );
@@ -108,6 +120,11 @@ registerMessages( Registry & registry )
   registry.registerMessageType(
     "path_message",
     ROTOR_DEFINITION_STRING( path_message )
+  );
+
+  registry.registerMessageType(
+    "path_stop_message",
+    ROTOR_DEFINITION_STRING( path_stop_message )
   );
 }
 
