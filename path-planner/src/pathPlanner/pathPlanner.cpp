@@ -77,7 +77,7 @@ mainLoop( Registry & registry, PosePlanner & planner,
             const Pose & pose = *it;
 
             pathMessage["x"][i]     = pose.x() - offsetX;
-            pathMessage["y"][i]     = pose.y() - offsetX;
+            pathMessage["y"][i]     = pose.y() - offsetY;
             pathMessage["theta"][i] = pose.theta();
           }
 
