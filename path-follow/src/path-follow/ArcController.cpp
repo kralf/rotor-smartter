@@ -3,6 +3,7 @@
 #include <rotor/Logger.h>
 #include <rotor/Conversion.h>
 #include <cfloat>
+#include <math.h>
 
 using namespace std;
 using namespace Rotor;
@@ -131,17 +132,62 @@ ArcController::steeringAngle( const Vector & v1, const Vector & v2 )
 
 double
 ArcController::velocity( const Vector & v1, const Vector & v2 )
-{
+{  
   const Vector & goal = _path.back();
 
-  double d_min = _velocity * _velocity / _deceleration;
+  //NOTE: Hardcoded reasonable value for Garcia District trials. M. Rufli, May 23, 2010
+  _deceleration = 0.1;
+  
+  //NOTE: Hardcoded for SmartTer. M. Rufli, May 23, 2010
+  double velocityNominal = 1.5; // m/s
+  double velocityMinimal = 0.8; // m/s
+  double tDeceleration = (velocityNominal - velocityMinimal)/_deceleration;
+  double sDeceleration = -0.5*_deceleration*tDeceleration*tDeceleration + 
+    velocityNominal*tDeceleration;
+  
   double d = sqrt( pow( goal.origin()[0] - v1.origin()[0], 2 ) +
     pow( goal.origin()[1] - v1.origin()[1], 2 ) );
 
-  if ( d < d_min )
-    return sqrt( 0.5 * _deceleration * d );
-  else
+  if ( d < sDeceleration ) {
+    //safety checks
+    double arg1 = velocityNominal*velocityNominal;
+    double arg2 = 2*_deceleration*(sDeceleration-d);
+    if(arg2 >= arg1) {
+     //NOTE: this is an error, and should not happen!
+     return 0.0; 
+    }
+    double tElapsed = (velocityNominal - sqrt(arg1 - arg2))/_deceleration;
+    double velocityDesired = velocityNominal - tElapsed*_deceleration;
+
+    if ( velocityDesired < 0.8 ) {
+      return 0.0;
+    }
+    else {
+      return velocityDesired;
+    }
+  }
+  else {
     return _velocity;
+  }
+  
+  
+  
+//   double d_min = _velocity * _velocity / _deceleration;
+//   double d = sqrt( pow( goal.origin()[0] - v1.origin()[0], 2 ) +
+//     pow( goal.origin()[1] - v1.origin()[1], 2 ) );
+// 
+//   if ( d < d_min ) {
+//     double desiredVelocity = sqrt( 0.5 * _deceleration * d );
+//     if ( desiredVelocity < 0.8 ) {
+//       return 0.0;
+//     }
+//     else {
+//       return desiredVelocity;
+//     }
+//   }
+//   else {
+//     return _velocity;
+//   }
 }
 
 //------------------------------------------------------------------------------
