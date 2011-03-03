@@ -1,7 +1,6 @@
 #ifndef SMART_ROTOR_INTERFACES_H
 #define SMART_ROTOR_INTERFACES_H
 
-
 #include <rotor/Rotor.h>
 #include <stdint.h>
 
@@ -212,4 +211,4 @@ ROTOR_DEFINE_TYPE( planner_plan_message,
   };
 )
 
-#endif SMART_ROTOR_INTERFACES_H
+#endif

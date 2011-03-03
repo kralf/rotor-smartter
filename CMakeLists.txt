@@ -17,6 +17,7 @@ remake_project(
   PREFIX rotor-
 )
 
+remake_python()
 remake_add_directories(
   data
   COMPONENT data
@@ -24,6 +25,11 @@ remake_add_directories(
 
 remake_pack_deb(
   rotor
+)
+remake_add_package(
+  COMPONENT python
+  DESCRIPTION "Python modules"
+  rotor-python
 )
 remake_pack_deb(
   COMPONENT dev

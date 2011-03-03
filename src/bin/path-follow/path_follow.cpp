@@ -2,8 +2,6 @@
 #include "ArcSafety.h"
 #include "Vector.h"
 
-#include <smart-rotor-interfaces/Messages.h>
-
 #include <rotor/BaseOptions.h>
 #include <rotor/Conversion.h>
 #include <rotor/FileUtils.h>
@@ -17,6 +15,8 @@
 #include <sstream>
 #include <fstream>
 #include <signal.h>
+
+#include "Messages.h"
 
 using namespace std;
 using namespace Rotor;

@@ -1,7 +1,9 @@
-#include "ArcController.h"
-#include "Vector.h"
 #include <rotor/Logger.h>
 #include <rotor/Conversion.h>
+
+#include "ArcController.h"
+#include "Vector.h"
+
 #include <cfloat>
 #include <math.h>
 

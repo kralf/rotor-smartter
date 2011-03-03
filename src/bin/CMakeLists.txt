@@ -1,6 +1,3 @@
-remake_include(
-  ../lib/interface/*
-  ../lib/core/*
-)
+remake_include(../lib/interface)
 
 remake_add_directories()
