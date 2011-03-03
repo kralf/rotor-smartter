@@ -477,7 +477,7 @@
   <customwidget>
    <class>LocalizationPlot</class>
    <extends>QWidget</extends>
-   <header>smart-monitor/LocalizationPlot.h</header>
+   <header>LocalizationPlot.h</header>
    <container>1</container>
    <slots>
     <slot>reset()</slot>
@@ -490,7 +490,7 @@
   <customwidget>
    <class>NavigationPlot</class>
    <extends>QWidget</extends>
-   <header>smart-monitor/NavigationPlot.h</header>
+   <header>NavigationPlot.h</header>
    <container>1</container>
    <slots>
     <slot>setScale(int)</slot>
@@ -503,25 +503,25 @@
   <customwidget>
    <class>CStatusPlot</class>
    <extends>QWidget</extends>
-   <header>smart-monitor/StatusPlot.h</header>
+   <header>StatusPlot.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CFrequencyPlotContainer</class>
    <extends>QWidget</extends>
-   <header location="global">smart-monitor/FrequencyPlotContainer.h</header>
+   <header location="global">FrequencyPlotContainer.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CGyroPlot</class>
    <extends>QWidget</extends>
-   <header>smart-monitor/GyroPlot.h</header>
+   <header>GyroPlot.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CControlPlot</class>
    <extends>QWidget</extends>
-   <header>smart-monitor/ControlPlot.h</header>
+   <header>ControlPlot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

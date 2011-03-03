@@ -1,8 +1,3 @@
-#include "DispatchThread.h"
-#include "ApplicationWindow.h"
-
-#include <smart-rotor-interfaces/Messages.h>
-
 #include <QApplication>
 
 #include <rotor/Rotor.h>
@@ -14,6 +9,11 @@
 
 #include <string>
 #include <cstdlib>
+
+#include "path/DispatchThread.h"
+#include "path/ApplicationWindow.h"
+
+#include "Messages.h"
 
 using namespace Rotor;
 using namespace std;
@@ -92,8 +92,8 @@ main( int argc, char * argv[] )
   QApplication application( argc, argv );
   ApplicationWindow * window = new ApplicationWindow();
 
-  window->mainWidget().pathPlot->setRegistry( registry );
-  window->mainWidget().pathPlot->setMap( argv[1] );
+  window->pathPlot().setRegistry( registry );
+  window->pathPlot().setMap( argv[1] );
 
   DispatchThread dispatch( registry, *window );
 

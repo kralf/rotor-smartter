@@ -9,6 +9,7 @@ remake_project(
   SUMMARY "RoToR modules for the SmartTer."
   AUTHOR "Ralf Kaestner"
   AUTHOR "Dizan Vasquez"
+  AUTHOR "Jerome Maye"
   AUTHOR "Martin Rufli"
   CONTACT "ralf.kaestner@gmail.com"
   HOME "http://aslforge.ethz.ch/projects/rotor-smartter"

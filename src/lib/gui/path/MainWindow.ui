@@ -133,7 +133,7 @@
   <customwidget>
    <class>PathPlot</class>
    <extends>QWidget</extends>
-   <header>path-control/PathPlot.h</header>
+   <header>PathPlot.h</header>
    <container>1</container>
    <slots>
     <slot>stop()</slot>

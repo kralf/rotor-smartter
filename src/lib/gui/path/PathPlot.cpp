@@ -1,5 +1,3 @@
-#include "PathPlot.h"
-
 #include <QPaintEvent>
 #include <QPainter>
 
@@ -7,11 +5,13 @@
 #include <fstream>
 #include <sstream>
 
-#include <smart-rotor-interfaces/Messages.h>
-
 #include <rotor/BaseOptions.h>
 #include <rotor/Time.h>
 #include <rotor/NetUtils.h>
+
+#include "PathPlot.h"
+
+#include "Messages.h"
 
 using namespace std;
 

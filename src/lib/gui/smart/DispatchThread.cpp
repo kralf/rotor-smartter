@@ -1,9 +1,12 @@
+#include <rotor/Structure.h>
+#include <rotor/Logger.h>
+
 #include "DispatchThread.h"
 #include "ApplicationWindow.h"
 #include "Configuration.h"
-#include <smart-rotor-interfaces/Messages.h>
-#include <rotor/Structure.h>
-#include <rotor/Logger.h>
+#include "Messages.h"
+
+#include "ui_MainWindow.h"
 
 using namespace Rotor;
 

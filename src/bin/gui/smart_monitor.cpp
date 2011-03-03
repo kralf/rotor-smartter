@@ -1,9 +1,3 @@
-#include "Configuration.h"
-#include "DispatchThread.h"
-#include "ApplicationWindow.h"
-
-#include <smart-rotor-interfaces/Messages.h>
-
 #include <QApplication>
 
 #include <rotor/Rotor.h>
@@ -16,6 +10,11 @@
 #include <string>
 #include <cstdlib>
 
+#include "smart/Configuration.h"
+#include "smart/DispatchThread.h"
+#include "smart/ApplicationWindow.h"
+
+#include "Messages.h"
 
 using namespace Rotor;
 using namespace std;

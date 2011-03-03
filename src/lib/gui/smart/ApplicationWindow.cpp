@@ -1,14 +1,22 @@
 #include "ApplicationWindow.h"
 
+#include "ui_MainWindow.h"
+
 //------------------------------------------------------------------------------
 
 ApplicationWindow::ApplicationWindow( const Configuration & configuration )
-  : _configuration( configuration )
+  : _configuration( configuration ),
+    _mainWidget( new Ui_MainWindow() )
 {
   setAttribute( Qt::WA_DeleteOnClose );
   setWindowTitle( "application main window" );
-  _mainWidget.setupUi( this );
-  _mainWidget.navigationPlot->configuration( configuration );
+  _mainWidget->setupUi( this );
+  _mainWidget->navigationPlot->configuration( configuration );
+}
+
+ApplicationWindow::~ApplicationWindow()
+{
+  delete _mainWidget;
 }
 
 //------------------------------------------------------------------------------
@@ -16,7 +24,7 @@ ApplicationWindow::ApplicationWindow( const Configuration & configuration )
 Ui_MainWindow &
 ApplicationWindow::mainWidget()
 {
-  return _mainWidget;
+  return *_mainWidget;
 }
 
 //------------------------------------------------------------------------------
