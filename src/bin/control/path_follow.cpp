@@ -392,13 +392,15 @@ registerMessages( Registry & registry, const string & localizationMessage )
 int main( int argc, char * argv[] )
 {
   Logger::setLevel( Logger::SPAM, "ArcController" );
+
+  string command = "rotor-path_follow";
   if ( argc < 2 )
   {
     cout << "Usage: " << argv[0] << " <config.ini> [path.txt]\n";
     exit( 1 );
   }
 
-  string moduleName( argv[0] );
+  string moduleName( "path_follow" );
 
   BaseOptions options;
   options.fromString( fileContents( argv[1] ) );

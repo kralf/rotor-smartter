@@ -149,8 +149,7 @@ void
 NavigationPlot::setGoal() {
   if ( _registry && ( _gui.state() == QProcess::NotRunning ) )
   {
-    _gui.start( _registry->options().getString( "smartMonitor",
-      "setGoalProcess" ).c_str() );
+    _gui.start( _configuration->setGoalProcess().c_str() );
   }
 }
 

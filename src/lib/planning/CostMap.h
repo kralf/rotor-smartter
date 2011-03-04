@@ -8,10 +8,6 @@
 struct CvMat;
 
 
-namespace Urus {
-namespace Wp2 {
-
-
 class CostMap
 {
 public:
@@ -27,10 +23,6 @@ private:
   double   _y;
   CvMat  * _map;
 };
-
-
-}
-}
 
 
 #include "CostMap-inline.h"

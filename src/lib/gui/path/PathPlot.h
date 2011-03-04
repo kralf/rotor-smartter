@@ -20,7 +20,7 @@ public:
   PathPlot( QWidget * parent );
   virtual ~PathPlot();
 
-  void setRegistry( Rotor::Registry& registry );
+  void setRegistry( Rotor::Registry& registry, const std::string & planner );
   void setMap( const std::string & filename );
   void setPose( double x, double y, double theta );
 

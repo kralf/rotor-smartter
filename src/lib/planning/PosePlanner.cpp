@@ -1,11 +1,10 @@
-#include "PosePlanner.h"
 #include <rotor/Time.h>
-#include <rana-graph/AStar.h>
 #include <algorithm>
 #include <iostream>
 
-using namespace Urus::Wp2;
-using namespace Rana::Graph;
+#include "AStar.h"
+#include "PosePlanner.h"
+
 using namespace Rotor;
 
 //------------------------------------------------------------------------------

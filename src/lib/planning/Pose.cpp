@@ -1,7 +1,5 @@
 #include "Pose.h"
 
-using namespace Urus::Wp2;
-
 double Pose::_distanceTolerance = 0.2;
 double Pose::_angleTolerance    = 0.05;
 

@@ -2,13 +2,10 @@
 #define URUS_WP2_POSE_PLANNER_H
 
 
-#include "PoseGraph.h"
-#include "CostMap.h"
 #include <list>
 
-
-namespace Urus {
-namespace Wp2 {
+#include "PoseGraph.h"
+#include "CostMap.h"
 
 
 class PosePlanner
@@ -41,10 +38,6 @@ private:
   double    _margin;
   double    _arcLength;
 };
-
-
-}
-}
 
 
 #endif //URUS_WP2_POSE_PLANNER_H

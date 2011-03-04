@@ -4,7 +4,7 @@
 
 inline
 double
-Urus::Wp2::Pose::x() const
+Pose::x() const
 {
   return _x;
 }
@@ -13,7 +13,7 @@ Urus::Wp2::Pose::x() const
 
 inline
 double
-Urus::Wp2::Pose::y() const
+Pose::y() const
 {
   return _y;
 }
@@ -22,7 +22,7 @@ Urus::Wp2::Pose::y() const
 
 inline
 double
-Urus::Wp2::Pose::theta() const
+Pose::theta() const
 {
   return _theta;
 }
@@ -31,7 +31,7 @@ Urus::Wp2::Pose::theta() const
 
 inline
 void
-Urus::Wp2::Pose::x( double x )
+Pose::x( double x )
 {
   _x = x;
 }
@@ -40,7 +40,7 @@ Urus::Wp2::Pose::x( double x )
 
 inline
 void
-Urus::Wp2::Pose::y( double y )
+Pose::y( double y )
 {
   _y = y;
 }
@@ -49,7 +49,7 @@ Urus::Wp2::Pose::y( double y )
 
 inline
 void
-Urus::Wp2::Pose::theta( double value )
+Pose::theta( double value )
 {
   _theta = value;
 }
@@ -58,7 +58,7 @@ Urus::Wp2::Pose::theta( double value )
 
 inline
 bool
-Urus::Wp2::Pose::operator==( const Pose & other ) const
+Pose::operator==( const Pose & other ) const
 {
 //   return _x == other._x && _y == other._y && _theta == other._theta;
   double xDiff = _x - other._x;
@@ -85,7 +85,7 @@ Urus::Wp2::Pose::operator==( const Pose & other ) const
 
 inline
 bool
-Urus::Wp2::Pose::operator!=( const Pose & other ) const
+Pose::operator!=( const Pose & other ) const
 {
   return ! operator!=( other );
 }
@@ -94,7 +94,7 @@ Urus::Wp2::Pose::operator!=( const Pose & other ) const
 
 inline
 bool
-Urus::Wp2::Pose::operator<( const Pose & other ) const {
+Pose::operator<( const Pose & other ) const {
   if ( _x < other._x ) {
     return true;
   } else if ( _x == other._x ) {
@@ -110,8 +110,8 @@ Urus::Wp2::Pose::operator<( const Pose & other ) const {
 //------------------------------------------------------------------------------
 
 inline
-Urus::Wp2::Pose
-Urus::Wp2::Pose::next( double length, double curvature ) const {
+Pose
+Pose::next( double length, double curvature ) const {
   double radius = 1E6;
   if ( curvature != 0 ) {
     radius = 1.0 / curvature;

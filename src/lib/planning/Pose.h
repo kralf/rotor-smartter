@@ -5,10 +5,6 @@
 #include <cstdlib>
 #include <tr1/unordered_map>
 
-namespace Urus {
-namespace Wp2 {
-
-
 class Pose
 {
 public:
@@ -36,16 +32,13 @@ private:
 };
 
 
-}
-}
-
 namespace std {
 namespace tr1 {
 
 template<>
-struct hash<Urus::Wp2::Pose>
+struct hash<Pose>
 {
-  size_t operator()( const Urus::Wp2::Pose & value ) const
+  size_t operator()( const Pose & value ) const
   {
     size_t seed =   static_cast<size_t>( value.x() )
                   + 0x9e3779b9;
@@ -59,6 +52,7 @@ struct hash<Urus::Wp2::Pose>
 
 }
 }
+
 
 #include "Pose-inline.h"
 

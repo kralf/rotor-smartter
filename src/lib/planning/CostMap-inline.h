@@ -4,7 +4,7 @@
 
 inline
 double
-Urus::Wp2::CostMap::operator()( double x, double y ) const
+CostMap::operator()( double x, double y ) const
 {
   int iX = static_cast<int>(  x / _cellSize + _x );
   int iY = static_cast<int>( -y / _cellSize + _y );

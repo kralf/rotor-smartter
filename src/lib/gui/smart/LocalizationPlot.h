@@ -18,6 +18,8 @@
 
 #include <rotor/Registry.h>
 
+class Configuration;
+
 class LocalizationPlot : public QWidget
 {
   Q_OBJECT
@@ -30,6 +32,7 @@ public:
   void setRegistry( Rotor::Registry& registry );
   void setDefaultPath( const std::string & defaultPath );
 
+  void configuration( const Configuration & configuration );
   void clearPath( const std::string & name );
   void updatePath( const std::string & name, double x, double y );
   void updatePoint( const std::string & name, double x, double y );
@@ -52,8 +55,9 @@ private:
   typedef std::map<std::string, QwtPlotMarker*>       PointMarkers;
   typedef std::map<std::string, std::vector<double> > PointSeries;
 
-  Rotor::Registry*  _registry;
-  std::string       _defaultPath;
+  Rotor::Registry* _registry;
+  std::string _defaultPath;
+  const Configuration * _configuration;
 
   size_t            _maxPathPoints;
   double            _minUpdateDistance;

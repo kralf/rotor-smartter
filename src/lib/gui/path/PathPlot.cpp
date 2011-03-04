@@ -41,18 +41,18 @@ PathPlot::~PathPlot()
 //------------------------------------------------------------------------------
 
 void
-PathPlot::setRegistry( Rotor::Registry & registry )
+PathPlot::setRegistry( Rotor::Registry & registry, const std::string & planner )
 {
   _registry = &registry;
 
-  _cellSize = _registry->options().getDouble( "pathPlanner", "cellSize" );
-  _offsetX = _registry->options().getDouble( "pathPlanner", "offsetX" );
-  _offsetY = _registry->options().getDouble( "pathPlanner", "offsetY" );
+  _cellSize = _registry->options().getDouble( planner, "cellSize" );
+  _offsetX = _registry->options().getDouble( planner, "offsetX" );
+  _offsetY = _registry->options().getDouble( planner, "offsetY" );
   _origin.setX(
-    _registry->options().getDouble( "pathPlanner", "originX" ) +
+    _registry->options().getDouble( planner, "originX" ) +
     _offsetX / _cellSize );
   _origin.setY(
-    _registry->options().getDouble( "pathPlanner", "originY" ) +
+    _registry->options().getDouble( planner, "originY" ) +
     -_offsetY / _cellSize );
   _robotRadius = _registry->options().getDouble( "smart", "radius" );
 }

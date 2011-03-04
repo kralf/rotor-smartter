@@ -1,9 +1,7 @@
-#include "PoseGraph.h"
-#include <opencv/cv.h>
 #include <iostream>
 
-using namespace Urus::Wp2;
-using namespace Rana::Graph;
+#include "PoseGraph.h"
+
 using namespace std;
 
 //------------------------------------------------------------------------------
@@ -26,8 +24,6 @@ PoseGraph::children( const Pose & node ) const throw( NotFoundError )
   Neighborhood & children = const_cast<Neighborhood&>( _children );
   children.clear();
 
-//   Nodes & nodes = const_cast<Nodes&>( _nodes );
-
   for (
     double curvature = -_maxCurvature;
     curvature <= _maxCurvature;
@@ -35,8 +31,6 @@ PoseGraph::children( const Pose & node ) const throw( NotFoundError )
   )
   {
     children.push_back( child( node, curvature ) );
-//     Pose & pose = children.back();
-//     nodes.insert( pose );
   }
   return _children;
 }
@@ -46,16 +40,8 @@ PoseGraph::children( const Pose & node ) const throw( NotFoundError )
 Pose
 PoseGraph::child( const Pose & node, double curvature ) const
 {
-//   fprintf( stderr, "Parent: x=%f, y=%f\n", node.x(), node.y() );
-//   fprintf( stderr, "Curvature: %f\n", curvature );
   Pose result = node.next( _arcLength, curvature  );
-//   fprintf( stderr, "Son: x=%f, y=%f\n", result.x(), result.y() );
   return result;
-/*  return Pose(
-    node.x() - radius * sin( node.theta() ) + radius * sin( node.theta() + deltaTheta ),
-    node.y() + radius * cos( node.theta() ) - radius * cos( node.theta() + deltaTheta ),
-    node.theta() + deltaTheta
-  );*/
 }
 
 

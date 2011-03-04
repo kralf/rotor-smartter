@@ -1,6 +1,5 @@
 #include "CostMap.h"
 
-using namespace Urus::Wp2;
 using namespace std;
 
 //------------------------------------------------------------------------------

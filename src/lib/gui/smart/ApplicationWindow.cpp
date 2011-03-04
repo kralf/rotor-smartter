@@ -12,6 +12,7 @@ ApplicationWindow::ApplicationWindow( const Configuration & configuration )
   setWindowTitle( "application main window" );
   _mainWidget->setupUi( this );
   _mainWidget->navigationPlot->configuration( configuration );
+  _mainWidget->localizationPlot->configuration( configuration );
 }
 
 ApplicationWindow::~ApplicationWindow()

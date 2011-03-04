@@ -13,6 +13,9 @@ Configuration::Configuration(
 )
   : _platform( options.getString( moduleName, "platform" ) ),
     _scale( options.getDouble( moduleName, "scale" ) ),
+    _defaultPath( options.getString( moduleName, "defaultPath" ) ),
+    _setGoalProcess( options.getString( moduleName, "setGoalProcess" ) ),
+    _setPoseProcess( options.getString( moduleName, "setPoseProcess" ) ),
     _wheelDistance( options.getDouble( "smart", "wheelDistance" ) ),
     _axesDistance( options.getDouble( "smart", "axesDistance" ) ),
     _laserDistance( options.getDouble( "smart", "laserDistance" ) ),
@@ -26,6 +29,30 @@ double
 Configuration::scale() const
 {
   return _scale;
+}
+
+//------------------------------------------------------------------------------
+
+const std::string &
+Configuration::defaultPath() const
+{
+  return _defaultPath;
+}
+
+//------------------------------------------------------------------------------
+
+const std::string &
+Configuration::setGoalProcess() const
+{
+  return _setGoalProcess;
+}
+
+//------------------------------------------------------------------------------
+
+const std::string &
+Configuration::setPoseProcess() const
+{
+  return _setPoseProcess;
 }
 
 //------------------------------------------------------------------------------

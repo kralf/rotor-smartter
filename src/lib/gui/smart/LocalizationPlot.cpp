@@ -93,6 +93,14 @@ LocalizationPlot::setDefaultPath( const std::string & defaultPath )
 //------------------------------------------------------------------------------
 
 void
+LocalizationPlot::configuration( const Configuration & value )
+{
+  _configuration = &value;
+}
+
+//------------------------------------------------------------------------------
+
+void
 LocalizationPlot::setScale( int value ) {
   _scale = exp(0.01*value);
   updateFigure();
@@ -182,8 +190,7 @@ LocalizationPlot::setPose()
 {
   if ( _registry && ( _gui.state() == QProcess::NotRunning ) )
   {
-    _gui.start( _registry->options().getString( "smartMonitor",
-      "setPoseProcess" ).c_str() );
+    _gui.start( _configuration->setPoseProcess().c_str() );
   }
 }
 

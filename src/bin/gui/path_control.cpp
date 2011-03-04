@@ -76,23 +76,26 @@ setupMessages( Registry & registry, const std::string & poseMessage )
 int
 main( int argc, char * argv[] )
 {
-  string command = "pathControl";
+  string command = "rotor-path_control";
   if ( argc != 3 ) {
     Logger::error( "Usage: " + command + " <map> <config.ini>" );
     exit( 1 );
   }
 
+  string moduleName( "path_control" );
+
   BaseOptions options;
   options.fromString( fileContents( argv[2] ) );
-  RemoteRegistry registry( "CarmenRegistry", "pathControl", options, "lib" );
+  RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
 
-  string poseMessage = options.getString( "pathControl", "poseMessage" );
+  string planner = options.getString( moduleName, "planner" );
+  string poseMessage = options.getString( moduleName, "poseMessage" );
   setupMessages( registry, poseMessage );
 
   QApplication application( argc, argv );
   ApplicationWindow * window = new ApplicationWindow();
 
-  window->pathPlot().setRegistry( registry );
+  window->pathPlot().setRegistry( registry, planner );
   window->pathPlot().setMap( argv[1] );
 
   DispatchThread dispatch( registry, *window );

@@ -1,6 +1,4 @@
 
-#include <smart-rotor-interfaces/Messages.h>
-
 #include <rotor/BaseOptions.h>
 #include <rotor/Conversion.h>
 #include <rotor/FileUtils.h>
@@ -12,6 +10,7 @@
 
 #include "PosePlanner.h"
 #include "PoseGraph.h"
+#include "Messages.h"
 
 #include <sys/time.h>
 #include <iostream>
@@ -19,7 +18,6 @@
 
 using namespace Rotor;
 using namespace std;
-using namespace Urus::Wp2;
 
 bool quit = false;
 
@@ -48,7 +46,7 @@ mainLoop( Registry & registry, PosePlanner & planner,
           * reinterpret_cast<planner_plan_message *>( data.buffer() );
 
         Logger::spam( "Plan request message has been received:" + data.toString(),
-          "pathPlanner" );
+          "path_planner" );
 
         double planStart = seconds();
 
@@ -86,7 +84,7 @@ mainLoop( Registry & registry, PosePlanner & planner,
           registry.sendStructure( "path_message", pathMessage );
 
           Logger::spam( "Path message has been sent:" + pathMessage.toString(),
-            "pathPlanner" );
+            "path_planner" );
         } else {
           Rotor::Structure stopMessage = registry.newStructure("path_stop_message");
 
@@ -95,11 +93,11 @@ mainLoop( Registry & registry, PosePlanner & planner,
           registry.sendStructure( "path_stop_message", stopMessage );
 
           Logger::spam( "Stop message has been sent:" + stopMessage.toString(),
-            "pathPlanner" );
+            "path_planner" );
         }
       }
     } catch( MessagingTimeout ) {
-      Logger::spam( "Timeout waiting for message", "pathPlanner" );
+      Logger::spam( "Timeout waiting for message", "path_planner" );
     }
   }
 }
@@ -132,13 +130,14 @@ registerMessages( Registry & registry )
 
 int main( int argc, char * argv[] )
 {
+  string command = "rotor-path_planner";
   if ( argc < 3 )
   {
     cout << "Usage: " << argv[0] << " <costmap.graph> <config.ini>\n";
     exit( 1 );
   }
 
-  string moduleName( argv[0] );
+  string moduleName( "path_planner" );
 
   BaseOptions options;
   options.fromString( fileContents( argv[2] ) );

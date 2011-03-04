@@ -111,16 +111,18 @@ setupMessages( Registry & registry )
 int
 main( int argc, char * argv[] )
 {
-  string command = "smartMonitor";
+  string command = "rotor-smart_monitor";
   if ( argc != 2 ) {
     Logger::error( "Usage: " + command + " <config.ini>" );
     exit( 1 );
   }
 
+  string moduleName( "smart_monitor" );
+
   BaseOptions options;
   options.fromString( fileContents( argv[1] ) );
-  RemoteRegistry registry( "CarmenRegistry", "smartMonitor", options, "lib" );
-  Configuration configuration( command, options );
+  RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
+  Configuration configuration( moduleName, options );
 
   setupMessages( registry );
 

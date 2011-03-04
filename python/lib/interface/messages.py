@@ -17,6 +17,7 @@ axt_message = '''
     float *z;
 
     double timestamp;
+    char *host;
   };
 '''
 

@@ -25,7 +25,7 @@ remake_add_directories(
 )
 
 remake_pack_deb(
-  rotor
+  rotor libcv4
 )
 remake_add_package(
   COMPONENT python
@@ -35,7 +35,7 @@ remake_add_package(
 remake_pack_deb(
   COMPONENT dev
   DESCRIPTION "development headers"
-  rotor-dev
+  rotor-dev libcv-dev
 )
 remake_pack_deb(
   ARCH all

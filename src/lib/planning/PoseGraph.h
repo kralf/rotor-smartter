@@ -2,15 +2,11 @@
 #define URUS_WP2_POSE_GRAPH_H
 
 
-#include "Pose.h"
-#include <rana-graph/Exceptions.h>
 #include <tr1/unordered_set>
 #include <list>
 
-
-namespace Urus {
-namespace Wp2 {
-
+#include "Pose.h"
+#include "Exceptions.h"
 
 class PoseGraph
 {
@@ -23,7 +19,8 @@ public:
     double maxCurvature, 
     size_t branchingFactor );
   
-  const Neighborhood & children( const Pose & node ) const throw( Rana::Graph::NotFoundError );
+  const Neighborhood & children( const Pose & node ) const
+    throw( NotFoundError );
   const Nodes & nodes() const;
   
 private:
@@ -35,10 +32,6 @@ private:
   Neighborhood _children;
   Nodes        _nodes;
 };
-
-
-}
-}
 
 
 #endif //URUS_WP2_POSE_GRAPH_H
