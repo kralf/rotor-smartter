@@ -25,7 +25,7 @@ remake_add_directories(
 )
 
 remake_pack_deb(
-  rotor libcv4
+  rotor libcv4 python-opencv
 )
 remake_add_package(
   COMPONENT python
