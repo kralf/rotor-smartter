@@ -1,17 +1,24 @@
-rotor-smartter (0.1-107) unstable; urgency=low
+rotor-smartter (0.1-108) lucid; urgency=low
+
+  * Fixed eigen2 includes
+  * Fixed changelog
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Wed, 04 Sep 2013 14:38:00 +0100
+
+rotor-smartter (0.1-107) lucid; urgency=low
 
   * Added pkg-config files
   * Release distributions
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Wed, 04 Sep 2013 14:26:00 +0100
 
-rotor-smartter (0.1-106) unstable; urgency=low
+rotor-smartter (0.1-106) lucid; urgency=low
 
   * Added missing CMakeLists.txt
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Wed, 04 Sep 2013 12:15:00 +0100
 
-rotor-smartter (0.1-105) unstable; urgency=low
+rotor-smartter (0.1-105) lucid; urgency=low
 
   * Added changelog
 

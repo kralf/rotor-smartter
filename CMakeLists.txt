@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 include(ReMake)
 
 remake_project(
-  "RoToR SmartTer"
+  rotor-smartter
   VERSION 0.1
   RELEASE alpha
   SUMMARY "RoToR modules for the SmartTer."
@@ -49,7 +49,7 @@ remake_distribute_deb(
   DISTRIBUTION lucid
   SECTION libs
   UPLOAD ppa:kralf/asl
-  DEPENDS remake rotor-dev libcv2.3 libcv-dev libqwt5-qt4-dev python-opencv
+  DEPENDS remake rotor-dev libcv-dev libqwt5-qt4-dev python-opencv
     pkg-config doxygen
   PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
@@ -57,7 +57,7 @@ remake_distribute_deb(
   DISTRIBUTION precise
   SECTION libs
   UPLOAD ppa:kralf/asl
-  DEPENDS remake rotor-dev libcv-dev libqwt5-qt4-dev python-opencv
-    pkg-config doxygen
+  DEPENDS remake rotor-dev libcv2.3 libcv-dev libopencv-contrib-dev
+    libqwt5-qt4-dev python-opencv pkg-config doxygen
   PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
