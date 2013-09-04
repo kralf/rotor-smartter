@@ -49,8 +49,8 @@ remake_distribute_deb(
   DISTRIBUTION lucid
   SECTION libs
   UPLOAD ppa:kralf/asl
-  DEPENDS remake rotor-dev libeigen2-dev libcv-dev libqwt5-qt4-dev
-    rotor-python python-opencv pkg-config doxygen
+  DEPENDS remake rotor-dev libeigen2-dev libcv-dev libhighgui-dev
+    libqwt5-qt4-dev rotor-python python-opencv pkg-config doxygen
   PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
 remake_distribute_deb(
