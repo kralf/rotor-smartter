@@ -50,7 +50,7 @@ remake_distribute_deb(
   SECTION libs
   UPLOAD ppa:kralf/asl
   DEPENDS remake rotor-dev libeigen2-dev libcv-dev libqwt5-qt4-dev
-    python-opencv pkg-config doxygen
+    rotor-python python-opencv pkg-config doxygen
   PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
 remake_distribute_deb(
@@ -58,7 +58,7 @@ remake_distribute_deb(
   SECTION libs
   UPLOAD ppa:kralf/asl
   DEPENDS remake rotor-dev libeigen2-dev libcv2.3 libcv-dev
-    libopencv-contrib-dev libqwt5-qt4-dev python-opencv pkg-config
-    doxygen
+    libopencv-contrib-dev libqwt5-qt4-dev rotor-python python-opencv
+    pkg-config doxygen
   PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
