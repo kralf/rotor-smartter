@@ -1,52 +1,59 @@
 rotor-smartter (0.1-107) unstable; urgency=low
 
+  * Added pkg-config files
+  * Release distributions
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Wed, 04 Sep 2013 14:26:00 +0100
+
+rotor-smartter (0.1-106) unstable; urgency=low
+
   * Added missing CMakeLists.txt
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Wed, 04 Sep 2013 12:15:00 +0100
 
-rotor-smartter (0.1-106) unstable; urgency=low
+rotor-smartter (0.1-105) unstable; urgency=low
 
   * Added changelog
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Wed, 04 Sep 2013 12:14:00 +0100
 
-rotor-smartter (0.1-105) unstable; urgency=low
+rotor-smartter (0.1-104) unstable; urgency=low
 
   * Added python-opencv to list of package dependencies
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Fri, 04 Mar 2011 18:35:34 +0100
 
-rotor-smartter (0.1-104) unstable; urgency=low
+rotor-smartter (0.1-103) unstable; urgency=low
 
   * Added costmap build and display scripts
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Fri, 04 Mar 2011 18:27:27 +0100
 
-rotor-smartter (0.1-103) unstable; urgency=low
+rotor-smartter (0.1-102) unstable; urgency=low
 
   * Finished ReMake build system port
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Fri, 04 Mar 2011 18:22:38 +0100
 
-rotor-smartter (0.1-102) unstable; urgency=low
+rotor-smartter (0.1-101) unstable; urgency=low
 
   * Removed obsolete smart-monitor directory
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 17:46:03 +0100
 
-rotor-smartter (0.1-101) unstable; urgency=low
+rotor-smartter (0.1-100) unstable; urgency=low
 
   * Another cleanup commit
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 17:45:07 +0100
 
-rotor-smartter (0.1-100) unstable; urgency=low
+rotor-smartter (0.1-99) unstable; urgency=low
 
   * ReMake build system port of path follower
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 15:27:49 +0100
 
-rotor-smartter (0.1-99) unstable; urgency=low
+rotor-smartter (0.1-98) unstable; urgency=low
 
   * Cleanup commit
 

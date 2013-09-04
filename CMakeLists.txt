@@ -18,27 +18,46 @@ remake_project(
   PREFIX rotor-
 )
 
-remake_python()
+remake_add_directories(
+  python
+)
 remake_add_directories(
   data
   COMPONENT data
 )
 
 remake_pack_deb(
-  rotor libcv4 python-opencv
+  DEPENDS rotor libcv[0-9.]* libqwt5-qt4
 )
 remake_add_package(
   COMPONENT python
   DESCRIPTION "Python modules"
-  rotor-python
+  DEPENDS rotor-python python-opencv
 )
 remake_pack_deb(
   COMPONENT dev
   DESCRIPTION "development headers"
-  rotor-dev libcv-dev
+  DEPENDS rotor-dev libcv-dev libqwt5-qt4-dev
 )
 remake_pack_deb(
   ARCH all
   COMPONENT data
   DESCRIPTION "costmap data"
+)
+
+remake_distribute_deb(
+  DISTRIBUTION lucid
+  SECTION libs
+  UPLOAD ppa:kralf/asl
+  DEPENDS remake rotor-dev libcv2.3 libcv-dev libqwt5-qt4-dev python-opencv
+    pkg-config doxygen
+  PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
+)
+remake_distribute_deb(
+  DISTRIBUTION precise
+  SECTION libs
+  UPLOAD ppa:kralf/asl
+  DEPENDS remake rotor-dev libcv-dev libqwt5-qt4-dev python-opencv
+    pkg-config doxygen
+  PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
