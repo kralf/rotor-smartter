@@ -1,3 +1,9 @@
+rotor-smartter (0.1-109) lucid; urgency=low
+
+  * Added missing libeigen2-dev build dependency
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Wed, 04 Sep 2013 15:14:00 +0100
+
 rotor-smartter (0.1-108) lucid; urgency=low
 
   * Fixed eigen2 includes
