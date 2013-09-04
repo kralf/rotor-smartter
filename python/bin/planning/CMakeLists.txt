@@ -1,0 +1,1 @@
+remake_add_scripts(costmap_build costmap_display)
