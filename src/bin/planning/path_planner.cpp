@@ -141,7 +141,7 @@ int main( int argc, char * argv[] )
 
   BaseOptions options;
   options.fromString( fileContents( argv[2] ) );
-  RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
+  RemoteRegistry registry( "CarmenRegistry", moduleName, options );
 
   registerMessages( registry );
 

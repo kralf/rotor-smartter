@@ -63,7 +63,7 @@ int main( int argc, char * argv[] )
 
   BaseOptions options;
   options.fromString( fileContents( argv[1] ) );
-  RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
+  RemoteRegistry registry( "CarmenRegistry", moduleName, options );
   string poseMessage = options.getString( moduleName, "poseMessage" );
   int alascaChannel = options.getInt( moduleName, "alascaChannel" );
 

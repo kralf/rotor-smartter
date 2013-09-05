@@ -1,3 +1,10 @@
+rotor-smartter (0.1-114) lucid; urgency=low
+
+  * Now using default search path for finding RemoteRegistry plugin
+    libraries
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 05 Sep 2013 10:20:00 +0100
+
 rotor-smartter (0.1-113) lucid; urgency=low
 
   * Added dependency on rotor-carmen as it needs to be installed for

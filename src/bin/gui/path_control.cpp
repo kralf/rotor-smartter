@@ -86,7 +86,7 @@ main( int argc, char * argv[] )
 
   BaseOptions options;
   options.fromString( fileContents( argv[2] ) );
-  RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
+  RemoteRegistry registry( "CarmenRegistry", moduleName, options );
 
   string planner = options.getString( moduleName, "planner" );
   string poseMessage = options.getString( moduleName, "poseMessage" );
