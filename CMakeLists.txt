@@ -12,7 +12,7 @@ remake_project(
   AUTHOR "Jerome Maye"
   AUTHOR "Martin Rufli"
   CONTACT "ralf.kaestner@gmail.com"
-  HOME "http://aslforge.ethz.ch/projects/rotor-smartter"
+  HOME "http://github.com/kralf/rotor-smartter"
   LICENSE "GNU Lesser General Public License (LGPL)"
   INSTALL /usr
   PREFIX rotor-
