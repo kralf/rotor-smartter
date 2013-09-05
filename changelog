@@ -1,3 +1,10 @@
+rotor-smartter (0.1-113) lucid; urgency=low
+
+  * Added dependency on rotor-carmen as it needs to be installed for
+    using CarmenRegistry
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 05 Sep 2013 10:06:00 +0100
+
 rotor-smartter (0.1-112) lucid; urgency=low
 
   * Added missing libcvaux-dev build dependency

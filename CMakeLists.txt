@@ -27,7 +27,7 @@ remake_add_directories(
 )
 
 remake_pack_deb(
-  DEPENDS rotor libcv[0-9.]* libqwt5-qt4
+  DEPENDS rotor-carmen libcv[0-9.]* libqwt5-qt4
 )
 remake_add_package(
   COMPONENT python
@@ -49,17 +49,17 @@ remake_distribute_deb(
   DISTRIBUTION lucid
   SECTION libs
   UPLOAD ppa:kralf/asl
-  DEPENDS remake rotor-dev libeigen2-dev libcv-dev libhighgui-dev
-    libcvaux-dev libqwt5-qt4-dev rotor-python python-opencv pkg-config
-    doxygen
+  DEPENDS remake rotor-dev rotor-carmen libeigen2-dev libcv-dev
+    libhighgui-dev libcvaux-dev libqwt5-qt4-dev rotor-python
+    python-opencv pkg-config doxygen
   PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
 remake_distribute_deb(
   DISTRIBUTION precise
   SECTION libs
   UPLOAD ppa:kralf/asl
-  DEPENDS remake rotor-dev libeigen2-dev libcv2.3 libcv-dev
-    libopencv-contrib-dev libqwt5-qt4-dev rotor-python python-opencv
-    pkg-config doxygen
+  DEPENDS remake rotor-dev rotor-carmen libeigen2-dev libcv2.3
+    libcv-dev libopencv-contrib-dev libqwt5-qt4-dev rotor-python
+    python-opencv pkg-config doxygen
   PASS CMAKE_BUILD_TYPE ROTOR_SMARTTER_GIT_REVISION
 )
