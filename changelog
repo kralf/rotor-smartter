@@ -1,3 +1,9 @@
+rotor-smartter (0.1-116) lucid; urgency=low
+
+  * Release distribution for Ubuntu Trusty Tahr
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Mon, 29 Sep 2014 12:24:00 +0100
+
 rotor-smartter (0.1-115) lucid; urgency=low
 
   * Updated project home
